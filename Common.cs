@@ -4550,7 +4550,7 @@ public abstract class Packet
         if (p == null) return null;
 
         if (length == MSGSIZE.DEFENCODE)
-            using (MemoryStream stream = new MemoryStream(defMsg, 0, length))
+            using (MemoryStream stream = new MemoryStream(defMsg, 6, MSGSIZE.DEFMSG-6))
             using (BinaryReader reader = new BinaryReader(stream))
             {
                 try
@@ -4931,6 +4931,9 @@ public abstract class Packet
     {
         switch (index)
         {
+            case ServerMsgIds.SM_PASSOK_SELECTSERVER:
+                return new S.SelServer();
+
             case (short)ServerPacketIds.Connected:
                 return new S.Connected();
             case (short)ServerPacketIds.ClientVersion:

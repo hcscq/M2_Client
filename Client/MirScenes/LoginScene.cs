@@ -344,11 +344,17 @@ namespace Client.MirScenes
         }
         private void SelServer(S.SelServer p)
         {
-            Enabled = false;
+            //Enabled = false;
             _login.Dispose();
             if (_ViewKey != null && !_ViewKey.IsDisposed) _ViewKey.Dispose();
-
-            _serSel.Show(p.Servers.ToString());
+            if (p.Servers==null)
+            {
+                MirMessageBox.Show("No server online.", true);
+                return;
+            }
+            if (_serSel == null)
+                _serSel = new ServerSelDialog {Visible=false ,Parent=_background};
+            _serSel.Show(new string(p.Servers));
         }
         private void SelServer(S.SelServerOk p)
         {
@@ -623,11 +629,11 @@ namespace Client.MirScenes
 
             public ServerSelDialog(string serverList=null)
             {
-                Index = 60;//1084;//06.01
+                Index = 256;//1084;//06.01
                 Library = Libraries.Prguse;
                 Location = new Point((Settings.ScreenWidth - Size.Width) / 2, (Settings.ScreenHeight - Size.Height) / 2);
                 PixelDetect = false;
-                Size = new Size(328, 220);
+                Size = new Size(308, 450);
 
                 if (serverList == null)
                     ServersButton = new List<MirScenes.LoginScene.ServerSelButton>();
@@ -666,36 +672,43 @@ namespace Client.MirScenes
                 if (!Visible) return;
                 Visible = false;
             }
-            public void Show(string serverList=null)
+            public void Show(string serverList = null)
             {
+                //serverList = "1,乘风";
                 if (serverList != null)
                 {
                     string[] serArr = serverList.Split(',');
                     ServerSelButton sb;
-                    for (int i = 0; i < serArr.Length; i += 2)
+                    if (serArr.Length >= 2)
                     {
-                        sb = new ServerSelButton
+                        int pHeight = Size.Height - 50;
+                        int bHeight = 42;
+                        for (int i = 0; i < serArr.Length; i += 2)
                         {
-                            Enabled = true,
-                            Size = new Size(42, 42),
-                            HoverIndex = 15,//321,
-                            Index = 15,//320,
-                            Library = Libraries.Title,
-                            Location = new Point(170, i * (2 * Size.Height / serArr.Length) + Size.Height / serArr.Length - Size.Height / 2),//new Point(227, 81),
-                            Parent = this,
-                            PressedIndex = 14,//322
-                            ServerIndex = int.Parse(serArr[i]),
-                            Text = serArr[i + 1]
-                        };
-                        sb.Click += (o, e) => SelServer(sb.ServerIndex);
-                        ServersButton.Add(sb);
+                            sb = new ServerSelButton
+                            {
+                                Enabled = true,
+                                Size = new Size(42, 42),
+                                HoverIndex = 15,//321,
+                                Index = 15,//320,
+                                Library = Libraries.Title,
+                                Location = new Point(100, i * (2 * pHeight / serArr.Length) + pHeight / serArr.Length - bHeight / 2),//new Point(227, 81),
+                                Parent = this,
+                                PressedIndex = 14,//322
+                                ServerIndex = int.Parse(serArr[i]),
+                                Text = serArr[i + 1]
+                            };
+                            sb.Click += (o, e) => SelServer(sb.ServerIndex);
+                            ServersButton.Add(sb);
+                        }
+                    }
+                    else
+                    {
+                        MirMessageBox.Show("No server online.", true);
+                        return;
                     }
                 }
-                if (ServersButton.Count <= 0)
-                {
-                    MirMessageBox.Show("No server online.", true);
-                    return;
-                }
+
                 if (Visible) return;
                 Visible = true;
             }

@@ -168,6 +168,10 @@ namespace Client.MirScenes
                     Login((S.LoginBanned)p);
                     break;
                 case ServerMsgIds.SM_PASSOK_SELECTSERVER:
+                    SelServer((S.SelServer)p);
+                    break;
+                case ServerMsgIds.SM_SELECTSERVER_OK:
+                    //SelServer((S.SelServer)p);
                     break;
                 case (short)ServerPacketIds.LoginSuccess:
                     Login((S.LoginSuccess)p);
@@ -345,6 +349,16 @@ namespace Client.MirScenes
             if (_ViewKey != null && !_ViewKey.IsDisposed) _ViewKey.Dispose();
 
             _serSel.Show(p.Servers.ToString());
+        }
+        private void SelServer(S.SelServerOk p)
+        {
+            MirMessageBox.Show("Unfinished.");
+            Enabled = false;
+            Network.Disconnect();
+            _login.Dispose();
+            if (_ViewKey != null && !_ViewKey.IsDisposed) _ViewKey.Dispose();
+
+            //_serSel.Show(p.Servers.ToString());
         }
         private void Login(S.LoginSuccess p)
         {
@@ -621,6 +635,7 @@ namespace Client.MirScenes
                 {
                     string []serArr = serverList.Split(',');
                     ServerSelButton sb;
+                    int pHeight = Size.Height - 35;
                     for (int i=0;i<serArr.Length;i+=2) {
                         sb = new ServerSelButton
                         {
@@ -629,7 +644,7 @@ namespace Client.MirScenes
                             HoverIndex = 15,//321,
                             Index = 15,//320,
                             Library = Libraries.Title,
-                            Location = new Point(170, i*(2*Size.Height/serArr.Length)+ Size.Height / serArr.Length - Size.Height / 2),//new Point(227, 81),
+                            Location = new Point(170, i*(2* pHeight / serArr.Length)+ pHeight / serArr.Length - Size.Height / 2),//new Point(227, 81),
                             Parent = this,
                             PressedIndex = 14,//322
                             ServerIndex = int.Parse(serArr[i]),

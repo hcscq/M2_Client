@@ -1226,7 +1226,8 @@ public enum DefenceType : byte
 
 public class ServerMsgIds
 {
-    public  const short SM_PASSOK_SELECTSERVER = 529;
+    public const short SM_PASSOK_SELECTSERVER = 529;
+    public const short SM_SELECTSERVER_OK = 530;
 }
 public class ClientMsgIds
 {

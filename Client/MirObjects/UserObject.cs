@@ -31,12 +31,7 @@ namespace Client.MirObjects
         public byte LifeOnHit;
 
         public bool TradeLocked;
-        public uint TradeGoldAmount;
         public bool AllowTrade;
-
-        public bool RentalGoldLocked;
-        public bool RentalItemLocked;
-        public uint RentalGoldAmount;
 
         public bool HasTeleportRing, HasProtectionRing, HasRevivalRing, HasClearRing,
             HasMuscleRing, HasParalysisRing, HasFireRing, HasHealRing, HasProbeNecklace, HasSkillNecklace, NoDuraLoss;
@@ -47,8 +42,7 @@ namespace Client.MirObjects
 
         public UserItem[] Inventory = new UserItem[46], Equipment = new UserItem[14], Trade = new UserItem[10], QuestInventory = new UserItem[40];
         public int BeltIdx = 6;
-        public bool HasExpandedStorage = false;
-        public DateTime ExpandedStorageExpiryTime;
+        public bool AddedStorage = false;
 
         public List<ClientMagic> Magics = new List<ClientMagic>();
         public List<ItemSets> ItemSets = new List<ItemSets>();
@@ -104,8 +98,7 @@ namespace Client.MirObjects
             Equipment = info.Equipment;
             QuestInventory = info.QuestInventory;
 
-            HasExpandedStorage = info.HasExpandedStorage;
-            ExpandedStorageExpiryTime = info.ExpandedStorageExpiryTime;
+            AddedStorage = info.AddedStorage;
 
             Magics = info.Magics;
             for (int i = 0; i < Magics.Count; i++ )
@@ -260,8 +253,7 @@ namespace Client.MirObjects
         private void RefreshEquipmentStats()
         {
             Weapon = -1;
-			WeaponEffect = 0;
-			Armour = 0;
+            Armour = 0;
             WingEffect = 0;
             MountType = -1;
 
@@ -362,13 +354,10 @@ namespace Client.MirObjects
                     Armour = RealItem.Shape;
                     WingEffect = RealItem.Effect;
                 }
-				if (RealItem.Type == ItemType.Weapon)
-				{
-					Weapon = RealItem.Shape;
-					WeaponEffect = RealItem.Effect;
-				}
+                if (RealItem.Type == ItemType.Weapon)
+                    Weapon = RealItem.Shape;
 
-				if (RealItem.Type == ItemType.Mount)
+                if (RealItem.Type == ItemType.Mount)
                     MountType = RealItem.Shape;
 
                 if (RealItem.Set == ItemSet.None) continue;

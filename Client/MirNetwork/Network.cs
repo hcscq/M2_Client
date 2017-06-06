@@ -21,7 +21,6 @@ namespace Client.MirNetwork
 
         static byte[] _rawData = new byte[0];
 
-        public static ConcurrentStack<SocketAsyncEventArgs> SocketArgsPool;
 
         public static void Connect()
         {
@@ -29,9 +28,11 @@ namespace Client.MirNetwork
                 Disconnect();
 
             ConnectAttempt++;
-            
+
             _client = new TcpClient {NoDelay = true};
+            //_client.Connect(Settings.IPAddress, Settings.Port);// Connection, null);
             _client.BeginConnect(Settings.IPAddress, Settings.Port, Connection, null);
+            
 
         }
 
@@ -57,7 +58,7 @@ namespace Client.MirNetwork
 
                 BeginReceive();
             }
-            catch (SocketException)
+            catch (SocketException e)
             {
                 Connect();
             }
@@ -93,7 +94,7 @@ namespace Client.MirNetwork
             {
                 dataRead = _client.Client.EndReceive(result);
             }
-            catch
+            catch(Exception e)
             {
                 Disconnect();
                 return;
@@ -112,7 +113,7 @@ namespace Client.MirNetwork
             Buffer.BlockCopy(rawBytes, 0, _rawData, temp.Length, dataRead);
 
             Packet p;
-            while ((p = Packet.ReceivePacket(_rawData, out _rawData)) != null)
+            while ((p = Packet.ReceivePacketEx(_rawData, out _rawData)) != null)
                 _receiveList.Enqueue(p);
 
             BeginReceive();
@@ -160,6 +161,7 @@ namespace Client.MirNetwork
         {
             if (_client == null || !_client.Connected)
             {
+                //return;//2017-01-24 test don't aways connect.
                 if (Connected)
                 {
                     while (_receiveList != null && !_receiveList.IsEmpty)
@@ -183,9 +185,10 @@ namespace Client.MirNetwork
 
             if (!Connected && TimeConnected > 0 && CMain.Time > TimeConnected + 5000)
             {
-                Disconnect();
-                Connect();
-                return;
+                //return;//2017-01-24 test don't aways connect.
+                //Disconnect();
+                //Connect();
+                //return;
             }
 
 
@@ -197,8 +200,9 @@ namespace Client.MirNetwork
                 MirScene.ActiveScene.ProcessPacket(p);
             }
 
-            if (CMain.Time > TimeOutTime && _sendList != null && _sendList.IsEmpty)
-                _sendList.Enqueue(new C.KeepAlive());
+
+            //if (CMain.Time > TimeOutTime && _sendList != null && _sendList.IsEmpty)
+            //    _sendList.Enqueue(new C.KeepAlive());2017-06-01 test don't aways send packet.
 
             if (_sendList == null || _sendList.IsEmpty) return;
 
@@ -209,7 +213,7 @@ namespace Client.MirNetwork
             {
                 Packet p;
                 if (!_sendList.TryDequeue(out p)) continue;
-                data.AddRange(p.GetPacketBytes());
+                data.AddRange(p.GetPacketBytesEx());
             }
 
 

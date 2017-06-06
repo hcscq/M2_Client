@@ -45,100 +45,100 @@ namespace Client.MirControls
                 case MirMessageBoxButtons.OK:
                     OKButton = new MirButton
                     {
-                        HoverIndex = 201,
-                        Index = 200,
+                        HoverIndex = 2,//201,
+                        Index = 2,//200,
                         Library = Libraries.Title,
-                        Location = new Point(360, 157),
+                        Location = new Point(360, 135),//new Point(360, 157),
                         Parent = this,
-                        PressedIndex = 202,
+                        PressedIndex = 9,//202,
                     };
                     OKButton.Click += (o, e) => Dispose();
                     break;
                 case MirMessageBoxButtons.OKCancel:
                     OKButton = new MirButton
                     {
-                        HoverIndex = 201,
-                        Index = 200,
+                        HoverIndex = 2,//201,
+                        Index = 2,//200,
                         Library = Libraries.Title,
-                        Location = new Point(260, 157),
+                        Location = new Point(260, 135),//new Point(360, 157),new Point(260, 157),
                         Parent = this,
-                        PressedIndex = 202,
+                        PressedIndex = 9,//202,
                     };
                     OKButton.Click += (o, e) => Dispose();
                     CancelButton = new MirButton
                     {
-                        HoverIndex = 204,
-                        Index = 203,
+                        HoverIndex = 3,//204,
+                        Index = 3,//203,
                         Library = Libraries.Title,
-                        Location = new Point(360, 157),
+                        Location = new Point(360, 135),//new Point(360, 157),
                         Parent = this,
-                        PressedIndex = 205,
+                        PressedIndex = 4,//205,
                     };
                     CancelButton.Click += (o, e) => Dispose();
                     break;
                 case MirMessageBoxButtons.YesNo:
                     YesButton = new MirButton
                     {
-                        HoverIndex = 207,
-                        Index = 206,
+                        HoverIndex = 2,//207,
+                        Index = 2,//206,
                         Library = Libraries.Title,
-                        Location = new Point(260, 157),
+                        Location = new Point(260, 135),//new Point(360, 157),new Point(260, 157),
                         Parent = this,
-                        PressedIndex = 208,
+                        PressedIndex = 9,//208,
                     };
                     YesButton.Click += (o, e) => Dispose();
                     NoButton = new MirButton
                     {
-                        HoverIndex = 211,
-                        Index = 210,
+                        HoverIndex = 3,//211,
+                        Index = 3,//210,
                         Library = Libraries.Title,
-                        Location = new Point(360, 157),
+                        Location = new Point(360, 135),//new Point(360, 157),
                         Parent = this,
-                        PressedIndex = 212,
+                        PressedIndex = 4,//212,
                     };
                     NoButton.Click += (o, e) => Dispose();
                     break;
                 case MirMessageBoxButtons.YesNoCancel:
                     YesButton = new MirButton
                     {
-                        HoverIndex = 207,
-                        Index = 206,
+                        HoverIndex = 2,//207,
+                        Index = 2,//206,
                         Library = Libraries.Title,
-                        Location = new Point(160, 157),
+                        Location = new Point(160, 135),//new Point(360, 157),new Point(160, 157),
                         Parent = this,
-                        PressedIndex = 208,
+                        PressedIndex = 9,//208,
                     };
                     YesButton.Click += (o, e) => Dispose();
                     NoButton = new MirButton
                     {
-                        HoverIndex = 211,
-                        Index = 210,
+                        HoverIndex = 3,//211,
+                        Index = 3,//210,
                         Library = Libraries.Title,
-                        Location = new Point(260, 157),
+                        Location = new Point(260, 135),//new Point(260, 157),
                         Parent = this,
-                        PressedIndex = 212,
+                        PressedIndex = 4,//212,
                     };
                     NoButton.Click += (o, e) => Dispose();
                     CancelButton = new MirButton
                     {
-                        HoverIndex = 204,
-                        Index = 203,
+                        HoverIndex = 5,//204,
+                        Index = 5,//203,
                         Library = Libraries.Title,
                         Location = new Point(360, 157),
                         Parent = this,
-                        PressedIndex = 205,
+                        PressedIndex = 6,//205,
                     };
                     CancelButton.Click += (o, e) => Dispose();
                     break;
                 case MirMessageBoxButtons.Cancel:
                     CancelButton = new MirButton
                     {
-                        HoverIndex = 204,
-                        Index = 203,
+                        HoverIndex = 3,//204,
+                        Index = 3,//203,
                         Library = Libraries.Title,
-                        Location = new Point(360, 157),
+                        Location = new Point(360,135),//new Point(360, 157),
                         Parent = this,
-                        PressedIndex = 205,
+                        PressedIndex = 4//205,
                     };
                     CancelButton.Click += (o, e) => Dispose();
                     break;

@@ -127,7 +127,7 @@ namespace Client.MirScenes
         public override void Process()
         {
             if (!Network.Connected && _connectBox.Label != null)
-                _connectBox.Label.Text = string.Format("Attempting to connect to the server.\nAttempt:{0}", Network.ConnectAttempt);
+                _connectBox.Label.Text = string.Format("Attempting to connect to the server.\nAttempt:{0} IP:"+Settings.IPAddress+" Port:"+Settings.Port, Network.ConnectAttempt);
         }
         public override void ProcessPacket(Packet p)
         {
@@ -150,12 +150,23 @@ namespace Client.MirScenes
                     ChangePassword((S.ChangePasswordBanned) p);
                     break;
                 case (short)ServerPacketIds.Login:
-                    Login((S.Login) p);
+                    Login((S.Login)p);
                     break;
+                //case (short)LoginSceneMsgId.SM_ID_NOTFOUND:
+                //    MirMessageBox.Show("账号不存在.");
+                //    _login.AccountIDTextBox.Text = string.Empty;
+                //    _login.AccountIDTextBox.SetFocus();
+                //    break;
+                //case (short)LoginSceneMsgId.SM_PASSWD_FAIL:
+                //    MirMessageBox.Show("密码错误.");
+                //    _login.PasswordTextBox.Text = string.Empty;
+                //    _login.PasswordTextBox.SetFocus();
+                //    break;
                 case (short)ServerPacketIds.LoginBanned:
                     Login((S.LoginBanned) p);
                     break;
                 case (short)ServerPacketIds.LoginSuccess:
+                case (short)LoginSceneMsgId.SM_PASSOK_SELECTSERVER:
                     Login((S.LoginSuccess) p);
                     break;
                 default:
@@ -348,7 +359,7 @@ namespace Client.MirScenes
 
             public LoginDialog()
             {
-                Index = 1084;
+                Index = 60;//1084;//06.01
                 Library = Libraries.Prguse;
                 Location = new Point((Settings.ScreenWidth - Size.Width)/2, (Settings.ScreenHeight - Size.Height)/2);
                 PixelDetect = false;
@@ -382,33 +393,33 @@ namespace Client.MirScenes
                     {
                         Enabled = false,
                         Size = new Size(42,42),
-                        HoverIndex = 321,
-                        Index = 320,
+                        HoverIndex = 15,//321,
+                        Index = 15,//320,
                         Library = Libraries.Title,
-                        Location = new Point(227, 81),
+                        Location = new Point(170,163),//new Point(227, 81),
                         Parent = this,
-                        PressedIndex = 322
+                        PressedIndex = 14//322
                     };
                 OKButton.Click += (o, e) => Login();
 
                 AccountButton = new MirButton
                     {
-                        HoverIndex = 324,
-                        Index = 323,
+                        HoverIndex = 13,//324,
+                        Index = 13,//323,
                         Library = Libraries.Title,
-                        Location = new Point(60, 163),
+                        Location = new Point (24,204),//new Point(60, 163),
                         Parent = this,
-                        PressedIndex = 325,
+                        PressedIndex = 16//325,
                     };
 
                 PassButton = new MirButton
                     {
-                        HoverIndex = 327,
-                        Index = 326,
+                        HoverIndex = 12,//327,
+                        Index = 12,//326,
                         Library = Libraries.Title,
-                        Location = new Point(166, 163),
+                        Location =new Point (130,204) ,//new Point(166, 163),
                         Parent = this,
-                        PressedIndex = 328,
+                        PressedIndex = 17//328,
                     };
 
                 ViewKeyButton = new MirButton
@@ -423,20 +434,20 @@ namespace Client.MirScenes
 
                 CloseButton = new MirButton
                     {
-                        HoverIndex = 330,
-                        Index = 329,
+                        HoverIndex = 11,//330,
+                        Index = 11,//329,
                         Library = Libraries.Title,
-                        Location = new Point(166, 189),
+                        Location = new Point (253,27),//new Point(166, 189),
                         Parent = this,
-                        PressedIndex = 331,
+                        PressedIndex = 10,//331,
                     };
                 CloseButton.Click += (o, e) => Program.Form.Close();
 
                 AccountIDTextBox = new MirTextBox
                     {
-                        Location = new Point(85, 85),
-                        Parent = this,
-                        Size = new Size(136, 12),
+                        Location = new Point(98, 85),// new Point(85, 85),
+                    Parent = this,
+                        Size = new Size(136,10),//new Size(136, 12),
                         MaxLength = Globals.MaxAccountIDLength
                 };
                 AccountIDTextBox.SetFocus();
@@ -448,10 +459,10 @@ namespace Client.MirScenes
 
                 PasswordTextBox = new MirTextBox
                     {
-                        Location = new Point(85, 108),
+                        Location =new Point(98,116) ,//new Point(85, 108),
                         Parent = this,
                         Password = true,
-                        Size = new Size(136, 15),
+                        Size = new Size (136,10),//new Size(136, 15),
                         MaxLength = Globals.MaxPasswordLength
                     };
 

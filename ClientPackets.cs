@@ -135,6 +135,24 @@ namespace ClientPackets
             writer.Write(Password.Substring(0,Password.Trim().Length).ToCharArray());
         }
     }
+    public sealed class SelServer : Packet
+    {
+        public override short Index
+        {
+            get { return (short)ClientMsgIds.CM_SELECTSERVER; }
+        }
+
+        public int ServerIndex = 0;
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            ServerIndex = reader.ReadInt32();
+        }
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(ServerIndex);
+        }
+    }
     public sealed class NewCharacter : Packet
     {
         public override short Index { get { return (short)ClientPacketIds.NewCharacter; } }

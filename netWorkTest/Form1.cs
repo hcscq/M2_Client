@@ -26,6 +26,7 @@ namespace netWorkTest
             //InitialClientNetWork();
             Packet.IsServer = false;
             //InitialServerNetwork();
+            /* packet test
             string str = "#=L>>><v!$";
             byte[] rawBytes = ASCIIEncoding.Default.GetBytes("#zt<>>><v");
             int tran=EnDecode.fnDecode6BitBufA(rawBytes, rawBytes, 1, 3, 1, 4);
@@ -34,7 +35,27 @@ namespace netWorkTest
 
             rawBytes = new byte[1024];
             rawBytes=(new S.KeepAlive()).GetPacketBytesEx() as byte[];
-            Packet.ReceivePacketEx(rawBytes,out rawBytes);
+            Packet.ReceivePacketEx(rawBytes,out rawBytes);*/
+            ButtonsLocation();
+
+        }
+        private void ButtonsLocation()
+        {
+            int len = 3;
+            System.Drawing.Size fSize = this.Size;
+            fSize.Height -= 30;
+            Button[] buttons = new Button[len];
+            System.Drawing.Size bSize = new System.Drawing.Size(70, 35);
+            for (int i=0;i<buttons.Length;i++)
+            {
+                buttons[i] = new Button();
+                buttons[i].Size = bSize;
+                buttons[i].Text = i.ToString();
+                buttons[i].Location = 
+                    new System.Drawing.Point(30,
+                    i*(fSize.Height/len)+fSize.Height/(2*len)-bSize.Height/2);
+                this.Controls.Add(buttons[i]);
+            }
 
         }
         private void OnClose(object sender,EventArgs e)

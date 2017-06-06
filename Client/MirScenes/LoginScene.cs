@@ -25,15 +25,17 @@ namespace Client.MirScenes
         private NewAccountDialog _account;
         private ChangePasswordDialog _password;
 
+        private ServerSelDialog _serSel;
+
         private MirMessageBox _connectBox;
 
         private InputKeyDialog _ViewKey;
 
-        public MirImageControl TestLabel, ViolenceLabel, MinorLabel, YouthLabel; 
+        public MirImageControl TestLabel, ViolenceLabel, MinorLabel, YouthLabel;
 
         public LoginScene()
         {
-
+           
             SoundManager.PlaySound(SoundList.IntroMusic, true);
             Disposing += (o, e) => SoundManager.StopSound(SoundList.IntroMusic);
 
@@ -138,16 +140,16 @@ namespace Client.MirScenes
                     SendVersion();
                     break;
                 case (short)ServerPacketIds.ClientVersion:
-                    ClientVersion((S.ClientVersion) p);
+                    ClientVersion((S.ClientVersion)p);
                     break;
                 case (short)ServerPacketIds.NewAccount:
-                    NewAccount((S.NewAccount) p);
+                    NewAccount((S.NewAccount)p);
                     break;
                 case (short)ServerPacketIds.ChangePassword:
-                    ChangePassword((S.ChangePassword) p);
+                    ChangePassword((S.ChangePassword)p);
                     break;
                 case (short)ServerPacketIds.ChangePasswordBanned:
-                    ChangePassword((S.ChangePasswordBanned) p);
+                    ChangePassword((S.ChangePasswordBanned)p);
                     break;
                 case (short)ServerPacketIds.Login:
                     Login((S.Login)p);
@@ -163,11 +165,12 @@ namespace Client.MirScenes
                 //    _login.PasswordTextBox.SetFocus();
                 //    break;
                 case (short)ServerPacketIds.LoginBanned:
-                    Login((S.LoginBanned) p);
+                    Login((S.LoginBanned)p);
+                    break;
+                case ServerMsgIds.SM_PASSOK_SELECTSERVER:
                     break;
                 case (short)ServerPacketIds.LoginSuccess:
-                case (short)LoginSceneMsgId.SM_PASSOK_SELECTSERVER:
-                    Login((S.LoginSuccess) p);
+                    Login((S.LoginSuccess)p);
                     break;
                 default:
                     base.ProcessPacket(p);
@@ -334,6 +337,14 @@ namespace Client.MirScenes
             TimeSpan d = p.ExpiryDate - CMain.Now;
             MirMessageBox.Show(string.Format("This account is banned.\n\nReason: {0}\nExpiryDate: {1}\nDuration: {2:#,##0} Hours, {3} Minutes, {4} Seconds", p.Reason,
                                              p.ExpiryDate, Math.Floor(d.TotalHours), d.Minutes, d.Seconds));
+        }
+        private void SelServer(S.SelServer p)
+        {
+            Enabled = false;
+            _login.Dispose();
+            if (_ViewKey != null && !_ViewKey.IsDisposed) _ViewKey.Dispose();
+
+            _serSel.Show(p.Servers.ToString());
         }
         private void Login(S.LoginSuccess p)
         {
@@ -580,6 +591,109 @@ namespace Client.MirScenes
                     AccountIDTextBox = null;
                     PasswordTextBox = null;
 
+                }
+
+                base.Dispose(disposing);
+            }
+
+            #endregion
+        }
+
+        public sealed class ServerSelButton : MirButton
+        {
+            public int ServerIndex;
+        }
+        public sealed class ServerSelDialog : MirImageControl
+        {
+            public List<ServerSelButton>  ServersButton;
+
+            public ServerSelDialog(string serverList=null)
+            {
+                Index = 60;//1084;//06.01
+                Library = Libraries.Prguse;
+                Location = new Point((Settings.ScreenWidth - Size.Width) / 2, (Settings.ScreenHeight - Size.Height) / 2);
+                PixelDetect = false;
+                Size = new Size(328, 220);
+
+                if (serverList == null)
+                    ServersButton = new List<MirScenes.LoginScene.ServerSelButton>();
+                else
+                {
+                    string []serArr = serverList.Split(',');
+                    ServerSelButton sb;
+                    for (int i=0;i<serArr.Length;i+=2) {
+                        sb = new ServerSelButton
+                        {
+                            Enabled = true,
+                            Size = new Size(42, 42),
+                            HoverIndex = 15,//321,
+                            Index = 15,//320,
+                            Library = Libraries.Title,
+                            Location = new Point(170, i*(2*Size.Height/serArr.Length)+ Size.Height / serArr.Length - Size.Height / 2),//new Point(227, 81),
+                            Parent = this,
+                            PressedIndex = 14,//322
+                            ServerIndex = int.Parse(serArr[i]),
+                            Text=serArr[i+1]
+                        };
+                        sb.Click += (o, e) => SelServer(sb.ServerIndex);
+                        ServersButton.Add(sb);
+                    }
+                }
+            }
+
+            private void SelServer(int serIndex)
+            {
+                Network.Enqueue(new C.SelServer { ServerIndex=serIndex });
+            }
+
+            public void Hide()
+            {
+                if (!Visible) return;
+                Visible = false;
+            }
+            public void Show(string serverList=null)
+            {
+                if (serverList != null)
+                {
+                    string[] serArr = serverList.Split(',');
+                    ServerSelButton sb;
+                    for (int i = 0; i < serArr.Length; i += 2)
+                    {
+                        sb = new ServerSelButton
+                        {
+                            Enabled = true,
+                            Size = new Size(42, 42),
+                            HoverIndex = 15,//321,
+                            Index = 15,//320,
+                            Library = Libraries.Title,
+                            Location = new Point(170, i * (2 * Size.Height / serArr.Length) + Size.Height / serArr.Length - Size.Height / 2),//new Point(227, 81),
+                            Parent = this,
+                            PressedIndex = 14,//322
+                            ServerIndex = int.Parse(serArr[i]),
+                            Text = serArr[i + 1]
+                        };
+                        sb.Click += (o, e) => SelServer(sb.ServerIndex);
+                        ServersButton.Add(sb);
+                    }
+                }
+                if (ServersButton.Count <= 0)
+                {
+                    MirMessageBox.Show("No server online.", true);
+                    return;
+                }
+                if (Visible) return;
+                Visible = true;
+            }
+
+            #region Disposable
+
+            protected override void Dispose(bool disposing)
+            {
+                if (disposing)
+                {
+                    ServersButton.Clear();
+
+                    ServersButton = null;
                 }
 
                 base.Dispose(disposing);

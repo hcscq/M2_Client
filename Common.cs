@@ -1224,6 +1224,14 @@ public enum DefenceType : byte
     None
 }
 
+public class ServerMsgIds
+{
+    public  const short SM_PASSOK_SELECTSERVER = 529;
+}
+public class ClientMsgIds
+{
+    public const short CM_SELECTSERVER = 104;
+}
 public enum ServerPacketIds : short
 {
     Connected,

@@ -241,6 +241,24 @@ namespace ServerPackets
                 Characters[i].Save(writer);
         }
     }
+    public sealed class SelServer : Packet
+    {
+        public override short Index
+        {
+            get { return ServerMsgIds.SM_PASSOK_SELECTSERVER; }
+        }
+
+        public char []Servers;
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            Servers=reader.ReadChars(1024);
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+        }
+    }
     public sealed class NewCharacter : Packet
     {
         public override short Index

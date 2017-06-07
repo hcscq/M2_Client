@@ -696,7 +696,7 @@ namespace Client.MirScenes
                     {
                         int pHeight = Size.Height - 50;
                         int bHeight = 42;
-                        for (int i = 0; i < serArr.Length; i += 2)
+                        for (int i = 0; i < serArr.Length-1; i += 2)
                         {
                             sb = new ServerSelButton
                             {
@@ -708,7 +708,7 @@ namespace Client.MirScenes
                                 Location = new Point(100, i * (2 * pHeight / serArr.Length) + pHeight / serArr.Length - bHeight / 2),//new Point(227, 81),
                                 Parent = this,
                                 PressedIndex = 14,//322
-                                ServerIndex = short.Parse(serArr[i]),
+                                ServerIndex = (short)i,//short.Parse(serArr[i]),
                                 Text = serArr[i + 1]
                             };
                             sb.Click += (o, e) => SelServer(sb.ServerIndex);

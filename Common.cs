@@ -4381,7 +4381,7 @@ public struct MSGSIZE
 class EnDecode
 {
     static byte[] Decode6BitMask = { 0xfc, 0xf8, 0xf0, 0xe0, 0xc0 };
-    public static int fnEncode6BitBufA(byte[] pszSrc, byte[] pszDest, int destOffset = 0)
+    public static int fnEncode6BitBufA(byte[] pszSrc, byte[] pszDest, int destOffset = 0,int srcLen=0)
     {
         int nDestPos = destOffset;
         int nRestCount = 0;
@@ -4546,9 +4546,9 @@ public abstract class Packet
 
         Packet p;
 
+        
+        if (  rawBytes.Length <= MSGSIZE.DEFENCODE|| rawBytes[0] != 35) return null; //'#'| 2Bytes: Packet Size | 2Bytes: Packet ID |data|'!''$'
         byte[] defMsg = new byte[MSGSIZE.DEFMSG];
-
-        if (rawBytes.Length <= MSGSIZE.DEFENCODE || rawBytes[0] != 35) return null; //'#'| 2Bytes: Packet Size | 2Bytes: Packet ID |data|'!''$'
 
         EnDecode.fnDecode6BitBufA(rawBytes, defMsg, 0, MSGSIZE.DEFMSG, 1, MSGSIZE.DEFENCODE + 1);
 
@@ -4643,6 +4643,7 @@ public abstract class Packet
                 nLen = MSGSIZE.DEFENCODE+ EnDecode.fnEncode6BitBufA(stream.ToArray(), pureData, 0);
 
                 stream.Seek(0, SeekOrigin.Begin);
+                stream.SetLength((long)MSGSIZE.DEFMSG);
                 WriteBaseBytes(writer);
                 EnDecode.fnEncode6BitBufA(stream.ToArray(), defMsgBytes, 0);
 

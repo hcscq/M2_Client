@@ -25,7 +25,7 @@ namespace Client.MirScenes
         private NewAccountDialog _account;
         private ChangePasswordDialog _password;
 
-        private ServerSelDialog _serSel;
+        private ServerSelDialog _serverSel;
 
         private MirMessageBox _connectBox;
 
@@ -174,6 +174,7 @@ namespace Client.MirScenes
                     //SelServer((S.SelServer)p);
                     break;
                 case (short)ServerPacketIds.LoginSuccess:
+                case ServerMsgIds.SM_QUERYCHR:
                     Login((S.LoginSuccess)p);
                     break;
                 default:
@@ -204,7 +205,7 @@ namespace Client.MirScenes
         }
         private void ClientVersion(S.ClientVersion p)
         {
-            switch (p.Result)
+            switch (p.wParam)
             {
                 case 0:
                     MirMessageBox.Show("Wrong version, please update your game.\nGame will now Close", true);
@@ -309,7 +310,7 @@ namespace Client.MirScenes
         private void Login(S.Login p)
         {
             _login.OKButton.Enabled = true;
-            switch (p.Result)
+            switch (p.wParam)
             {
                 case 0:
                     MirMessageBox.Show("Logging in is currently disabled.");
@@ -344,27 +345,38 @@ namespace Client.MirScenes
         }
         private void SelServer(S.SelServer p)
         {
-            //Enabled = false;
             _login.Dispose();
+            g_nRecog = p.nRecog;
             if (_ViewKey != null && !_ViewKey.IsDisposed) _ViewKey.Dispose();
             if (p.Servers==null)
             {
                 MirMessageBox.Show("No server online.", true);
                 return;
             }
-            if (_serSel == null)
-                _serSel = new ServerSelDialog {Visible=false ,Parent=_background};
-            _serSel.Show(new string(p.Servers));
+            if (_serverSel == null)
+                _serverSel = new ServerSelDialog {Visible=false ,Parent=_background};
+            _serverSel.Show(new string(p.Servers));
         }
         private void SelServer(S.SelServerOk p)
         {
             MirMessageBox.Show("Unfinished.");
             Enabled = false;
             Network.Disconnect();
-            _login.Dispose();
-            if (_ViewKey != null && !_ViewKey.IsDisposed) _ViewKey.Dispose();
+            _serverSel.Dispose();
+            string[] ipInfo = p.IpInfo.Split('/');
+            if (ipInfo.Length >= 2)
+            {
+                Settings.IPAddress = ipInfo[0];
+                Settings.Port = int.Parse(ipInfo[1]);
+                Network.Connect();
+                Network.Enqueue(new C.QueryChr { nRecog = g_nRecog, Account=g_Account});
+            }
+            else MirMessageBox.Show("Get server info failed.",true);
+            //Network.Enqueue(new C.s);
 
-            //_serSel.Show(p.Servers.ToString());
+
+
+            //_serverSel.Show(p.Servers.ToString());
         }
         private void Login(S.LoginSuccess p)
         {
@@ -571,6 +583,7 @@ namespace Client.MirScenes
             {
                 OKButton.Enabled = false;
                 Network.Enqueue(new C.Login {AccountID = AccountIDTextBox.Text, Password = PasswordTextBox.Text});
+                g_Account = AccountIDTextBox.Text;
             }
 
             public void Hide()
@@ -621,7 +634,7 @@ namespace Client.MirScenes
 
         public sealed class ServerSelButton : MirButton
         {
-            public int ServerIndex;
+            public short ServerIndex;
         }
         public sealed class ServerSelDialog : MirImageControl
         {
@@ -653,7 +666,7 @@ namespace Client.MirScenes
                             Location = new Point(170, i*(2* pHeight / serArr.Length)+ pHeight / serArr.Length - Size.Height / 2),//new Point(227, 81),
                             Parent = this,
                             PressedIndex = 14,//322
-                            ServerIndex = int.Parse(serArr[i]),
+                            ServerIndex = short.Parse(serArr[i]),
                             Text=serArr[i+1]
                         };
                         sb.Click += (o, e) => SelServer(sb.ServerIndex);
@@ -662,9 +675,9 @@ namespace Client.MirScenes
                 }
             }
 
-            private void SelServer(int serIndex)
+            private void SelServer(short serIndex)
             {
-                Network.Enqueue(new C.SelServer { ServerIndex=serIndex });
+                Network.Enqueue(new C.SelServer { wParam=serIndex });
             }
 
             public void Hide()
@@ -695,7 +708,7 @@ namespace Client.MirScenes
                                 Location = new Point(100, i * (2 * pHeight / serArr.Length) + pHeight / serArr.Length - bHeight / 2),//new Point(227, 81),
                                 Parent = this,
                                 PressedIndex = 14,//322
-                                ServerIndex = int.Parse(serArr[i]),
+                                ServerIndex = short.Parse(serArr[i]),
                                 Text = serArr[i + 1]
                             };
                             sb.Click += (o, e) => SelServer(sb.ServerIndex);

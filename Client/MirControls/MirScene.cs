@@ -16,6 +16,10 @@ namespace Client.MirControls
         private static MouseButtons _buttons;
         private static long _lastClickTime;
         private static MirControl _clickedControl;
+
+        protected static int g_nRecog;
+
+        protected static string g_Account;
         //private bool _redraw;
 
         protected MirScene()

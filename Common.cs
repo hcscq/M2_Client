@@ -1228,10 +1228,13 @@ public class ServerMsgIds
 {
     public const short SM_PASSOK_SELECTSERVER = 529;
     public const short SM_SELECTSERVER_OK = 530;
+    public const short SM_QUERYCHR = 520;
 }
 public class ClientMsgIds
 {
     public const short CM_SELECTSERVER = 104;
+
+    public const short CM_QUERYCHR = 100;
 }
 public enum ServerPacketIds : short
 {
@@ -4366,26 +4369,11 @@ public class ClientIntelligentCreature
         writer.Write(MaintainFoodTime);
     }
 }
-struct TDEFAULTMESSAGE
-{
-    public int nRecog;
-    public short wIdent;
-    public short wParam;
-    public short wTag;
-    public short wSeries;
-    public void WriteBytes(BinaryWriter writer)
-    {
-        writer.Write(nRecog);
-        writer.Write(wIdent);
-        writer.Write(wParam);
-        writer.Write(wTag);
-        writer.Write(wSeries);
-    }
-}
+
 public struct MSGSIZE
 {
-    public const short DEFMSG = 12;
-    public const short DEFENCODE = 16;
+    public const short DEFMSG = 16;
+    public const short DEFENCODE = 22;
     public const short MSGHEADER = 1;
     public const short MSGHEADERENCODE = 1;
 
@@ -4491,6 +4479,31 @@ public abstract class Packet
 
     public abstract short Index { get; }
 
+    public int nLen;
+    public int nRecog;
+    public short wIdent { get { return Index; } }
+    public short wParam;
+    public short wTag;
+    public short wSeries;
+    public void WriteBaseBytes(BinaryWriter writer)
+    {
+        writer.Write(nLen);
+        writer.Write(nRecog);
+        writer.Write(wIdent);
+        writer.Write(wParam);
+        writer.Write(wTag);
+        writer.Write(wSeries);
+    }
+    public void ReadBaseBytes(BinaryReader reader)
+    {
+        nLen= reader.ReadInt32();
+        nRecog= reader.ReadInt32();
+        reader.ReadInt16();
+        wParam=reader.ReadInt16();
+        wTag=reader.ReadInt16();
+        wSeries=reader.ReadInt16();
+    }
+
     public static Packet ReceivePacket(byte[] rawBytes, out byte[] extra)
     {
         extra = rawBytes;
@@ -4535,37 +4548,37 @@ public abstract class Packet
 
         byte[] defMsg = new byte[MSGSIZE.DEFMSG];
 
-        if (rawBytes.Length < MSGSIZE.DEFENCODE) return null; //'#'| 2Bytes: Packet Size | 2Bytes: Packet ID |data|'!''$'
+        if (rawBytes.Length <= MSGSIZE.DEFENCODE || rawBytes[0] != 35) return null; //'#'| 2Bytes: Packet Size | 2Bytes: Packet ID |data|'!''$'
 
-        EnDecode.fnDecode6BitBufA(rawBytes, defMsg, 0, MSGSIZE.DEFMSG, 1, MSGSIZE.DEFENCODE+1);
+        EnDecode.fnDecode6BitBufA(rawBytes, defMsg, 0, MSGSIZE.DEFMSG, 1, MSGSIZE.DEFENCODE + 1);
 
-        int length = (defMsg[3] << 24)+ (defMsg[2] << 16)+(defMsg[1] << 8) + defMsg[0];
+        int length = (defMsg[3] << 24) + (defMsg[2] << 16) + (defMsg[1] << 8) + defMsg[0];
 
-        if (length+2 > rawBytes.Length || length < MSGSIZE.DEFENCODE) return null;
+        if (length + 2 > rawBytes.Length || length < MSGSIZE.DEFENCODE) return null;
 
-        short id = (short)(defMsg[4] + (defMsg[5] << 8));//reader.ReadInt16();
+        short id = (short)(defMsg[8] + (defMsg[9] << 8));//reader.ReadInt16();
 
         p = IsServer ? GetClientPacket(id) : GetServerPacket(id);
 
         if (p == null) return null;
 
-        if (length == MSGSIZE.DEFENCODE)
-            using (MemoryStream stream = new MemoryStream(defMsg, 6, MSGSIZE.DEFMSG-6))
-            using (BinaryReader reader = new BinaryReader(stream))
-            {
-                try
-                {
-                    p.ReadPacket(reader);
-                }
-                catch
-                {
-                    return null;
-                    //return new C.Disconnect();
-                }
-            }
-        else
+        using (MemoryStream stream = new MemoryStream(defMsg, 0, MSGSIZE.DEFMSG))
+        using (BinaryReader reader = new BinaryReader(stream))
         {
-            using (MemoryStream stream = new MemoryStream(rawBytes, 0, 
+            try
+            {
+                p.ReadBaseBytes(reader);
+
+            }
+            catch
+            {
+                return null;
+                //return new C.Disconnect();
+            }
+        }
+        if (length > MSGSIZE.DEFENCODE)
+        {
+            using (MemoryStream stream = new MemoryStream(rawBytes, 0,
                 EnDecode.fnDecode6BitBufA(rawBytes, rawBytes, 0, length - MSGSIZE.DEFENCODE, 1 + MSGSIZE.DEFENCODE, length + 1)))
             using (BinaryReader reader = new BinaryReader(stream))
             {
@@ -4581,8 +4594,8 @@ public abstract class Packet
             }
         }
 
-        extra = new byte[rawBytes.Length -2-length];
-        Buffer.BlockCopy(rawBytes, 2 + length, extra, 0, rawBytes.Length - length-2);
+        extra = new byte[rawBytes.Length - 2 - length];
+        Buffer.BlockCopy(rawBytes, 2 + length, extra, 0, rawBytes.Length - length - 2);
 
         return p;
     }
@@ -4618,21 +4631,19 @@ public abstract class Packet
         byte[] data;
         byte[] pureData;
         byte[] defMsgBytes = new byte[MSGSIZE.DEFENCODE];
-        TDEFAULTMESSAGE defMsg = new TDEFAULTMESSAGE();
         using (MemoryStream stream = new MemoryStream())
         {
             using (BinaryWriter writer = new BinaryWriter(stream))
             {
-                defMsg.wIdent = Index;
 
                 WritePacket(writer);
 
                 pureData = new byte[stream.Length + ((2 + stream.Length) / 3)];
 
-                defMsg.nRecog = MSGSIZE.DEFENCODE+ EnDecode.fnEncode6BitBufA(stream.ToArray(), pureData, 0);
+                nLen = MSGSIZE.DEFENCODE+ EnDecode.fnEncode6BitBufA(stream.ToArray(), pureData, 0);
 
                 stream.Seek(0, SeekOrigin.Begin);
-                defMsg.WriteBytes(writer);
+                WriteBaseBytes(writer);
                 EnDecode.fnEncode6BitBufA(stream.ToArray(), defMsgBytes, 0);
 
                 stream.Seek(0, SeekOrigin.Begin);

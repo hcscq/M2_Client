@@ -266,11 +266,11 @@ namespace ServerPackets
             get { return ServerMsgIds.SM_SELECTSERVER_OK; }
         }
 
-        public char[] IpInfo;
+        public string IpInfo;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            IpInfo = reader.ReadChars(128);
+            IpInfo =new string(reader.ReadChars(128));
         }
 
         protected override void WritePacket(BinaryWriter writer)

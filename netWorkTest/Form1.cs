@@ -26,17 +26,18 @@ namespace netWorkTest
             //InitialClientNetWork();
             Packet.IsServer = false;
             //InitialServerNetwork();
-            /* packet test
+            //packet test
             string str = "#=L>>><v!$";
             byte[] rawBytes = ASCIIEncoding.Default.GetBytes("#zt<>>><v");
-            int tran=EnDecode.fnDecode6BitBufA(rawBytes, rawBytes, 1, 3, 1, 4);
+            int tran = EnDecode.fnDecode6BitBufA(rawBytes, rawBytes, 1, 3, 1, 4);
             int length = (rawBytes[2] << 8) + rawBytes[1];
             length = 0;
 
             rawBytes = new byte[1024];
-            rawBytes=(new S.KeepAlive()).GetPacketBytesEx() as byte[];
-            Packet.ReceivePacketEx(rawBytes,out rawBytes);*/
-            ButtonsLocation();
+            rawBytes = (new S.Chat { Message="OK.",Type=ChatType.Guild,nRecog=1100}).GetPacketBytesEx() as byte[];
+            Packet.ReceivePacketEx(rawBytes, out rawBytes);
+            /*ButtonsLocation*/
+            //ButtonsLocation();
 
         }
         private void ButtonsLocation()

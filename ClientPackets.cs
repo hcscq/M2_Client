@@ -142,15 +142,31 @@ namespace ClientPackets
             get { return (short)ClientMsgIds.CM_SELECTSERVER; }
         }
 
-        public int ServerIndex = 0;
+
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ServerIndex = reader.ReadInt32();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ServerIndex);
+        }
+    }//CM_QUERYCHR
+    public sealed class QueryChr : Packet
+    {
+        public override short Index
+        {
+            get { return (short)ClientMsgIds.CM_QUERYCHR; }
+        }
+        public string Account;
+        
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+        }
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(Account.ToCharArray());
+            writer.Write('/');
         }
     }
     public sealed class NewCharacter : Packet

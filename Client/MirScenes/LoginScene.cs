@@ -639,6 +639,7 @@ namespace Client.MirScenes
         public sealed class ServerSelDialog : MirImageControl
         {
             public List<ServerSelButton>  ServersButton;
+            private MirButton CloseButton;
 
             public ServerSelDialog(string serverList=null)
             {
@@ -647,6 +648,17 @@ namespace Client.MirScenes
                 Location = new Point((Settings.ScreenWidth - Size.Width) / 2, (Settings.ScreenHeight - Size.Height) / 2);
                 PixelDetect = false;
                 Size = new Size(308, 450);
+
+                CloseButton = new MirButton
+                {
+                    HoverIndex = 11,//330,
+                    Index = 11,//329,
+                    Library = Libraries.Title,
+                    Location = new Point(244, 28),//new Point(166, 189),
+                    Parent = this,
+                    PressedIndex = 10,//331,
+                };
+                CloseButton.Click += (o, e) => Program.Form.Close();
 
                 if (serverList == null)
                     ServersButton = new List<MirScenes.LoginScene.ServerSelButton>();
@@ -709,15 +721,17 @@ namespace Client.MirScenes
                                 sb = new ServerSelButton
                                 {
                                     Enabled = true,
-                                    Size = new Size(42, 42),
+                                    Size = new Size(200, 42),
                                     HoverIndex = 15,//321,
                                     Index = 15,//320,
                                     Library = Libraries.Title,
                                     Location = new Point(100, POS_TOP_SERVER_BTN_Y + (j - i * COUNT_BUTTON_PER_COLUME) * (SERVER_BTN_HEIGHT + SERVER_BTN_GAP)),//new Point(227, 81),
                                     Parent = this,
                                     PressedIndex = 14,//322
-                                    ServerIndex = short.Parse(serArr[2*i]),
-                                    Text = serArr[2*i + 1].Trim()
+                                    ServerIndex = short.Parse(serArr[2*(i+j)]),
+                                    Text = serArr[2*(i+j) + 1].Trim(),
+                                    CenterText=true
+                                   
                                 };
                                 sb.Click += (o, e) => SelServer(sb.ServerIndex);
                                 ServersButton.Add(sb);

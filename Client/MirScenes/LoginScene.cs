@@ -355,7 +355,7 @@ namespace Client.MirScenes
             }
             if (_serverSel == null)
                 _serverSel = new ServerSelDialog {Visible=false ,Parent=_background};
-            _serverSel.Show(new string(p.Servers));
+            _serverSel.Show(p.Servers);
         }
         private void SelServer(S.SelServerOk p)
         {
@@ -652,26 +652,28 @@ namespace Client.MirScenes
                     ServersButton = new List<MirScenes.LoginScene.ServerSelButton>();
                 else
                 {
-                    string []serArr = serverList.Split(',');
-                    ServerSelButton sb;
-                    int pHeight = Size.Height - 35;
-                    for (int i=0;i<serArr.Length;i+=2) {
-                        sb = new ServerSelButton
-                        {
-                            Enabled = true,
-                            Size = new Size(42, 42),
-                            HoverIndex = 15,//321,
-                            Index = 15,//320,
-                            Library = Libraries.Title,
-                            Location = new Point(170, i*(2* pHeight / serArr.Length)+ pHeight / serArr.Length - Size.Height / 2),//new Point(227, 81),
-                            Parent = this,
-                            PressedIndex = 14,//322
-                            ServerIndex = short.Parse(serArr[i]),
-                            Text=serArr[i+1]
-                        };
-                        sb.Click += (o, e) => SelServer(sb.ServerIndex);
-                        ServersButton.Add(sb);
-                    }
+                    #region bulid old button
+                    //string []serArr = serverList.Split(',');
+                    //ServerSelButton sb;
+                    //int pHeight = Size.Height - 35;
+                    //for (int i=0;i<serArr.Length;i+=2) {
+                    //    sb = new ServerSelButton
+                    //    {
+                    //        Enabled = true,
+                    //        Size = new Size(42, 42),
+                    //        HoverIndex = 15,//321,
+                    //        Index = 15,//320,
+                    //        Library = Libraries.Title,
+                    //        Location = new Point(170, i*(2* pHeight / serArr.Length)+ pHeight / serArr.Length - Size.Height / 2),//new Point(227, 81),
+                    //        Parent = this,
+                    //        PressedIndex = 14,//322
+                    //        ServerIndex = short.Parse(serArr[i]),
+                    //        Text=serArr[i+1]
+                    //    };
+                    //    sb.Click += (o, e) => SelServer(sb.ServerIndex);
+                    //    ServersButton.Add(sb);
+                    //}
+                    #endregion
                 }
             }
 
@@ -690,29 +692,36 @@ namespace Client.MirScenes
                 //serverList = "1,乘风";
                 if (serverList != null)
                 {
-                    string[] serArr = serverList.Split(',');
+
                     ServerSelButton sb;
+                    string[] serArr = serverList.Split(',');
+
                     if (serArr.Length >= 2)
                     {
-                        int pHeight = Size.Height - 50;
-                        int bHeight = 42;
-                        for (int i = 0; i < serArr.Length-1; i += 2)
+                        int m_nSrvCount = serArr.Length / 2, POS_TOP_SERVER_BTN_Y = 60, SERVER_BTN_HEIGHT = 42, SERVER_BTN_GAP = 20;
+                        int COUNT_BUTTON_PER_COLUME = m_nSrvCount;
+                        Button[] buttons = new Button[m_nSrvCount];
+                        System.Drawing.Size bSize = new System.Drawing.Size(70, 35);
+                        for (int i = 0; i <= ((m_nSrvCount - 1) / COUNT_BUTTON_PER_COLUME); i++)
                         {
-                            sb = new ServerSelButton
+                            for (int j = i * COUNT_BUTTON_PER_COLUME; (j < m_nSrvCount && j < (COUNT_BUTTON_PER_COLUME * (i + 1))); j++)
                             {
-                                Enabled = true,
-                                Size = new Size(42, 42),
-                                HoverIndex = 15,//321,
-                                Index = 15,//320,
-                                Library = Libraries.Title,
-                                Location = new Point(100, i * (2 * pHeight / serArr.Length) + pHeight / serArr.Length - bHeight / 2),//new Point(227, 81),
-                                Parent = this,
-                                PressedIndex = 14,//322
-                                ServerIndex = (short)i,//short.Parse(serArr[i]),
-                                Text = serArr[i + 1]
-                            };
-                            sb.Click += (o, e) => SelServer(sb.ServerIndex);
-                            ServersButton.Add(sb);
+                                sb = new ServerSelButton
+                                {
+                                    Enabled = true,
+                                    Size = new Size(42, 42),
+                                    HoverIndex = 15,//321,
+                                    Index = 15,//320,
+                                    Library = Libraries.Title,
+                                    Location = new Point(100, POS_TOP_SERVER_BTN_Y + (j - i * COUNT_BUTTON_PER_COLUME) * (SERVER_BTN_HEIGHT + SERVER_BTN_GAP)),//new Point(227, 81),
+                                    Parent = this,
+                                    PressedIndex = 14,//322
+                                    ServerIndex = short.Parse(serArr[2*i]),
+                                    Text = serArr[2*i + 1].Trim()
+                                };
+                                sb.Click += (o, e) => SelServer(sb.ServerIndex);
+                                ServersButton.Add(sb);
+                            }
                         }
                     }
                     else

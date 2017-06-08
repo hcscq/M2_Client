@@ -17,46 +17,65 @@ namespace netWorkTest
         private Socket ServSocket;
         private bool Running;
         private Thread _thread;
-        private const string IP = "10.7.205.143";
+        private const string IP = "127.0.0.1";
         private const int port = 7000;
         public NetWork()
         {
             InitializeComponent();
             this.Disposed += new EventHandler(OnClose);
-            //InitialClientNetWork();
             Packet.IsServer = false;
+            InitialClientNetWork();
+
             //InitialServerNetwork();
             //packet test
-            string str = "#=L>>><v!$";
+            /*string str = "#=L>>><v!$";
             byte[] rawBytes = ASCIIEncoding.Default.GetBytes("#zt<>>><v");
             int tran = EnDecode.fnDecode6BitBufA(rawBytes, rawBytes, 1, 3, 1, 4);
             int length = (rawBytes[2] << 8) + rawBytes[1];
             length = 0;
 
             rawBytes = new byte[1024];
-            rawBytes = (new S.Chat { Message="OK.",Type=ChatType.Guild,nRecog=1100}).GetPacketBytesEx() as byte[];
-            Packet.ReceivePacketEx(rawBytes, out rawBytes);
+            rawBytes = (new S.Chat { Message="QQ拼音.",Type=ChatType.Guild,nRecog=1100}).GetPacketBytesEx() as byte[];
+            Packet.ReceivePacketEx(rawBytes, out rawBytes);*/
             /*ButtonsLocation*/
             //ButtonsLocation();
 
         }
         private void ButtonsLocation()
         {
-            int len = 3;
-            System.Drawing.Size fSize = this.Size;
-            fSize.Height -= 30;
-            Button[] buttons = new Button[len];
+
+            int m_nSrvCount = 2, COUNT_BUTTON_PER_COLUME=2, POS_TOP_SERVER_BTN_Y=30, SERVER_BTN_HEIGHT=35, SERVER_BTN_GAP=15;
+            Button[] buttons = new Button[m_nSrvCount];
             System.Drawing.Size bSize = new System.Drawing.Size(70, 35);
-            for (int i=0;i<buttons.Length;i++)
+            for (int i = 0; i <= ((m_nSrvCount - 1) / COUNT_BUTTON_PER_COLUME); i++)
             {
-                buttons[i] = new Button();
-                buttons[i].Size = bSize;
-                buttons[i].Text = i.ToString();
-                buttons[i].Location = 
-                    new System.Drawing.Point(30,
-                    i*(fSize.Height/len)+fSize.Height/(2*len)-bSize.Height/2);
-                this.Controls.Add(buttons[i]);
+                for (int j = i * COUNT_BUTTON_PER_COLUME; (j < m_nSrvCount && j < (COUNT_BUTTON_PER_COLUME * (i + 1))); j++)
+                {
+
+                    buttons[i] = new Button();
+                    buttons[i].Size = bSize;
+                    buttons[i].Text = i.ToString();
+                    buttons[i].Location =
+                        new System.Drawing.Point(100,
+                        POS_TOP_SERVER_BTN_Y + (j - i * COUNT_BUTTON_PER_COLUME) * (SERVER_BTN_HEIGHT + SERVER_BTN_GAP));
+                    this.Controls.Add(buttons[i]);
+                }
             }
+            //int len = 3;
+            //System.Drawing.Size fSize = this.Size;
+            //fSize.Height -= 30;
+            //Button[] buttons = new Button[len];
+            //System.Drawing.Size bSize = new System.Drawing.Size(70, 35);
+            //for (int i=0;i<buttons.Length;i++)
+            //{
+            //    buttons[i] = new Button();
+            //    buttons[i].Size = bSize;
+            //    buttons[i].Text = i.ToString();
+            //    buttons[i].Location = 
+            //        new System.Drawing.Point(30,
+            //        i*(fSize.Height/len)+fSize.Height/(2*len)-bSize.Height/2);
+            //    this.Controls.Add(buttons[i]);
+            //}
 
         }
         private void OnClose(object sender,EventArgs e)
@@ -110,7 +129,7 @@ namespace netWorkTest
                 Envir.AccSocketArgs = new SocketAsyncEventArgs();
             Envir.AccSocketArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnIOCompleted);
             IPEndPoint servIp = new IPEndPoint(IPAddress.Parse(IP), port);
-            ServSocket = new Socket(servIp.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            ServSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             //ServSocket.Bind(servIp);
             if (Envir.AccSocketArgs.Buffer == null)
                 Envir.AccSocketArgs.SetBuffer(new byte[8 * 1024], 0, 8 * 1024);
@@ -118,15 +137,9 @@ namespace netWorkTest
             if (!ServSocket.ConnectAsync(Envir.AccSocketArgs))
                 ProcessConnect(Envir.AccSocketArgs);
             S.Awakening p = new S.Awakening();
-            //string s = "ghgjgj54sdssfa";
-            //byte []inByte= Encoding.Default.GetBytes(s);
-            //byte[] outByte = new byte[inByte.Length+((2+inByte.Length)/3)];//(3*Length-2)/4-Length
-            //byte[] outByte2 = new byte[inByte.Length];
-            //EnDecode.fnEncode6BitBufA(Encoding.Default.GetBytes(s), outByte);
-            //EnDecode.fnDecode6BitBufA(outByte,ref outByte2, outByte2.Length);
-            //string ok = Encoding.Default.GetString(outByte2);
+
             MessageBox.Show("Network Started.");
-            Start();
+            //Start();
         }
         public void Start()
         {
@@ -147,8 +160,9 @@ namespace netWorkTest
                     for (int i = Envir.Connections.Count - 1; i >= 0; i--)
                     {
                         Envir.Connections[i].Process();
+                        Thread.Sleep(10);
                         //if(Envir.Connections[i].SendSocketArgs.Count>0&&!Envir.Connections[i]._client.SendAsync(Envir.Connections[i].SendSocketArgs))
-                         //   ProcessSend(Envir.Connections[i].SendSocketArgs);
+                        //   ProcessSend(Envir.Connections[i].SendSocketArgs);
                     }
                 }
             }

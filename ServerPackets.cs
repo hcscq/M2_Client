@@ -248,11 +248,11 @@ namespace ServerPackets
             get { return ServerMsgIds.SM_PASSOK_SELECTSERVER; }
         }
 
-        public char []Servers;
+        public string Servers; 
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            Servers=reader.ReadChars(1024);
+            Servers= System.Text.Encoding.Default.GetString(reader.ReadBytes(1024)).Replace('\0',' ');//GetEncoding("GB18030")
         }
 
         protected override void WritePacket(BinaryWriter writer)

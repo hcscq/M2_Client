@@ -24,5 +24,7 @@ namespace netWorkTest
         public static SocketAsyncEventArgs AccSocketArgs;
 
         public static Semaphore BufferLock = new Semaphore(Envir.MaxIP * 2, Envir.MaxIP * 2);
+        public enum STEP {UNLOGIN,LOGINING,LOGINED,SELSERVER }
+        public static STEP curStep = STEP.UNLOGIN;
     }
 }

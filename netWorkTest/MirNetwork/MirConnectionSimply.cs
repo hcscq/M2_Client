@@ -112,15 +112,21 @@ namespace netWorkTest.MirNetwork
 
             Buffer.BlockCopy(SocketArgs.Buffer, 0, _rawData, temp.Length, SocketArgs.BytesTransferred);
 
-            _sendList.Enqueue(new C.KeepAlive
-            {
-                Time = DateTime.Now.Ticks
-            });
+            //_sendList.Enqueue(new C.KeepAlive
+            //{
+            //    Time = DateTime.Now.Ticks
+            //});
 
             Packet p;
             while ((p = Packet.ReceivePacketEx(_rawData, out _rawData)) != null)
                 _receiveList.Enqueue(p);
-            //Process();
+
+            if (Envir.curStep == Envir.STEP.UNLOGIN)
+            {
+                _sendList.Enqueue(new C.Login { AccountID = "mirclient", Password = "mirpass" });
+                Envir.curStep = Envir.STEP.LOGINING;
+            }
+            Process();
             //BeginReceive();
         }
 
@@ -195,58 +201,65 @@ namespace netWorkTest.MirNetwork
 
             switch (p.Index)
             {
-                case (short)ClientPacketIds.ClientVersion:
+                case ServerMsgIds.SM_PASSOK_SELECTSERVER:
+                    Encoding srcEncode = Encoding.GetEncoding("GB18030");
+                    string aa = Encoding.Default.GetString( Encoding.Convert(srcEncode, Encoding.Default, srcEncode.GetBytes(((S.SelServer)p).Servers)));
+                    break;
+                case (short)ServerPacketIds.Connected:
+
+                    break;
+                case (short)ServerPacketIds.ClientVersion:
                     ClientVersion((C.ClientVersion)p);
                     break;
-                case (short)ClientPacketIds.Disconnect:
+                case (short)ServerPacketIds.Disconnect:
                     Disconnect(22);
                     break;
-                case (short)ClientPacketIds.KeepAlive: // Keep Alive
+                case (short)ServerPacketIds.KeepAlive: // Keep Alive
                     ClientKeepAlive((C.KeepAlive)p);
                     break;
-                case (short)ClientPacketIds.NewAccount:
+                case (short)ServerPacketIds.NewAccount:
                     //NewAccount((C.NewAccount)p);
                     break;
-                case (short)ClientPacketIds.ChangePassword:
+                case (short)ServerPacketIds.ChangePassword:
                     //ChangePassword((C.ChangePassword)p);
                     break;
-                case (short)ClientPacketIds.Login:
+                case (short)ServerPacketIds.Login:
                     //Login((C.Login)p);
                     break;
-                case (short)ClientPacketIds.NewCharacter:
+                case (short)ServerPacketIds.NewCharacter:
                     //NewCharacter((C.NewCharacter)p);
                     break;
-                case (short)ClientPacketIds.DeleteCharacter:
+                case (short)ServerPacketIds.DeleteCharacter:
                     //DeleteCharacter((C.DeleteCharacter)p);
                     break;
-                case (short)ClientPacketIds.StartGame:
+                case (short)ServerPacketIds.StartGame:
                     //StartGame((C.StartGame)p);
                     break;
                 case (short)ClientPacketIds.LogOut:
                     //LogOut();
                     break;
-                case (short)ClientPacketIds.Turn:
-                    //Turn((C.Turn)p);
-                    break;
-                case (short)ClientPacketIds.Walk:
-                    //Walk((C.Walk)p);
-                    break;
-                case (short)ClientPacketIds.Run:
+                //case (short)ServerPacketIds.Turn:
+                //    //Turn((C.Turn)p);
+                //    break;
+                //case (short)ServerPacketIds.Walk:
+                //    //Walk((C.Walk)p);
+                //    break;
+                //case (short)ServerPacketIds.Run:
                     //Run((C.Run)p);
-                    break;
-                case (short)ClientPacketIds.Chat:
+                    //break;
+                case (short)ServerPacketIds.Chat:
                     //Chat((C.Chat)p);
                     break;
-                case (short)ClientPacketIds.MoveItem:
+                case (short)ServerPacketIds.MoveItem:
                     //MoveItem((C.MoveItem)p);
                     break;
-                case (short)ClientPacketIds.StoreItem:
+                case (short)ServerPacketIds.StoreItem:
                     //StoreItem((C.StoreItem)p);
                     break;
                 case (short)ClientPacketIds.DepositRefineItem:
                     //DepositRefineItem((C.DepositRefineItem)p);
                     break;
-                case (short)ClientPacketIds.RetrieveRefineItem:
+                case (short)ServerPacketIds.RetrieveRefineItem:
                     //RetrieveRefineItem((C.RetrieveRefineItem)p);
                     break;
                

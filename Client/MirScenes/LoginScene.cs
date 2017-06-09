@@ -701,7 +701,6 @@ namespace Client.MirScenes
             }
             public void Show(string serverList = null)
             {
-                //serverList = "1,乘风";
                 if (serverList != null)
                 {
 

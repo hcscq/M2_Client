@@ -255,7 +255,8 @@ namespace Client.MirScenes
 
             Network.Enqueue(new C.StartGame
             {
-                CharacterIndex = Characters[_selected].Index
+                CharacterIndex = Characters[_selected].Index,
+                Account=g_Account
             });
         }
 

@@ -208,6 +208,7 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.StartGame; } }
 
+        public string Account;
         public int CharacterIndex;
 
         protected override void ReadPacket(BinaryReader reader)
@@ -216,6 +217,8 @@ namespace ClientPackets
         }
         protected override void WritePacket(BinaryWriter writer)
         {
+            writer.Write(Account.ToCharArray());
+            writer.Write('/');
             writer.Write(CharacterIndex);
         }
     }

@@ -31,38 +31,46 @@ namespace Client.MirScenes
 
         private InputKeyDialog _ViewKey;
 
-        public MirImageControl TestLabel, ViolenceLabel, MinorLabel, YouthLabel;
+        public MirImageControl TestLabel, ViolenceLabel, MinorLabel, YouthLabel, AnimateBackImg;
 
         public LoginScene()
         {
            
             SoundManager.PlaySound(SoundList.IntroMusic, true);
             Disposing += (o, e) => SoundManager.StopSound(SoundList.IntroMusic);
-
+            AnimateBackImg = new MirImageControl
+            {
+                Index = 0,
+                Library = Libraries.ChrSel,
+                Parent = this,
+                Visible = true
+            };
             _background = new MirAnimatedControl
                 {
                     Animated = false,
-                    AnimationCount = 19,
+                    AnimationCount = 10,
                     AnimationDelay = 100,
-                    Index = 0,
+                    Index = 23,
                     Library = Libraries.ChrSel,
                     Loop = false,
-                    Parent = this,
-                };
+                    Parent = AnimateBackImg,
+                    Location= new Point((Settings.ScreenWidth - 496) / 2, (Settings.ScreenHeight - 361) / 2)
+            };
 
-            _login = new LoginDialog {Parent = _background, Visible = false};
+            _login = new LoginDialog {Parent = AnimateBackImg, Visible = false};
+            _serverSel = new ServerSelDialog { Visible = false, Parent = AnimateBackImg };
             _login.AccountButton.Click += (o, e) =>
                 {
                     _login.Hide();
                     if(_ViewKey != null && !_ViewKey.IsDisposed) _ViewKey.Dispose();
-                    _account = new NewAccountDialog { Parent = _background };
+                    _account = new NewAccountDialog { Parent = AnimateBackImg };
                     _account.Disposing += (o1, e1) => _login.Show();
                 };
             _login.PassButton.Click += (o, e) =>
                 {
                     _login.Hide();
                     if (_ViewKey != null && !_ViewKey.IsDisposed) _ViewKey.Dispose();
-                    _password = new ChangePasswordDialog { Parent = _background };
+                    _password = new ChangePasswordDialog { Parent = AnimateBackImg };
                     _password.Disposing += (o1, e1) => _login.Show();
                 };
 
@@ -70,7 +78,7 @@ namespace Client.MirScenes
             {
                 if (_ViewKey != null && !_ViewKey.IsDisposed) return;
 
-                _ViewKey = new InputKeyDialog(_login) { Parent = _background };
+                _ViewKey = new InputKeyDialog(_login) { Parent = AnimateBackImg };
             };
 
             Version = new MirLabel
@@ -80,7 +88,7 @@ namespace Client.MirScenes
                     Border = true,
                     BorderColour = Color.Black,
                     Location = new Point(5, 580),
-                    Parent = _background,
+                    Parent = AnimateBackImg,
                     Text = string.Format("Version: {0}", Application.ProductVersion),
                 };
 
@@ -171,10 +179,11 @@ namespace Client.MirScenes
                     SelServer((S.SelServer)p);
                     break;
                 case ServerMsgIds.SM_SELECTSERVER_OK:
-                    //SelServer((S.SelServer)p);
+                    SelServer((S.SelServerOk)p);
                     break;
                 case (short)ServerPacketIds.LoginSuccess:
                 case ServerMsgIds.SM_QUERYCHR:
+                case ServerMsgIds.SM_QUERYCHR_FAIL:
                     Login((S.LoginSuccess)p);
                     break;
                 default:
@@ -352,19 +361,17 @@ namespace Client.MirScenes
             {
                 MirMessageBox.Show("No server online.", true);
                 return;
-            }
-            if (_serverSel == null)
-                _serverSel = new ServerSelDialog {Visible=false ,Parent=_background};
+            }                
             _serverSel.Show(p.Servers);
         }
         private void SelServer(S.SelServerOk p)
         {
-            MirMessageBox.Show("Unfinished.");
+            //MirMessageBox.Show("Unfinished.");
             Enabled = false;
             Network.Disconnect();
             _serverSel.Dispose();
             string[] ipInfo = p.IpInfo.Split('/');
-            if (ipInfo.Length >= 2)
+            if (ipInfo.Length >= 2) 
             {
                 Settings.IPAddress = ipInfo[0];
                 Settings.Port = int.Parse(ipInfo[1]);
@@ -689,10 +696,7 @@ namespace Client.MirScenes
                 }
             }
 
-            private void SelServer(short serIndex)
-            {
-                Network.Enqueue(new C.SelServer { wParam=serIndex });
-            }
+
 
             public void Hide()
             {
@@ -709,7 +713,7 @@ namespace Client.MirScenes
 
                     if (serArr.Length >= 2)
                     {
-                        int m_nSrvCount = serArr.Length / 2, POS_TOP_SERVER_BTN_Y = 60, SERVER_BTN_HEIGHT = 42, SERVER_BTN_GAP = 20;
+                        int m_nSrvCount = serArr.Length / 2, POS_TOP_SERVER_BTN_Y = 90, SERVER_BTN_HEIGHT = 42, SERVER_BTN_GAP = 20;
                         int COUNT_BUTTON_PER_COLUME = m_nSrvCount;
                         Button[] buttons = new Button[m_nSrvCount];
                         System.Drawing.Size bSize = new System.Drawing.Size(70, 35);
@@ -721,18 +725,21 @@ namespace Client.MirScenes
                                 {
                                     Enabled = true,
                                     Size = new Size(200, 42),
-                                    HoverIndex = 15,//321,
-                                    Index = 15,//320,
-                                    Library = Libraries.Title,
-                                    Location = new Point(100, POS_TOP_SERVER_BTN_Y + (j - i * COUNT_BUTTON_PER_COLUME) * (SERVER_BTN_HEIGHT + SERVER_BTN_GAP)),//new Point(227, 81),
+                                    HoverIndex = 257,//321,
+                                    Index = 257,//320,
+                                    Library = Libraries.Prguse,
+                                    Location = new Point(60, POS_TOP_SERVER_BTN_Y + (j - i * COUNT_BUTTON_PER_COLUME) * (SERVER_BTN_HEIGHT + SERVER_BTN_GAP)),//new Point(227, 81),
                                     Parent = this,
-                                    PressedIndex = 14,//322
+                                    PressedIndex = 258,//322
                                     ServerIndex = short.Parse(serArr[2*(i+j)]),
                                     Text = serArr[2*(i+j) + 1].Trim(),
                                     CenterText=true
                                    
                                 };
-                                sb.Click += (o, e) => SelServer(sb.ServerIndex);
+                                sb.Click += (o, e) =>
+                                {
+                                    Network.Enqueue(new C.SelServer { wParam = ((ServerSelButton)o).ServerIndex });
+                                };
                                 ServersButton.Add(sb);
                             }
                         }

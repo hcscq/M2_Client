@@ -1229,6 +1229,7 @@ public class ServerMsgIds
     public const short SM_PASSOK_SELECTSERVER = 529;
     public const short SM_SELECTSERVER_OK = 530;
     public const short SM_QUERYCHR = 520;
+    public const short SM_QUERYCHR_FAIL = 527;
 }
 public class ClientMsgIds
 {
@@ -4946,6 +4947,12 @@ public abstract class Packet
             case ServerMsgIds.SM_PASSOK_SELECTSERVER:
                 return new S.SelServer();
 
+            case ServerMsgIds.SM_SELECTSERVER_OK:
+                return new S.SelServerOk();
+            case ServerMsgIds.SM_QUERYCHR:
+            case ServerMsgIds.SM_QUERYCHR_FAIL:
+                return new S.LoginSuccess();
+
             case (short)ServerPacketIds.Connected:
                 return new S.Connected();
             case (short)ServerPacketIds.ClientVersion:
@@ -4964,7 +4971,9 @@ public abstract class Packet
                 return new S.Login();
             case (short)ServerPacketIds.LoginBanned:
                 return new S.LoginBanned();
+
             case (short)ServerPacketIds.LoginSuccess:
+
                 return new S.LoginSuccess();
             case (short)ServerPacketIds.NewCharacter:
                 return new S.NewCharacter();

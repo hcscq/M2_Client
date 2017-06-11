@@ -270,7 +270,7 @@ namespace ServerPackets
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            IpInfo =new string(reader.ReadChars(128));
+            IpInfo =new string(reader.ReadChars(128)).Replace('\0',' ').Trim();
         }
 
         protected override void WritePacket(BinaryWriter writer)

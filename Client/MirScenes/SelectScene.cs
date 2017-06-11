@@ -34,11 +34,11 @@ namespace Client.MirScenes
             Characters = characters;
             SortList();
 
-            KeyPress +=SelectScene_KeyPress;
+            KeyPress += SelectScene_KeyPress;
 
             Background = new MirImageControl
             {
-                Index = 64,
+                Index = 65,
                 Library = Libraries.Prguse,
                 Parent = this,
             };
@@ -52,68 +52,73 @@ namespace Client.MirScenes
             };
 
             ServerLabel = new MirLabel
-                {
-                    Location = new Point(322, 44),
-                    Parent = Background,
-                    Size = new Size(155, 17),
-                    Text = "Legend of Mir 2",
-                    DrawFormat = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter
-                };
-            
+            {
+                Location = new Point(322, 5),
+                Parent = Background,
+                Size = new Size(155, 17),
+                Text = "Legend of Mir 2",
+                DrawFormat = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter
+            };
+
             StartGameButton = new MirButton
             {
                 Enabled = false,
-                HoverIndex = 341,
-                Index = 340,
-                Library = Libraries.Title,
-                Location = new Point(110, 568),
+                HoverIndex = 68,//341,
+                Index = 68,//340,
+                Library = Libraries.Prguse,//Libraries.Title,
+                Location = new Point(385,455),//new Point(110, 568),
                 Parent = Background,
-                PressedIndex = 342,
-                GrayScale = true
+                PressedIndex = 68,//342,
+                GrayScale = true,
+
             };
             StartGameButton.Click += (o, e) => StartGame();
 
             NewCharacterButton = new MirButton
-                {
-                    HoverIndex = 344,
-                    Index = 343,
-                    Library = Libraries.Title,
-                    Location = new Point(230, 568),
-                    Parent = Background,
-                    PressedIndex = 345,
-                };
-            NewCharacterButton.Click += (o, e) => _character = new NewCharacterDialog { Parent = this };
+            {
+                HoverIndex = 69,//344,
+                Index = 69,//343,
+                Library = Libraries.Prguse,//Libraries.Title,
+                Location = new Point (350,484),//new Point(230, 568),
+                Parent = Background,
+                PressedIndex = 69,//345,
+
+            };
+            NewCharacterButton.Click += (o, e) => _character = new NewCharacterDialog { Parent = Background };
 
             DeleteCharacterButton = new MirButton
             {
-                HoverIndex = 347,
-                Index = 346,
-                Library = Libraries.Title,
-                Location = new Point(350, 568),
+                HoverIndex = 70,// 347,
+                Index = 70,//346,
+                Library = Libraries.Prguse,//Libraries.Title,
+                Location = new Point(350, 505),
                 Parent = Background,
-                PressedIndex = 348
+                PressedIndex = 70,//348
+
             };
             DeleteCharacterButton.Click += (o, e) => DeleteCharacter();
 
 
             CreditsButton = new MirButton
             {
-                HoverIndex = 350,
-                Index = 349,
-                Library = Libraries.Title,
-                Location = new Point(470, 568),
+                HoverIndex = 71,//350,
+                Index = 71,//349,
+                Library = Libraries.Prguse,//Libraries.Title,
+                Location = new Point(363, 526),
                 Parent = Background,
-                PressedIndex = 351
+                PressedIndex = 71,//351
+
             };
 
             ExitGame = new MirButton
             {
-                HoverIndex = 353,
-                Index = 352,
-                Library = Libraries.Title,
-                Location = new Point(590, 568),
+                HoverIndex = 72,//353,
+                Index = 72,//352,
+                Library = Libraries.Prguse,//Libraries.Title,
+                Location = new Point(380, 546),
                 Parent = Background,
-                PressedIndex = 354
+                PressedIndex = 72,//354
+
             };
             ExitGame.Click += (o, e) => Program.Form.Close();
 
@@ -135,10 +140,10 @@ namespace Client.MirScenes
             };
             CharacterDisplay.AfterDraw += (o, e) =>
             {
-               // if (_selected >= 0 && _selected < Characters.Count && characters[_selected].Class == MirClass.Wizard)
-                    Libraries.ChrSel.DrawBlend(CharacterDisplay.Index + 560, CharacterDisplay.DisplayLocationWithoutOffSet, Color.White, true);
+                // if (_selected >= 0 && _selected < Characters.Count && characters[_selected].Class == MirClass.Wizard)
+                Libraries.ChrSel.DrawBlend(CharacterDisplay.Index + 560, CharacterDisplay.DisplayLocationWithoutOffSet, Color.White, true);
             };
-            
+
             CharacterButtons = new CharacterButton[4];
 
             CharacterButtons[0] = new CharacterButton
@@ -147,7 +152,7 @@ namespace Client.MirScenes
                 Parent = Background,
                 Sound = SoundList.ButtonA,
             };
-            CharacterButtons[0].Click += (o,e) =>
+            CharacterButtons[0].Click += (o, e) =>
             {
                 if (characters.Count <= 0) return;
 
@@ -205,14 +210,14 @@ namespace Client.MirScenes
                 Border = true,
             };
             LastAccessLabelLabel = new MirLabel
-                {
-                    Location = new Point(-80, -1),
-                    Parent = LastAccessLabel,
-                    Text = "Last Online:",
-                    Size = new Size(100, 21),
-                    DrawFormat = TextFormatFlags.Left | TextFormatFlags.VerticalCenter,
-                    Border = true,
-                };
+            {
+                Location = new Point(-80, -1),
+                Parent = LastAccessLabel,
+                Text = "Last Online:",
+                Size = new Size(100, 21),
+                DrawFormat = TextFormatFlags.Left | TextFormatFlags.VerticalCenter,
+                Border = true,
+            };
             UpdateInterface();
         }
 
@@ -625,9 +630,9 @@ namespace Client.MirScenes
                         Animated = true,
                         AnimationCount = 16,
                         AnimationDelay = 250,
-                        Index = 20,
+                        Index = 40,//20,
                         Library = Libraries.ChrSel,
-                        Location = new Point(120, 250),
+                        Location =new Point(120,100),// new Point(120, 250),
                         Parent = this,
                         UseOffSet = true,
                     };

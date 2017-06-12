@@ -176,6 +176,8 @@ namespace ClientPackets
         public string Name = string.Empty;
         public MirGender Gender;
         public MirClass Class;
+        public string Account;
+        public byte CharIndex;
         protected override void ReadPacket(BinaryReader reader)
         {
             Name = reader.ReadString();
@@ -184,20 +186,22 @@ namespace ClientPackets
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(Name);
-            writer.Write((byte)Gender);
+            writer.Write(CharIndex);
             writer.Write((byte)Class);
+            writer.Write((byte)Gender);
+            writer.Write(System.Text.Encoding.Default.GetBytes(Name));
+            writer.Write(System.Text.Encoding.Default.GetBytes(Account));
         }
     }
     public sealed class DeleteCharacter : Packet
     {
         public override short Index { get { return (short)ClientPacketIds.DeleteCharacter; } }
 
-        public int CharacterIndex;
+        public byte CharacterIndex;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            CharacterIndex = reader.ReadInt32();
+            CharacterIndex = reader.ReadByte();
         }
         protected override void WritePacket(BinaryWriter writer)
         {

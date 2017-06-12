@@ -20,6 +20,8 @@ namespace Client.MirControls
         protected static int g_nRecog;
 
         protected static string g_Account;
+
+        protected static string g_ServerName;
         //private bool _redraw;
 
         protected MirScene()

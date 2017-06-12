@@ -133,6 +133,7 @@ namespace Client.MirControls
                 _label.Text = value;
                 _label.Visible = !string.IsNullOrEmpty(value);
             }
+            get { return Text; }
         }
         #endregion
 

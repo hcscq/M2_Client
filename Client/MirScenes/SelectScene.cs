@@ -18,22 +18,22 @@ namespace Client.MirScenes
         private NewCharacterDialog _character;
 
         public MirLabel ServerLabel;
-        public MirAnimatedControl CharacterDisplay;
+        public MirAnimatedControl[] CharacterDisplay;
         public MirButton StartGameButton, NewCharacterButton, DeleteCharacterButton, CreditsButton, ExitGame;
-        public CharacterButton[] CharacterButtons;
+        public CharacterControl[] CharacterControls;
         public MirLabel LastAccessLabel, LastAccessLabelLabel;
         public List<SelectInfo> Characters = new List<SelectInfo>();
-        private int _selected;
+        private byte _selected;
 
         public SelectScene(List<SelectInfo> characters)
         {
             SoundManager.PlaySound(SoundList.SelectMusic, true);
             Disposing += (o, e) => SoundManager.StopSound(SoundList.SelectMusic);
-
+            CharacterDisplay = new MirAnimatedControl[2];
 
             Characters = characters;
             SortList();
-
+            _selected =Characters[Characters.Count-1].Index;
             KeyPress += SelectScene_KeyPress;
 
             Background = new MirImageControl
@@ -56,7 +56,7 @@ namespace Client.MirScenes
                 Location = new Point(322, 5),
                 Parent = Background,
                 Size = new Size(155, 17),
-                Text = "Legend of Mir 2",
+                Text = g_ServerName,//"Legend of Mir 2",
                 DrawFormat = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter
             };
 
@@ -84,7 +84,18 @@ namespace Client.MirScenes
                 PressedIndex = 69,//345,
 
             };
-            NewCharacterButton.Click += (o, e) => _character = new NewCharacterDialog { Parent = Background };
+            NewCharacterButton.Click += (o, e) =>
+            {
+                for (int i = 0; i < CharacterControls.Length; i++)
+                    if (CharacterControls[i].IsEmpty)
+                        _character = new NewCharacterDialog
+                        {
+                            CharIndex = CharacterControls[i].CharIndex,
+                            Parent = Background,
+                            Location = CharacterControls[i > 0 ? (i - 1) : (i + 1)].Location,
+                            CharacterDisplay = CharacterControls[i].CharacterDisplay
+                        };
+            };
 
             DeleteCharacterButton = new MirButton
             {
@@ -122,37 +133,22 @@ namespace Client.MirScenes
             };
             ExitGame.Click += (o, e) => Program.Form.Close();
 
+            #region Animations
 
-            CharacterDisplay = new MirAnimatedControl
-            {
-                Animated = true,
-                AnimationCount = 16,
-                AnimationDelay = 250,
-                FadeIn = true,
-                FadeInDelay = 75,
-                FadeInRate = 0.1F,
-                Index = 220,
-                Library = Libraries.ChrSel,
-                Location = new Point(200, 300),
-                Parent = Background,
-                UseOffSet = true,
-                Visible = false
-            };
-            CharacterDisplay.AfterDraw += (o, e) =>
-            {
-                // if (_selected >= 0 && _selected < Characters.Count && characters[_selected].Class == MirClass.Wizard)
-                Libraries.ChrSel.DrawBlend(CharacterDisplay.Index + 560, CharacterDisplay.DisplayLocationWithoutOffSet, Color.White, true);
-            };
+            CharacterDisplay[0].Location = new Point(120,100);
+            CharacterDisplay[1].Location = new Point(500,100);
+            #endregion
 
-            CharacterButtons = new CharacterButton[4];
+            CharacterControls = new CharacterControl[4];
 
-            CharacterButtons[0] = new CharacterButton
+            CharacterControls[0] = new CharacterControl
             {
+                CharIndex = 0,
                 Location = new Point(447, 122),
                 Parent = Background,
                 Sound = SoundList.ButtonA,
             };
-            CharacterButtons[0].Click += (o, e) =>
+            CharacterControls[0].Click += (o, e) =>
             {
                 if (characters.Count <= 0) return;
 
@@ -160,47 +156,48 @@ namespace Client.MirScenes
                 UpdateInterface();
             };
 
-            CharacterButtons[1] = new CharacterButton
+            CharacterControls[1] = new CharacterControl
             {
+                CharIndex = 1,
                 Location = new Point(447, 226),
                 Parent = Background,
                 Sound = SoundList.ButtonA,
             };
-            CharacterButtons[1].Click += (o, e) =>
+            CharacterControls[1].Click += (o, e) =>
             {
                 if (characters.Count <= 1) return;
                 _selected = 1;
                 UpdateInterface();
             };
+            #region 2,3 characters
+            //CharacterControls[2] = new CharacterControl
+            //{
+            //    Location = new Point(447, 330),
+            //    Parent = Background,
+            //    Sound = SoundList.ButtonA,
+            //};
+            //CharacterControls[2].Click += (o, e) =>
+            //{
+            //    if (characters.Count <= 2) return;
 
-            CharacterButtons[2] = new CharacterButton
-            {
-                Location = new Point(447, 330),
-                Parent = Background,
-                Sound = SoundList.ButtonA,
-            };
-            CharacterButtons[2].Click += (o, e) =>
-            {
-                if (characters.Count <= 2) return;
+            //    _selected = 2;
+            //    UpdateInterface();
+            //};
 
-                _selected = 2;
-                UpdateInterface();
-            };
+            //CharacterControls[3] = new CharacterControl
+            //{
+            //    Location = new Point(447, 434),
+            //    Parent = Background,
+            //    Sound = SoundList.ButtonA,
+            //};
+            //CharacterControls[3].Click += (o, e) =>
+            //{
+            //    if (characters.Count <= 3) return;
 
-            CharacterButtons[3] = new CharacterButton
-            {
-                Location = new Point(447, 434),
-                Parent = Background,
-                Sound = SoundList.ButtonA,
-            };
-            CharacterButtons[3].Click += (o, e) =>
-            {
-                if (characters.Count <= 3) return;
-
-                _selected = 3;
-                UpdateInterface();
-            };
-
+            //    _selected = 3;
+            //    UpdateInterface();
+            //};
+            #endregion
             LastAccessLabel = new MirLabel
             {
                 Location = new Point(140, 509),
@@ -348,7 +345,7 @@ namespace Client.MirScenes
             if (_selected < 0 || _selected >= Characters.Count) return;
 
             MirMessageBox message = new MirMessageBox(string.Format("Are you sure you want to Delete the character {0}?", Characters[_selected].Name), MirMessageBoxButtons.YesNo);
-            int index = Characters[_selected].Index;
+            byte index = _selected;//Characters[_selected].Index;
 
             message.YesButton.Click += (o, e) =>
             {
@@ -454,48 +451,49 @@ namespace Client.MirScenes
         }
         private void UpdateInterface()
         {
-            for (int i = 0; i < CharacterButtons.Length; i++)
+            for (int i = 0; i < CharacterControls.Length; i++)
             {
-                CharacterButtons[i].Selected = i == _selected;
-                CharacterButtons[i].Update(i >= Characters.Count ? null : Characters[i]);
+                CharacterControls[i].Selected = CharacterControls[i].Index == _selected;
+                CharacterControls[i].Update((Characters.Exists(it => it.Index == CharacterControls[i].Index)) ? Characters.Find(it => it.Index == CharacterControls[i].Index) : null);
             }
+            #region shared stage
+            //if (_selected >= 0 && _selected < Characters.Count)
+            //{
+            //    CharacterDisplay.Visible = true;
+            //    //CharacterDisplay.Index = ((byte)Characters[_selected].Class + 1) * 20 + (byte)Characters[_selected].Gender * 280; 
 
-            if (_selected >= 0 && _selected < Characters.Count)
-            {
-                CharacterDisplay.Visible = true;
-                //CharacterDisplay.Index = ((byte)Characters[_selected].Class + 1) * 20 + (byte)Characters[_selected].Gender * 280; 
+            //    switch ((MirClass)Characters[_selected].Class)
+            //    {
+            //        case MirClass.Warrior:
+            //            CharacterDisplay.Index = (byte)Characters[_selected].Gender == 0 ? 20 : 300; //220 : 500;
+            //            break;
+            //        case MirClass.Wizard:
+            //            CharacterDisplay.Index = (byte)Characters[_selected].Gender == 0 ? 40 : 320; //240 : 520;
+            //            break;
+            //        case MirClass.Taoist:
+            //            CharacterDisplay.Index = (byte)Characters[_selected].Gender == 0 ? 60 : 340; //260 : 540;
+            //            break;
+            //        case MirClass.Assassin:
+            //            CharacterDisplay.Index = (byte)Characters[_selected].Gender == 0 ? 80 : 360; //280 : 560;
+            //            break;
+            //        case MirClass.Archer:
+            //            CharacterDisplay.Index = (byte)Characters[_selected].Gender == 0 ? 100 : 140; //160 : 180;
+            //            break;
+            //    }
 
-                switch ((MirClass)Characters[_selected].Class)
-                {
-                    case MirClass.Warrior:
-                        CharacterDisplay.Index = (byte)Characters[_selected].Gender == 0 ? 20 : 300; //220 : 500;
-                        break;
-                    case MirClass.Wizard:
-                        CharacterDisplay.Index = (byte)Characters[_selected].Gender == 0 ? 40 : 320; //240 : 520;
-                        break;
-                    case MirClass.Taoist:
-                        CharacterDisplay.Index = (byte)Characters[_selected].Gender == 0 ? 60 : 340; //260 : 540;
-                        break;
-                    case MirClass.Assassin:
-                        CharacterDisplay.Index = (byte)Characters[_selected].Gender == 0 ? 80 : 360; //280 : 560;
-                        break;
-                    case MirClass.Archer:
-                        CharacterDisplay.Index = (byte)Characters[_selected].Gender == 0 ? 100 : 140; //160 : 180;
-                        break;
-                }
-
-                LastAccessLabel.Text = Characters[_selected].LastAccess == DateTime.MinValue ? "Never" : Characters[_selected].LastAccess.ToString();
-                LastAccessLabel.Visible = true;
-                LastAccessLabelLabel.Visible = true;
-                StartGameButton.Enabled = true;
-            }
-            else
-            {
-                CharacterDisplay.Visible = false;
-                LastAccessLabel.Visible = false;
-                LastAccessLabelLabel.Visible = false;
-                StartGameButton.Enabled = false;
-            }
+            //    LastAccessLabel.Text = Characters[_selected].LastAccess == DateTime.MinValue ? "Never" : Characters[_selected].LastAccess.ToString();
+            //    LastAccessLabel.Visible = true;
+            //    LastAccessLabelLabel.Visible = true;
+            //    StartGameButton.Enabled = true;
+            //}
+            //else
+            //{
+            //    CharacterDisplay.Visible = false;
+            //    LastAccessLabel.Visible = false;
+            //    LastAccessLabelLabel.Visible = false;
+            //    StartGameButton.Enabled = false;
+            //}
+            #endregion
         }
 
 
@@ -514,7 +512,7 @@ namespace Client.MirScenes
                 DeleteCharacterButton = null; 
                 CreditsButton = null;
                 ExitGame = null;
-                CharacterButtons = null;
+                CharacterControls = null;
                 LastAccessLabel = null;LastAccessLabelLabel = null;
                 Characters  = null;
                 _selected = 0;
@@ -546,7 +544,7 @@ namespace Client.MirScenes
 
             private MirClass _class;
             private MirGender _gender;
-
+            public byte CharIndex;
             #region Descriptions
             public const string WarriorDescription =
                 "Warriors are a class of great strength and vitality. They are not easily killed in battle and have the advantage of being able to use" +
@@ -579,7 +577,7 @@ namespace Client.MirScenes
             {
                 Index = 73;
                 Library = Libraries.Prguse;
-                Location = new Point((Settings.ScreenWidth - Size.Width)/2, (Settings.ScreenHeight - Size.Height)/2);
+                //Location = new Point((Settings.ScreenWidth - Size.Width)/2, (Settings.ScreenHeight - Size.Height)/2);
                 Modal = true;
 
                 TitleLabel = new MirImageControl
@@ -625,22 +623,22 @@ namespace Client.MirScenes
                 NameTextBox.TextBox.TextChanged += CharacterNameTextBox_TextChanged;
                 NameTextBox.SetFocus();
 
-                CharacterDisplay = new MirAnimatedControl
-                    {
-                        Animated = true,
-                        AnimationCount = 16,
-                        AnimationDelay = 250,
-                        Index = 40,//20,
-                        Library = Libraries.ChrSel,
-                        Location =new Point(120,100),// new Point(120, 250),
-                        Parent = this,
-                        UseOffSet = true,
-                    };
-                CharacterDisplay.AfterDraw += (o, e) =>
-                    {
-                        if (_class == MirClass.Wizard)
-                            Libraries.ChrSel.DrawBlend(CharacterDisplay.Index + 560, CharacterDisplay.DisplayLocationWithoutOffSet, Color.White, true);
-                    };
+                //CharacterDisplay = new MirAnimatedControl
+                //    {
+                //        Animated = true,
+                //        AnimationCount = 16,
+                //        AnimationDelay = 250,
+                //        Index = 40,//20,
+                //        Library = Libraries.ChrSel,
+                //        Location =new Point(120,100),// new Point(120, 250),
+                //        Parent = this,
+                //        UseOffSet = true,
+                //    };
+                //CharacterDisplay.AfterDraw += (o, e) =>
+                //    {
+                //        if (_class == MirClass.Wizard)
+                //            Libraries.ChrSel.DrawBlend(CharacterDisplay.Index + 560, CharacterDisplay.DisplayLocationWithoutOffSet, Color.White, true);
+                //    };
 
 
                 WarriorButton = new MirButton
@@ -803,11 +801,13 @@ namespace Client.MirScenes
                 OKButton.Enabled = false;
 
                 Network.Enqueue(new C.NewCharacter
-                    {
-                        Name = NameTextBox.Text,
-                        Class = _class,
-                        Gender = _gender
-                    });
+                {
+                    Name = NameTextBox.Text,
+                    Class = _class,
+                    Gender = _gender,
+                    Account = g_Account,
+                    CharIndex = CharIndex
+                });
             }
 
             private void UpdateInterface()
@@ -863,16 +863,39 @@ namespace Client.MirScenes
                 //CharacterDisplay.Index = ((byte)_class + 1) * 20 + (byte)_gender * 280;
             }
         }
-        public sealed class CharacterButton : MirImageControl
+        public sealed class CharacterControl : MirImageControl
         {
             public MirLabel NameLabel, LevelLabel, ClassLabel;
             public bool Selected;
-            
-            public CharacterButton()
+            public MirAnimatedControl CharacterDisplay;
+            public bool IsEmpty;
+            public byte CharIndex;
+            public CharacterControl()
             {
                 Index = 44; //45 locked
                 Library = Libraries.Prguse;
                 Sound = SoundList.ButtonA;
+                UseOffSet = true;
+                CharacterDisplay = new MirAnimatedControl
+                {
+                    Animated = false,
+                    AnimationCount = 16,
+                    AnimationDelay = 250,
+                    FadeIn = true,
+                    FadeInDelay = 75,
+                    FadeInRate = 0.1F,
+                    Index = 220,//stone Img Index
+                    Library = Libraries.ChrSel,
+                    Location = new Point(120,100),//new Point(200, 300),
+                    Parent = this,
+                    UseOffSet = true,
+                    Visible = false
+                };
+                CharacterDisplay.AfterDraw += (o, e) =>
+                {
+                    // if (_selected >= 0 && _selected < Characters.Count && characters[_selected].Class == MirClass.Wizard)
+                    Libraries.ChrSel.DrawBlend(CharacterDisplay.Index + 560, CharacterDisplay.DisplayLocationWithoutOffSet, Color.White, true);
+                };
 
                 NameLabel = new MirLabel
                 {
@@ -912,13 +935,36 @@ namespace Client.MirScenes
                     NameLabel.Visible = false;
                     LevelLabel.Visible = false;
                     ClassLabel.Visible = false;
-
+                    Selected = false;
+                    IsEmpty = true;
                     return;
                 }
-
+                /*new begin*/
+                IsEmpty = false;
+                switch (info.Class)
+                {//stoned first Img Index 
+                    case MirClass.Warrior:
+                        CharacterDisplay.Index = info.Gender == 0 ? 20 : 300; //220 : 500;
+                        break;
+                    case MirClass.Wizard:
+                        CharacterDisplay.Index = info.Gender == 0 ? 40 : 320; //240 : 520;
+                        break;
+                    case MirClass.Taoist:
+                        CharacterDisplay.Index = info.Gender == 0 ? 60 : 340; //260 : 540;
+                        break;
+                    case MirClass.Assassin:
+                        CharacterDisplay.Index = info.Gender == 0 ? 80 : 360; //280 : 560;
+                        break;
+                    case MirClass.Archer:
+                        CharacterDisplay.Index = info.Gender == 0 ? 100 : 140; //160 : 180;
+                        break;
+                }
+                if (Selected) CharacterDisplay.Animated = true;
+                CharacterDisplay.Visible = true;
+                /*new end*/
                 Library = Libraries.Title;
 
-                Index = 660 + (byte) info.Class;
+                Index = 660 + (byte)info.Class;
 
                 if (Selected) Index += 5;
 
@@ -926,7 +972,7 @@ namespace Client.MirScenes
                 NameLabel.Text = info.Name;
                 LevelLabel.Text = info.Level.ToString();
                 ClassLabel.Text = info.Class.ToString();
-                
+
                 NameLabel.Visible = true;
                 LevelLabel.Visible = true;
                 ClassLabel.Visible = true;

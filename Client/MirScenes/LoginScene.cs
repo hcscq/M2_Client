@@ -738,7 +738,9 @@ namespace Client.MirScenes
                                 };
                                 sb.Click += (o, e) =>
                                 {
-                                    Network.Enqueue(new C.SelServer { wParam = ((ServerSelButton)o).ServerIndex });
+                                    ServerSelButton ServerButton = (ServerSelButton)o;
+                                    Network.Enqueue(new C.SelServer { wParam = ServerButton.ServerIndex });
+                                    g_ServerName = ServerButton.Text;
                                 };
                                 ServersButton.Add(sb);
                             }

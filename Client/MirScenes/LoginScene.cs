@@ -590,7 +590,7 @@ namespace Client.MirScenes
             {
                 OKButton.Enabled = false;
                 Network.Enqueue(new C.Login {AccountID = AccountIDTextBox.Text, Password = PasswordTextBox.Text});
-                g_Account = AccountIDTextBox.Text;
+                g_Account = AccountIDTextBox.Text.ToArray();
             }
 
             public void Hide()

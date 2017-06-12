@@ -157,7 +157,7 @@ namespace ClientPackets
         {
             get { return (short)ClientMsgIds.CM_QUERYCHR; }
         }
-        public string Account;
+        public char[] Account;
         
 
         protected override void ReadPacket(BinaryReader reader)
@@ -165,7 +165,7 @@ namespace ClientPackets
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(Account.ToCharArray());
+            writer.Write(Account);
             writer.Write('/');
         }
     }
@@ -176,7 +176,7 @@ namespace ClientPackets
         public string Name = string.Empty;
         public MirGender Gender;
         public MirClass Class;
-        public string Account;
+        public char[] Account;
         public byte CharIndex;
         protected override void ReadPacket(BinaryReader reader)
         {
@@ -190,7 +190,7 @@ namespace ClientPackets
             writer.Write((byte)Class);
             writer.Write((byte)Gender);
             writer.Write(System.Text.Encoding.Default.GetBytes(Name));
-            writer.Write(System.Text.Encoding.Default.GetBytes(Account));
+            writer.Write(Account);
         }
     }
     public sealed class DeleteCharacter : Packet
@@ -198,7 +198,7 @@ namespace ClientPackets
         public override short Index { get { return (short)ClientPacketIds.DeleteCharacter; } }
 
         public byte CharacterIndex;
-
+        public char[] Account;
         protected override void ReadPacket(BinaryReader reader)
         {
             CharacterIndex = reader.ReadByte();
@@ -206,13 +206,14 @@ namespace ClientPackets
         protected override void WritePacket(BinaryWriter writer)
         {
             writer.Write(CharacterIndex);
+            writer.Write(Account);
         }
     }
     public sealed class StartGame : Packet
     {
         public override short Index { get { return (short)ClientPacketIds.StartGame; } }
 
-        public string Account;
+        public char[] Account;
         public int CharacterIndex;
 
         protected override void ReadPacket(BinaryReader reader)
@@ -221,7 +222,7 @@ namespace ClientPackets
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(Account.ToCharArray());
+            writer.Write(Account);
             writer.Write('/');
             writer.Write(CharacterIndex);
         }

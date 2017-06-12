@@ -350,7 +350,7 @@ namespace Client.MirScenes
             message.YesButton.Click += (o, e) =>
             {
                 DeleteCharacterButton.Enabled = false;
-                Network.Enqueue(new C.DeleteCharacter { CharacterIndex = index });
+                Network.Enqueue(new C.DeleteCharacter { CharacterIndex = index,Account=g_Account });
             };
 
             message.Show();
@@ -359,7 +359,7 @@ namespace Client.MirScenes
         private void DeleteCharacter(S.DeleteCharacter p)
         {
             DeleteCharacterButton.Enabled = true;
-            switch (p.Result)
+            switch (p.wParam)
             {
                 case 0:
                     MirMessageBox.Show("Deleting characters is currently disabled.");

@@ -330,7 +330,6 @@ namespace ServerPackets
             get { return (short)ServerPacketIds.DeleteCharacter; }
         }
 
-        public byte Result;
 
         /*
          * 0: Disabled.
@@ -339,12 +338,12 @@ namespace ServerPackets
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            Result = reader.ReadByte();
+
         }
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(Result);
+
         }
     }
     public sealed class DeleteCharacterSuccess : Packet

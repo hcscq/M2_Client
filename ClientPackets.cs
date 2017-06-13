@@ -172,15 +172,15 @@ namespace ClientPackets
     public sealed class NewCharacter : Packet
     {
         public override short Index { get { return (short)ClientPacketIds.NewCharacter; } }
-
-        public string Name = string.Empty;
+        public char[] _Name = new char[20];
+        public char []Name=new char[20];
         public MirGender Gender;
         public MirClass Class;
-        public char[] Account;
+        public char[] Account=new char[20];
         public byte CharIndex;
         protected override void ReadPacket(BinaryReader reader)
         {
-            Name = reader.ReadString();
+            Name = reader.ReadChars(20);
             Gender = (MirGender)reader.ReadByte();
             Class = (MirClass)reader.ReadByte();
         }
@@ -189,7 +189,8 @@ namespace ClientPackets
             writer.Write(CharIndex);
             writer.Write((byte)Class);
             writer.Write((byte)Gender);
-            writer.Write(System.Text.Encoding.Default.GetBytes(Name));
+            Name.CopyTo(_Name, 0);
+            writer.Write(_Name);
             writer.Write(Account);
         }
     }

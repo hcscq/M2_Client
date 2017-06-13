@@ -494,11 +494,11 @@ namespace Client.MirScenes
                 CloseButton.Click += (o, e) => Program.Form.Close();
 
                 AccountIDTextBox = new MirTextBox
-                    {
-                        Location = new Point(98, 85),// new Point(85, 85),
+                {
+                    Location = new Point(98, 85),// new Point(85, 85),
                     Parent = this,
-                        Size = new Size(136,10),//new Size(136, 12),
-                        MaxLength = Globals.MaxAccountIDLength
+                    Size = new Size(136, 10),//new Size(136, 12),
+                    MaxLength = Globals.MaxAccountIDLength
                 };
                 AccountIDTextBox.SetFocus();
                 AccountIDTextBox.TextBox.TextChanged += AccountIDTextBox_TextChanged;
@@ -590,7 +590,10 @@ namespace Client.MirScenes
             {
                 OKButton.Enabled = false;
                 Network.Enqueue(new C.Login {AccountID = AccountIDTextBox.Text, Password = PasswordTextBox.Text});
-                g_Account = AccountIDTextBox.Text.ToArray();
+                char[] Account = AccountIDTextBox.Text.Trim().ToArray();
+                Account.CopyTo(g_Account,0);
+                g_Account[Account.Length] = '\0';
+                
             }
 
             public void Hide()

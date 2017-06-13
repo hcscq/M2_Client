@@ -19,7 +19,7 @@ namespace Client.MirControls
 
         protected static int g_nRecog;
 
-        protected static char[] g_Account;
+        protected static char[] g_Account=new char[20];
 
         protected static string g_ServerName;
         //private bool _redraw;

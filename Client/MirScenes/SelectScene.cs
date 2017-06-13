@@ -29,11 +29,12 @@ namespace Client.MirScenes
         {
             SoundManager.PlaySound(SoundList.SelectMusic, true);
             Disposing += (o, e) => SoundManager.StopSound(SoundList.SelectMusic);
-            CharacterDisplay = new MirAnimatedControl[2];
+            CharacterDisplay = new MirAnimatedControl[2+1];
 
             Characters = characters;
             SortList();
-            _selected =Characters[Characters.Count-1].Index;
+            if(Characters.Count>0)
+                _selected =Characters[Characters.Count-1].Index;
             KeyPress += SelectScene_KeyPress;
 
             Background = new MirImageControl
@@ -55,7 +56,7 @@ namespace Client.MirScenes
             {
                 Location = new Point(322, 5),
                 Parent = Background,
-                Size = new Size(155, 17),
+                Size = new Size(155, 16),
                 Text = g_ServerName,//"Legend of Mir 2",
                 DrawFormat = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter
             };
@@ -88,6 +89,7 @@ namespace Client.MirScenes
             {
                 for (int i = 0; i < CharacterControls.Length; i++)
                     if (CharacterControls[i].IsEmpty)
+                    {
                         _character = new NewCharacterDialog
                         {
                             CharIndex = CharacterControls[i].CharIndex,
@@ -95,6 +97,8 @@ namespace Client.MirScenes
                             Location = CharacterControls[i > 0 ? (i - 1) : (i + 1)].Location,
                             CharacterDisplay = CharacterControls[i].CharacterDisplay
                         };
+                        return;
+                    }
             };
 
             DeleteCharacterButton = new MirButton
@@ -135,8 +139,10 @@ namespace Client.MirScenes
 
             #region Animations
 
+            CharacterDisplay = new MirAnimatedControl[3];
             CharacterDisplay[0].Location = new Point(120,100);
             CharacterDisplay[1].Location = new Point(500,100);
+            CharacterDisplay[2].Location = new Point(120, 100);
             #endregion
 
             CharacterControls = new CharacterControl[4];
@@ -144,9 +150,12 @@ namespace Client.MirScenes
             CharacterControls[0] = new CharacterControl
             {
                 CharIndex = 0,
-                Location = new Point(447, 122),
+                Location = new Point(60, 50),
                 Parent = Background,
                 Sound = SoundList.ButtonA,
+                Border=true,
+                BorderColour=Color.Yellow,
+                Visible=true
             };
             CharacterControls[0].Click += (o, e) =>
             {
@@ -159,7 +168,7 @@ namespace Client.MirScenes
             CharacterControls[1] = new CharacterControl
             {
                 CharIndex = 1,
-                Location = new Point(447, 226),
+                Location = new Point(432, 30),
                 Parent = Background,
                 Sound = SoundList.ButtonA,
             };
@@ -281,6 +290,7 @@ namespace Client.MirScenes
                     DeleteCharacter((S.DeleteCharacter)p);
                     break;
                 case (short)ServerPacketIds.DeleteCharacterSuccess:
+                case ServerMsgIds.SM_DELCHR_SUCCESS:
                     DeleteCharacter((S.DeleteCharacterSuccess)p);
                     break;
                 case (short)ServerPacketIds.StartGame:
@@ -453,6 +463,7 @@ namespace Client.MirScenes
         {
             for (int i = 0; i < CharacterControls.Length; i++)
             {
+                if (CharacterControls[i] == null) continue;
                 CharacterControls[i].Selected = CharacterControls[i].Index == _selected;
                 CharacterControls[i].Update((Characters.Exists(it => it.Index == CharacterControls[i].Index)) ? Characters.Find(it => it.Index == CharacterControls[i].Index) : null);
             }
@@ -579,7 +590,7 @@ namespace Client.MirScenes
                 Library = Libraries.Prguse;
                 //Location = new Point((Settings.ScreenWidth - Size.Width)/2, (Settings.ScreenHeight - Size.Height)/2);
                 Modal = true;
-
+                CharacterDisplay.Visible = true;
                 TitleLabel = new MirImageControl
                     {
                         Index = 20,
@@ -872,10 +883,11 @@ namespace Client.MirScenes
             public byte CharIndex;
             public CharacterControl()
             {
-                Index = 44; //45 locked
+                Index = 82;//44; //45 locked
                 Library = Libraries.Prguse;
                 Sound = SoundList.ButtonA;
-                UseOffSet = true;
+                //UseOffSet = true;
+                
                 CharacterDisplay = new MirAnimatedControl
                 {
                     Animated = false,
@@ -884,12 +896,14 @@ namespace Client.MirScenes
                     FadeIn = true,
                     FadeInDelay = 75,
                     FadeInRate = 0.1F,
-                    Index = 220,//stone Img Index
+                    Index = 60,//220,//stone Img Index
                     Library = Libraries.ChrSel,
                     Location = new Point(120,100),//new Point(200, 300),
                     Parent = this,
-                    UseOffSet = true,
-                    Visible = false
+                    UseOffSet = false,
+                    Visible = true,
+                    Border=true,
+                    BorderColour=Color.Red
                 };
                 CharacterDisplay.AfterDraw += (o, e) =>
                 {
@@ -926,7 +940,7 @@ namespace Client.MirScenes
             {
                 if (info == null)
                 {
-                    Index = 44;
+                    Index = 82;//66;//44;
                     Library = Libraries.Prguse;
                     NameLabel.Text = string.Empty;
                     LevelLabel.Text = string.Empty;

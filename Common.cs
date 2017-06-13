@@ -1230,6 +1230,8 @@ public class ServerMsgIds
     public const short SM_SELECTSERVER_OK = 530;
     public const short SM_QUERYCHR = 520;
     public const short SM_QUERYCHR_FAIL = 527;
+
+    public const short SM_DELCHR_SUCCESS = 532;
 }
 public class ClientMsgIds
 {

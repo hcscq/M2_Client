@@ -92,7 +92,7 @@ namespace Client.MirScenes
                         {
                             CharIndex = CharacterControls[i].CharIndex,
                             Parent = Background,
-                            Location = CharacterControls[i > 0 ? (i - 1) : (i + 1)].Location,
+                            Location = CharacterControls[i > 0 ? (i - 1) : (i + 1)].CharacterDisplay.Location,
                             CharacterDisplay = CharacterControls[i].CharacterDisplay
                         };
             };
@@ -141,34 +141,38 @@ namespace Client.MirScenes
 
             CharacterControls = new CharacterControl[4];
 
-            CharacterControls[0] = new CharacterControl
-            {
-                CharIndex = 0,
-                Location = new Point(447, 122),
-                Parent = Background,
-                Sound = SoundList.ButtonA,
-            };
-            CharacterControls[0].Click += (o, e) =>
+            CharacterControls[0] = new CharacterControl(Background){CharIndex = 0};
+            CharacterControls[0].SelectButton.Location = new Point(137,420);
+            CharacterControls[0].CharacterDisplay.Location = new Point(100,100);
+            CharacterControls[0].NameLabel.Location = new Point(107,450);
+            CharacterControls[0].LevelLabel.Location = new Point(107,480);
+            CharacterControls[0].ClassLabel.Location = new Point(107,510);
+            CharacterControls[0].SelectButton.Sound = SoundList.ButtonA;
+
+            CharacterControls[0].SelectButton.Click += (o, e) =>
             {
                 if (characters.Count <= 0) return;
 
-                _selected = 0;
+                _selected = ((CharacterControl)o).CharIndex;
                 UpdateInterface();
             };
 
-            CharacterControls[1] = new CharacterControl
-            {
-                CharIndex = 1,
-                Location = new Point(447, 226),
-                Parent = Background,
-                Sound = SoundList.ButtonA,
-            };
-            CharacterControls[1].Click += (o, e) =>
+
+            CharacterControls[1] = new CharacterControl(Background) { CharIndex = 1 };
+            CharacterControls[1].SelectButton.Location = new Point(390,420);
+            CharacterControls[1].CharacterDisplay.Location = new Point(380,100);
+            CharacterControls[1].NameLabel.Location = new Point(407,450);
+            CharacterControls[1].LevelLabel.Location = new Point(407,480);
+            CharacterControls[1].ClassLabel.Location = new Point(407,510);
+            CharacterControls[1].SelectButton.Sound = SoundList.ButtonA;
+
+            CharacterControls[1].SelectButton.Click += (o, e) =>
             {
                 if (characters.Count <= 1) return;
-                _selected = 1;
+                _selected = ((CharacterControl)o).CharIndex;
                 UpdateInterface();
             };
+
             #region 2,3 characters
             //CharacterControls[2] = new CharacterControl
             //{
@@ -453,8 +457,9 @@ namespace Client.MirScenes
         {
             for (int i = 0; i < CharacterControls.Length; i++)
             {
-                CharacterControls[i].Selected = CharacterControls[i].Index == _selected;
-                CharacterControls[i].Update((Characters.Exists(it => it.Index == CharacterControls[i].Index)) ? Characters.Find(it => it.Index == CharacterControls[i].Index) : null);
+                if (CharacterControls[i] == null) continue;
+                CharacterControls[i].Selected = CharacterControls[i].CharIndex == _selected;
+                CharacterControls[i].Update((Characters.Exists(it => it.Index == CharacterControls[i].CharIndex)) ? Characters.Find(it => it.Index == CharacterControls[i].CharIndex) : null);
             }
             #region shared stage
             //if (_selected >= 0 && _selected < Characters.Count)
@@ -863,19 +868,24 @@ namespace Client.MirScenes
                 //CharacterDisplay.Index = ((byte)_class + 1) * 20 + (byte)_gender * 280;
             }
         }
-        public sealed class CharacterControl : MirImageControl
+        public sealed class CharacterControl //: MirImageControl
         {
             public MirLabel NameLabel, LevelLabel, ClassLabel;
+            public MirButton SelectButton;
             public bool Selected;
             public MirAnimatedControl CharacterDisplay;
             public bool IsEmpty;
             public byte CharIndex;
-            public CharacterControl()
+            public CharacterControl(MirControl parent)
             {
-                Index = 44; //45 locked
-                Library = Libraries.Prguse;
-                Sound = SoundList.ButtonA;
-                UseOffSet = true;
+                SelectButton = new MirButton
+                {
+                    Index=66,
+                    HoverIndex=66,
+                    PressedIndex=67,
+                    Library=Libraries.Prguse
+
+                };
                 CharacterDisplay = new MirAnimatedControl
                 {
                     Animated = false,
@@ -884,10 +894,10 @@ namespace Client.MirScenes
                     FadeIn = true,
                     FadeInDelay = 75,
                     FadeInRate = 0.1F,
-                    Index = 220,//stone Img Index
+                    Index = 60,//stone Img Index
                     Library = Libraries.ChrSel,
-                    Location = new Point(120,100),//new Point(200, 300),
-                    Parent = this,
+                    //Location = new Point(100,100),//new Point(200, 300),
+                    Parent = parent,
                     UseOffSet = true,
                     Visible = false
                 };
@@ -899,26 +909,29 @@ namespace Client.MirScenes
 
                 NameLabel = new MirLabel
                 {
-                    Location = new Point(107, 9),
-                    Parent = this,
+                    Location = new Point(107, 450),
+                    Parent = parent,
                     NotControl = true,
-                    Size = new Size(170, 18)
+                    Size = new Size(170, 18),
+                    Text = "NAME TEST."
                 };
 
                 LevelLabel = new MirLabel
                 {
-                    Location = new Point(107, 28),
-                    Parent = this,
+                    Location = new Point(107, 480),
+                    Parent = parent,
                     NotControl = true,
-                    Size = new Size(30, 18)
+                    Size = new Size(30, 18),
+                    Text="LEV TEST"
                 };
 
                 ClassLabel = new MirLabel
                 {
-                    Location = new Point(178, 28),
-                    Parent = this,
+                    Location = new Point(107, 510),
+                    Parent = parent,
                     NotControl = true,
-                    Size = new Size(100, 18)
+                    Size = new Size(100, 18),
+                    Text="CLASS TEST"
                 };
             }
 
@@ -926,8 +939,6 @@ namespace Client.MirScenes
             {
                 if (info == null)
                 {
-                    Index = 44;
-                    Library = Libraries.Prguse;
                     NameLabel.Text = string.Empty;
                     LevelLabel.Text = string.Empty;
                     ClassLabel.Text = string.Empty;
@@ -959,14 +970,14 @@ namespace Client.MirScenes
                         CharacterDisplay.Index = info.Gender == 0 ? 100 : 140; //160 : 180;
                         break;
                 }
-                if (Selected) CharacterDisplay.Animated = true;
-                CharacterDisplay.Visible = true;
+                if (Selected) { CharacterDisplay.Animated = true; SelectButton.Index = SelectButton.PressedIndex; }
+                    CharacterDisplay.Visible = true;
                 /*new end*/
-                Library = Libraries.Title;
+                //Library = Libraries.Title;
 
-                Index = 660 + (byte)info.Class;
+                //Index = 660 + (byte)info.Class;
 
-                if (Selected) Index += 5;
+                //if (Selected) SelectButton.Index = SelectButton.PressedIndex;
 
 
                 NameLabel.Text = info.Name;

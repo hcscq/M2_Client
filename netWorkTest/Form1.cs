@@ -9,6 +9,8 @@ using System.Threading;
 using System.Collections.Concurrent;
 using System.Text;
 using C = ClientPackets;
+using System.Drawing;
+
 namespace netWorkTest
 {
     public partial class NetWork : Form
@@ -24,9 +26,24 @@ namespace netWorkTest
             InitializeComponent();
             this.Disposed += new EventHandler(OnClose);
             Packet.IsServer = false;
-            InitialClientNetWork();
+            //InitialClientNetWork();
 
             //InitialServerNetwork();
+
+            ContainerControl container = new ContainerControl() { BackColor=Color.Gray} ;
+            container.Size = new Size(100,80);
+            container.Location = new Point(30,60);
+            container.Parent = this;
+
+            Button btn = new Button() {Text="Text" };
+            btn.Click += (o, e) =>
+            {
+                MessageBox.Show("There.");
+            };
+            btn.Parent = container;
+            btn.Location = new Point(20,90);
+            
+            
             //packet test
             /*string str = "#=L>>><v!$";
             byte[] rawBytes = ASCIIEncoding.Default.GetBytes("#zt<>>><v");

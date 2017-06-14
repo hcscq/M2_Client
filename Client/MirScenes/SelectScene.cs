@@ -1054,7 +1054,7 @@ namespace Client.MirScenes
                 //if (Selected) SelectButton.Index = SelectButton.PressedIndex;
 
 
-                NameLabel.Text = info.Name;
+                NameLabel.Text =new string(info.Name);
                 LevelLabel.Text = info.Level.ToString();
                 ClassLabel.Text = info.Class.ToString();
 

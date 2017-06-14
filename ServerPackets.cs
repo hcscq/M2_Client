@@ -227,7 +227,7 @@ namespace ServerPackets
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            int count = reader.ReadInt32();
+            int count = wParam;
 
             for (int i = 0; i < count; i++)
                 Characters.Add(new SelectInfo(reader));

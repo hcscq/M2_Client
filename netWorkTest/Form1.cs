@@ -10,6 +10,7 @@ using System.Collections.Concurrent;
 using System.Text;
 using C = ClientPackets;
 using System.Drawing;
+using System.Linq;
 
 namespace netWorkTest
 {
@@ -20,28 +21,17 @@ namespace netWorkTest
         private bool Running;
         private Thread _thread;
         private const string IP = "127.0.0.1";
-        private const int port = 7000;
+        private const int port = 7032;
         public NetWork()
         {
             InitializeComponent();
             this.Disposed += new EventHandler(OnClose);
             Packet.IsServer = false;
-            //InitialClientNetWork();
+            InitialClientNetWork();
 
             //InitialServerNetwork();
 
-            ContainerControl container = new ContainerControl() { BackColor=Color.Gray} ;
-            container.Size = new Size(100,80);
-            container.Location = new Point(30,60);
-            container.Parent = this;
 
-            Button btn = new Button() {Text="Text" };
-            btn.Click += (o, e) =>
-            {
-                MessageBox.Show("There.");
-            };
-            btn.Parent = container;
-            btn.Location = new Point(20,90);
             
             
             //packet test
@@ -138,7 +128,7 @@ namespace netWorkTest
             for (int i = 0; i < Envir.MaxIP * 2; i++)
             {
                 socketArgs = new SocketAsyncEventArgs();
-                socketArgs.SetBuffer(new byte[1024 * 8], 0, 1024 * 8);
+                socketArgs.SetBuffer(new byte[1024 * 5], 0, 1024 * 5);
                 socketArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnIOCompleted);
                 Envir.SocketArgsPool.Push(socketArgs);
             }
@@ -148,8 +138,8 @@ namespace netWorkTest
             IPEndPoint servIp = new IPEndPoint(IPAddress.Parse(IP), port);
             ServSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             //ServSocket.Bind(servIp);
-            if (Envir.AccSocketArgs.Buffer == null)
-                Envir.AccSocketArgs.SetBuffer(new byte[8 * 1024], 0, 8 * 1024);
+            //if (Envir.AccSocketArgs.Buffer == null)
+            //    Envir.AccSocketArgs.SetBuffer(new byte[8 * 1024], 0, 8 * 1024);
             Envir.AccSocketArgs.RemoteEndPoint = servIp;
             if (!ServSocket.ConnectAsync(Envir.AccSocketArgs))
                 ProcessConnect(Envir.AccSocketArgs);
@@ -177,7 +167,7 @@ namespace netWorkTest
                     for (int i = Envir.Connections.Count - 1; i >= 0; i--)
                     {
                         Envir.Connections[i].Process();
-                        Thread.Sleep(10);
+                        Thread.Sleep(100);
                         //if(Envir.Connections[i].SendSocketArgs.Count>0&&!Envir.Connections[i]._client.SendAsync(Envir.Connections[i].SendSocketArgs))
                         //   ProcessSend(Envir.Connections[i].SendSocketArgs);
                     }
@@ -216,6 +206,17 @@ namespace netWorkTest
             if (e.SocketError==SocketError.Success&&Envir.SocketArgsPool != null && Envir.BufferLock.WaitOne(200, true) && Envir.SocketArgsPool.TryPop(out socketArgs))
             {
                 MirConnectionSimply connectInfo = new MirConnectionSimply(++Envir._sessionID, e.ConnectSocket, socketArgs);
+                char[] acc = new char[20];
+                "hcscq".ToArray().CopyTo(acc, 0);
+                connectInfo._sendList.Enqueue(new C.NewCharacter
+                {
+                    Name = "红色边".ToArray(),
+                    Class = 0,
+                    Gender = 0,
+                    Account = acc,
+                    CharIndex = 1
+                });
+                connectInfo.Process();
                 lock (Envir.Connections)
                     Envir.Connections.Add(connectInfo);
                 if (!e.ConnectSocket.ReceiveAsync(socketArgs))

@@ -2542,7 +2542,7 @@ public static class Functions
 public class SelectInfo
 {
     public byte Index;
-    public string Name = string.Empty;
+    public char []Name = new char[20];
     public ushort Level;
     public MirClass Class;
     public MirGender Gender;
@@ -2557,7 +2557,7 @@ public class SelectInfo
         Class = (MirClass)reader.ReadByte();
         Gender = (MirGender)reader.ReadByte();
         LastAccess = DateTime.FromBinary(reader.ReadInt64());
-        Name = System.Text.Encoding.Default.GetString(reader.ReadBytes(20)); //reader.ReadString();
+        Name = System.Text.Encoding.Default.GetChars(reader.ReadBytes(20)); //reader.ReadString();
     }
     public void Save(BinaryWriter writer)
     {

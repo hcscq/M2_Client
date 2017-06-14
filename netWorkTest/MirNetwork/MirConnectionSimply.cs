@@ -106,7 +106,7 @@ namespace netWorkTest.MirNetwork
 
 
             byte[] temp = _rawData;
-            _rawData = new byte[SocketArgs.BytesTransferred+ temp.Length];
+            _rawData = new byte[SocketArgs.BytesTransferred + temp.Length];
             Buffer.BlockCopy(temp, 0, _rawData, 0, temp.Length);
             //EnDecode.fnDecode6BitBufA(SocketArgs.Buffer, _rawData, temp.Length, _rawData.Length);
 
@@ -120,10 +120,19 @@ namespace netWorkTest.MirNetwork
             Packet p;
             while ((p = Packet.ReceivePacketEx(_rawData, out _rawData)) != null)
                 _receiveList.Enqueue(p);
-
+            
             if (Envir.curStep == Envir.STEP.UNLOGIN)
-            {
-                _sendList.Enqueue(new C.Login { AccountID = "mirclient", Password = "mirpass" });
+            {//
+                //char[] acc = new char[20];
+                //"hcscq".ToArray().CopyTo(acc, 0);
+                //_sendList.Enqueue(new  C.NewCharacter
+                //{
+                //    Name = "TestActor".ToArray(),
+                //    Class = 0,
+                //    Gender = 0,
+                //    Account = acc,
+                //    CharIndex = 0
+                //});
                 Envir.curStep = Envir.STEP.LOGINING;
             }
             Process();
@@ -188,8 +197,8 @@ namespace netWorkTest.MirNetwork
                     //EnDecode.fnEncode6BitBufA(data.ToArray(), SendSocketArgs.Buffer);
                     Buffer.BlockCopy(data.ToArray(), 0, SendSocketArgs.Buffer,0, data.Count);
                     SendSocketArgs.SetBuffer(SendSocketArgs.Offset,data.Count);
+                    SendSocketArgs.RemoteEndPoint = _client.RemoteEndPoint;
                 }
-
                 if (!_client.SendAsync(SendSocketArgs))
                     NetWork.ProcessSend(SendSocketArgs);
             }

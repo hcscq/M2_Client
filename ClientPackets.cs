@@ -192,6 +192,7 @@ namespace ClientPackets
             Name.CopyTo(_Name, 0);
             writer.Write(_Name);
             writer.Write(Account);
+            
         }
     }
     public sealed class DeleteCharacter : Packet

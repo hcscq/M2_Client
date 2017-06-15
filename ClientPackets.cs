@@ -157,7 +157,7 @@ namespace ClientPackets
         {
             get { return (short)ClientMsgIds.CM_QUERYCHR; }
         }
-        public char[] Account;
+        public byte[] Account;
         
 
         protected override void ReadPacket(BinaryReader reader)
@@ -172,15 +172,15 @@ namespace ClientPackets
     public sealed class NewCharacter : Packet
     {
         public override short Index { get { return (short)ClientPacketIds.NewCharacter; } }
-        public char[] _Name = new char[20];
-        public char []Name=new char[20];
+        private byte[] _Name = new byte[20];
+        public byte []Name;
         public MirGender Gender;
         public MirClass Class;
-        public char[] Account=new char[20];
+        public byte[] Account;
         public byte CharIndex;
         protected override void ReadPacket(BinaryReader reader)
         {
-            Name = reader.ReadChars(20);
+            Name = reader.ReadBytes(40);
             Gender = (MirGender)reader.ReadByte();
             Class = (MirClass)reader.ReadByte();
         }
@@ -200,7 +200,7 @@ namespace ClientPackets
         public override short Index { get { return (short)ClientPacketIds.DeleteCharacter; } }
 
         public byte CharacterIndex;
-        public char[] Account;
+        public byte[] Account;
         protected override void ReadPacket(BinaryReader reader)
         {
             CharacterIndex = reader.ReadByte();
@@ -215,12 +215,12 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.StartGame; } }
 
-        public char[] Account;
-        public int CharacterIndex;
+        public byte[] Account;
+        public byte CharacterIndex;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            CharacterIndex = reader.ReadInt32();
+            CharacterIndex = reader.ReadByte();
         }
         protected override void WritePacket(BinaryWriter writer)
         {

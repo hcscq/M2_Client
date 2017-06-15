@@ -376,7 +376,7 @@ namespace Client.MirScenes
                 Settings.IPAddress = ipInfo[0];
                 Settings.Port = int.Parse(ipInfo[1]);
                 Network.Connect();
-                Network.Enqueue(new C.QueryChr { nRecog = g_nRecog, Account=g_Account});
+                Network.Enqueue(new C.QueryChr { nRecog = g_nRecog, Account = g_Account });
             }
             else MirMessageBox.Show("Get server info failed.",true);
             //Network.Enqueue(new C.s);
@@ -590,9 +590,7 @@ namespace Client.MirScenes
             {
                 OKButton.Enabled = false;
                 Network.Enqueue(new C.Login {AccountID = AccountIDTextBox.Text, Password = PasswordTextBox.Text});
-                char[] Account = AccountIDTextBox.Text.Trim().ToArray();
-                Account.CopyTo(g_Account,0);
-                g_Account[Account.Length] = '\0';
+                System.Text.Encoding.Default.GetBytes(AccountIDTextBox.Text.Trim()).CopyTo(g_Account,0);
                 
             }
 

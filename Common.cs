@@ -1232,12 +1232,16 @@ public class ServerMsgIds
     public const short SM_QUERYCHR_FAIL = 527;
 
     public const short SM_DELCHR_SUCCESS = 532;
+
+    public const short SM_STARTPLAY = 525;
 }
 public class ClientMsgIds
 {
     public const short CM_SELECTSERVER = 104;
 
     public const short CM_QUERYCHR = 100;
+
+    public const short CM_SELCHR = 103;
 }
 public enum ServerPacketIds : short
 {
@@ -4954,6 +4958,8 @@ public abstract class Packet
             case ServerMsgIds.SM_QUERYCHR:
             case ServerMsgIds.SM_QUERYCHR_FAIL:
                 return new S.LoginSuccess();
+            case ServerMsgIds.SM_DELCHR_SUCCESS:
+                return new S.DeleteCharacter();
 
             case (short)ServerPacketIds.Connected:
                 return new S.Connected();

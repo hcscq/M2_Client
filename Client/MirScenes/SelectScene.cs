@@ -317,10 +317,10 @@ namespace Client.MirScenes
                     NewCharacter((S.NewCharacterSuccess)p);
                     break;
                 case (short)ServerPacketIds.DeleteCharacter:
+                case ServerMsgIds.SM_DELCHR_SUCCESS:
                     DeleteCharacter((S.DeleteCharacter)p);
                     break;
                 case (short)ServerPacketIds.DeleteCharacterSuccess:
-                case ServerMsgIds.SM_DELCHR_SUCCESS:
                     DeleteCharacter((S.DeleteCharacterSuccess)p);
                     break;
                 case (short)ServerPacketIds.StartGame:
@@ -398,15 +398,31 @@ namespace Client.MirScenes
 
         private void DeleteCharacter(S.DeleteCharacter p)
         {
+            short SUCCESS = 16;
+            byte CHARACTERMASK = 15;
             DeleteCharacterButton.Enabled = true;
-            switch (p.wParam)
-            {
-                case 0:
-                    MirMessageBox.Show("Deleting characters is currently disabled.");
-                    break;
-                case 1:
-                    MirMessageBox.Show("The character you selected does not exist.\n Contact a GM for assistance.");
-                    break;
+            if ((p.wParam & SUCCESS) <= 0)
+                switch (p.wParam)
+                {
+                    case 0:
+                        MirMessageBox.Show("Deleting characters is currently disabled.");
+                        break;
+                    case 1:
+                        MirMessageBox.Show("The character you selected does not exist.\n Contact a GM for assistance.");
+                        break;
+                }
+            else {
+                DeleteCharacterButton.Enabled = true;
+                MirMessageBox.Show("Your character was deleted successfully.");
+                byte charIndex = (byte)(CHARACTERMASK & p.wParam);
+                for (int i = 0; i < Characters.Count; i++)
+                    if (Characters[i].Index == charIndex)
+                    {
+                        Characters.RemoveAt(i);
+                        break;
+                    }
+
+                UpdateInterface();
             }
         }
         private void DeleteCharacter(S.DeleteCharacterSuccess p)
@@ -847,7 +863,7 @@ namespace Client.MirScenes
 
                 Network.Enqueue(new C.NewCharacter
                 {
-                    Name = NameTextBox.Text.ToCharArray(),
+                    Name = System.Text.Encoding.Default.GetBytes(NameTextBox.Text.Trim()),
                     Class = _class,
                     Gender = _gender,
                     Account = g_Account,

@@ -32,8 +32,6 @@ namespace netWorkTest
             //InitialServerNetwork();
 
 
-            
-            
             //packet test
             /*string str = "#=L>>><v!$";
             byte[] rawBytes = ASCIIEncoding.Default.GetBytes("#zt<>>><v");
@@ -206,15 +204,16 @@ namespace netWorkTest
             if (e.SocketError==SocketError.Success&&Envir.SocketArgsPool != null && Envir.BufferLock.WaitOne(200, true) && Envir.SocketArgsPool.TryPop(out socketArgs))
             {
                 MirConnectionSimply connectInfo = new MirConnectionSimply(++Envir._sessionID, e.ConnectSocket, socketArgs);
-                char[] acc = new char[20];
-                "hcscq".ToArray().CopyTo(acc, 0);
-                connectInfo._sendList.Enqueue(new C.NewCharacter
+                byte[] acc = new byte[20];
+                Encoding.Default.GetBytes("hcscq").CopyTo(acc, 0);
+                connectInfo._sendList.Enqueue(new C.DeleteCharacter
                 {
-                    Name = "红色边".ToArray(),
-                    Class = 0,
-                    Gender = 0,
+                    //Name = Encoding.Default.GetBytes("黑色星期Ⅷ"),
+                    //Class = 0,
+                    //Gender = 0,
                     Account = acc,
-                    CharIndex = 1
+                    CharacterIndex=1
+                    //CharIndex = 1
                 });
                 connectInfo.Process();
                 lock (Envir.Connections)

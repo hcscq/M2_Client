@@ -213,7 +213,7 @@ namespace netWorkTest
                     //Gender = 0,
                     Account = acc,
                     CharacterIndex=1
-                    //CharIndex = 1
+                    //CharIndex = 0
                 });
                 connectInfo.Process();
                 lock (Envir.Connections)

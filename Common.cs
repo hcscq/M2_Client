@@ -1232,7 +1232,7 @@ public class ServerMsgIds
     public const short SM_QUERYCHR_FAIL = 527;
 
     public const short SM_NEWCHR_SUCCESS = 521;
-    public const short SM_DELCHR_SUCCESS = 532;
+    public const short SM_DELCHR_SUCCESS = 523;
 
     public const short SM_STARTPLAY = 525;
 }
@@ -4960,9 +4960,15 @@ public abstract class Packet
             case ServerMsgIds.SM_QUERYCHR_FAIL:
                 return new S.LoginSuccess();
 
+            case ServerMsgIds.SM_NEWCHR_SUCCESS:
+                return new S.NewCharacterSuccess();
+
             case ServerMsgIds.SM_DELCHR_SUCCESS:
                 return new S.DeleteCharacter();
 
+            case ServerMsgIds.SM_STARTPLAY:
+                return new S.StartGame();
+///////////////////////////////////////////////////////////////////////////
             case (short)ServerPacketIds.Connected:
                 return new S.Connected();
             case (short)ServerPacketIds.ClientVersion:
@@ -4988,7 +4994,6 @@ public abstract class Packet
             case (short)ServerPacketIds.NewCharacter:
                 return new S.NewCharacter();
             case (short)ServerPacketIds.NewCharacterSuccess:
-            case ServerMsgIds.SM_NEWCHR_SUCCESS:
                 return new S.NewCharacterSuccess();
             case (short)ServerPacketIds.DeleteCharacter:
                 return new S.DeleteCharacter();

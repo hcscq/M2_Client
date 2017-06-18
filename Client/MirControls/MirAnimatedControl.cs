@@ -152,7 +152,7 @@ namespace Client.MirControls
         public override int Index
         {
             get { return base.Index + OffSet; }
-            set { base.Index = value; }
+            set { base.Index = value;OffSet = 0; }
         }
 
         #region Loop

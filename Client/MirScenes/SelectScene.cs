@@ -123,19 +123,6 @@ namespace Client.MirScenes
 
             CharacterControls = new CharacterControl[4];
 
-//<<<<<<< HEAD
-//            CharacterControls[0] = new CharacterControl
-//            {
-//                CharIndex = 0,
-//                Location = new Point(60, 50),
-//                Parent = Background,
-//                Sound = SoundList.ButtonA,
-//                Border=true,
-//                BorderColour=Color.Yellow,
-//                Visible=true
-//            };
-//            CharacterControls[0].Click += (o, e) =>
-//=======
             CharacterControls[0] = new CharacterControl(Background){CharIndex = 0};
             CharacterControls[0].SelectButton.Location = new Point(134,453);
             CharacterControls[0].CharacterDisplay.Location = new Point(60,50);
@@ -147,24 +134,12 @@ namespace Client.MirScenes
             CharacterControls[0].SelectButton.Sound = SoundList.ButtonA;
 
             CharacterControls[0].SelectButton.Click += (o, e) =>
-//>>>>>>> origin/master
             {
                 if (characters.Count <= 0) return;
 
-                _selected = ((CharacterControl)o).CharIndex;
+                _selected = CharacterControls[0].CharIndex;
                 UpdateInterface();
             };
-
-//<<<<<<< HEAD
-//            CharacterControls[1] = new CharacterControl
-//            {
-//                CharIndex = 1,
-//                Location = new Point(432, 30),
-//                Parent = Background,
-//                Sound = SoundList.ButtonA,
-//            };
-//            CharacterControls[1].Click += (o, e) =>
-//=======
 
             CharacterControls[1] = new CharacterControl(Background) { CharIndex = 1 };
             CharacterControls[1].SelectButton.Location = new Point(685,453);
@@ -175,10 +150,9 @@ namespace Client.MirScenes
             CharacterControls[1].SelectButton.Sound = SoundList.ButtonA;
 
             CharacterControls[1].SelectButton.Click += (o, e) =>
-//>>>>>>> origin/master
             {
                 if (characters.Count <= 1) return;
-                _selected = ((CharacterControl)o).CharIndex;  
+                _selected = CharacterControls[1].CharIndex;  
                 UpdateInterface();
             };
 
@@ -376,7 +350,7 @@ namespace Client.MirScenes
             MirMessageBox.Show("Your character was created successfully.");
             
             Characters.Insert(0, p.CharInfo);
-            _selected = 0;
+            _selected = p.CharInfo.Index;
             UpdateInterface();
         }
 
@@ -384,7 +358,7 @@ namespace Client.MirScenes
         {
             if (_selected < 0 || _selected >= Characters.Count) return;
 
-            MirMessageBox message = new MirMessageBox(string.Format("Are you sure you want to Delete the character {0}?", Characters[_selected].Name), MirMessageBoxButtons.YesNo);
+            MirMessageBox message = new MirMessageBox(string.Format("Are you sure you want to Delete the character {0}?", Characters[_selected].Name.ToString()), MirMessageBoxButtons.YesNo);
             byte index = _selected;//Characters[_selected].Index;
 
             message.YesButton.Click += (o, e) =>
@@ -421,7 +395,8 @@ namespace Client.MirScenes
                         Characters.RemoveAt(i);
                         break;
                     }
-
+                if (Characters.Count > 0)
+                    _selected = Characters[0].Index;
                 UpdateInterface();
             }
         }
@@ -974,8 +949,7 @@ namespace Client.MirScenes
                     Location = new Point(107, 450),
                     Parent = parent,
                     NotControl = true,
-                    Size = new Size(170, 18),
-                    Text = "NAME TEST."
+                    Size = new Size(170, 18)
                 };
 
                 LevelLabel = new MirLabel
@@ -983,8 +957,7 @@ namespace Client.MirScenes
                     Location = new Point(107, 480),
                     Parent = parent,
                     NotControl = true,
-                    Size = new Size(30, 18),
-                    Text="LEV TEST"
+                    Size = new Size(30, 18)
                 };
 
                 ClassLabel = new MirLabel
@@ -992,14 +965,17 @@ namespace Client.MirScenes
                     Location = new Point(107, 510),
                     Parent = parent,
                     NotControl = true,
-                    Size = new Size(100, 18),
-                    Text="CLASS TEST"
+                    Size = new Size(100, 18)
                 };
             }
 
 
             public void Update(SelectInfo info)
             {
+                CharacterDisplay.Animated = false;
+                CharacterDisplay.Loop = false;
+                CharacterDisplay.Visible = false;
+                SelectButton.Index = 66;
                 if (info == null)
                 {
 
@@ -1010,38 +986,36 @@ namespace Client.MirScenes
                     NameLabel.Visible = false;
                     LevelLabel.Visible = false;
                     ClassLabel.Visible = false;
+                    SelectButton.Enabled = false;
                     Selected = false;
                     IsEmpty = true;
                     return;
                 }
                 /*new begin*/
                 IsEmpty = false;
+                int index = 0;
                 switch (info.Class)
                 {
                     case MirClass.Warrior:
-                        CharacterDisplay.Index = info.Gender == 0 ? 60 : 180;//20 : 300; //220 : 500;
+                        index = info.Gender == 0 ? 60 : 180;//20 : 300; //220 : 500;
                         break;
                     case MirClass.Wizard:
-                        CharacterDisplay.Index = info.Gender == 0 ? 100 : 220;//40 : 320; //240 : 520;
+                        index = info.Gender == 0 ? 100 : 220;//40 : 320; //240 : 520;
                         break;
                     case MirClass.Taoist:
-                        CharacterDisplay.Index = info.Gender == 0 ? 140 : 260;//60 : 340; //260 : 540;
+                        index = info.Gender == 0 ? 140 : 260;//60 : 340; //260 : 540;
                         break;
-                        //case MirClass.Assassin:
-                        //    CharacterDisplay.Index = info.Gender == 0 ? 80 : 360; //280 : 560;
-                        //    break;
-                        //case MirClass.Archer:
-                        //    CharacterDisplay.Index = info.Gender == 0 ? 100 : 140; //160 : 180;
-                        //    break;
                 }
+                CharacterDisplay.Index = index;
+                SelectButton.Enabled = true;
                 if (Selected)
                 {
+                    CharacterDisplay.Index = index-20;
                     CharacterDisplay.Animated = true;
-                    CharacterDisplay.Index -= 20;
                     CharacterDisplay.Loop = true;
                     SelectButton.Index = SelectButton.PressedIndex;
+                    SelectButton.Enabled = false;
                 }
-                CharacterDisplay.Visible = true;
                 /*new end*/
                 //Library = Libraries.Title;
 
@@ -1049,11 +1023,11 @@ namespace Client.MirScenes
 
                 //if (Selected) SelectButton.Index = SelectButton.PressedIndex;
 
-
                 NameLabel.Text =new string(info.Name);
                 LevelLabel.Text = info.Level.ToString();
                 ClassLabel.Text = info.Class.ToString();
 
+                CharacterDisplay.Visible = true;
                 NameLabel.Visible = true;
                 LevelLabel.Visible = true;
                 ClassLabel.Visible = true;

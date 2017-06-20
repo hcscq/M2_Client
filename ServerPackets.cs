@@ -372,10 +372,11 @@ namespace ServerPackets
             get { return (short)ServerPacketIds.StartGame; }
         }
 
-        public byte Result;
-        public int Resolution;
+        //public byte Result;
+        //public int Resolution;
+        public byte []ServerIP;
 
-        /*
+        /*wPara
          * 0: Disabled.
          * 1: Not logged in
          * 2: Character not found.
@@ -384,16 +385,19 @@ namespace ServerPackets
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            Result = reader.ReadByte();
-            Resolution = reader.ReadInt32();
+            //Result = reader.ReadByte();
+            //Resolution = reader.ReadInt32();
+            ServerIP = reader.ReadBytes(32);
         }
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(Result);
-            writer.Write(Resolution);
+            //writer.Write(Result);
+            //writer.Write(Resolution);
+            writer.Write(ServerIP);
         }
     }
+
     public sealed class StartGameBanned : Packet
     {
         public override short Index

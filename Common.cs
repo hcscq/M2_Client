@@ -134,7 +134,6 @@ public enum QuestState : byte
     Update,
     Remove
 }
-
 public enum DefaultNPCType : byte
 {
     Login,
@@ -1235,6 +1234,11 @@ public class ServerMsgIds
     public const short SM_DELCHR_SUCCESS = 523;
 
     public const short SM_STARTPLAY = 525;
+
+    /*G sence begin*/
+    public const short SM_LOGON = 50;
+    public const short SM_NEWMAP = 51;
+
 }
 public class ClientMsgIds
 {
@@ -1243,6 +1247,8 @@ public class ClientMsgIds
     public const short CM_QUERYCHR = 100;
 
     public const short CM_SELCHR = 103;
+
+    public const short CM_CERTIFACATION = 0;
 }
 public enum ServerPacketIds : short
 {
@@ -4511,7 +4517,7 @@ public abstract class Packet
         wTag=reader.ReadInt16();
         wSeries=reader.ReadInt16();
     }
-
+    public static string GetString(byte[] src) { return System.Text.Encoding.Default.GetString(src).Replace('\0', ' ').Trim(); }
     public static Packet ReceivePacket(byte[] rawBytes, out byte[] extra)
     {
         extra = rawBytes;
@@ -4673,7 +4679,7 @@ public abstract class Packet
 
     protected abstract void ReadPacket(BinaryReader reader);
     protected abstract void WritePacket(BinaryWriter writer);
-
+    
     private static Packet GetClientPacket(short index)
     {
         switch (index)

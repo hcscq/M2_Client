@@ -355,7 +355,7 @@ namespace Client.MirScenes
         private void SelServer(S.SelServer p)
         {
             _login.Dispose();
-            g_nRecog = p.nRecog;
+            g_nCertifacation = p.nRecog;
             if (_ViewKey != null && !_ViewKey.IsDisposed) _ViewKey.Dispose();
             if (p.Servers==null)
             {
@@ -376,7 +376,7 @@ namespace Client.MirScenes
                 Settings.IPAddress = ipInfo[0];
                 Settings.Port = int.Parse(ipInfo[1]);
                 Network.Connect();
-                Network.Enqueue(new C.QueryChr { nRecog = g_nRecog, Account = g_Account });
+                Network.Enqueue(new C.QueryChr { nRecog = g_nCertifacation, Account = g_Account });
             }
             else MirMessageBox.Show("Get server info failed.",true);
             //Network.Enqueue(new C.s);

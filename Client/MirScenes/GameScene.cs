@@ -15,6 +15,7 @@ using Microsoft.DirectX.Direct3D;
 using Font = System.Drawing.Font;
 using S = ServerPackets;
 using C = ClientPackets;
+using SEX = ServerPacketsEx;
 using Effect = Client.MirObjects.Effect;
 
 using Client.MirScenes.Dialogs;
@@ -1016,6 +1017,11 @@ namespace Client.MirScenes
                 case (short)ServerPacketIds.KeepAlive:
                     KeepAlive((S.KeepAlive)p);
                     break;
+                /*EX process begin*/
+                case ServerMsgIds.SM_NEWMAP:
+
+                    break;
+                    /*EX process end*/
                 case (short)ServerPacketIds.MapInformation: //MapInfo
                     MapInformation((S.MapInformation)p);
                     break;
@@ -1682,6 +1688,24 @@ namespace Client.MirScenes
             if (MapControl != null && !MapControl.IsDisposed)
                 MapControl.Dispose();
             MapControl = new MapControl { FileName = Path.Combine(Settings.MapPath, p.FileName + ".map"), Title = p.Title, MiniMap = p.MiniMap, BigMap = p.BigMap, Lights = p.Lights, Lightning = p.Lightning, Fire = p.Fire, MapDarkLight = p.MapDarkLight, Music = p.Music };
+            MapControl.LoadMap();
+            InsertControl(0, MapControl);
+        }
+        private void MapInformationEx(SEX.NewMap p)
+        {
+            if (MapControl != null && !MapControl.IsDisposed)
+                MapControl.Dispose();
+            MapControl = new MapControl {
+                FileName = Path.Combine(Settings.MapPath,Packet.GetString(p.MapName) + ".map"),
+                Title =Packet.GetString(p.MapName),
+                MiniMap = p.MiniMap,
+                BigMap = p.BigMap,
+                Lights = p.Lights,
+                Lightning = p.Lightning,
+                Fire = p.Fire,
+                MapDarkLight = p.MapDarkLight,
+                Music = p.Music
+            };
             MapControl.LoadMap();
             InsertControl(0, MapControl);
         }

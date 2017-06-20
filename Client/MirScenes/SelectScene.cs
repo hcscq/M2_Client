@@ -358,7 +358,7 @@ namespace Client.MirScenes
         {
             if (_selected < 0 || _selected >= Characters.Count) return;
 
-            MirMessageBox message = new MirMessageBox(string.Format("Are you sure you want to Delete the character {0}?", Characters[_selected].Name.ToString()), MirMessageBoxButtons.YesNo);
+            MirMessageBox message = new MirMessageBox(string.Format("Are you sure you want to Delete the character {0}?", new string(Characters[_selected].Name)), MirMessageBoxButtons.YesNo);
             byte index = _selected;//Characters[_selected].Index;
 
             message.YesButton.Click += (o, e) =>
@@ -446,15 +446,15 @@ namespace Client.MirScenes
         public void StartGame(S.StartGame p)
         {
             StartGameButton.Enabled = true;
+            //2017.06.20
+            //if (p.Resolution < Settings.Resolution || Settings.Resolution == 0) Settings.Resolution = p.Resolution;
 
-            if (p.Resolution < Settings.Resolution || Settings.Resolution == 0) Settings.Resolution = p.Resolution;
+            //if (p.Resolution < 1024 || Settings.Resolution < 1024) Settings.Resolution = 800;
+            //else if (p.Resolution < 1366 || Settings.Resolution < 1280) Settings.Resolution = 1024;
+            //else if (p.Resolution < 1366 || Settings.Resolution < 1366) Settings.Resolution = 1280;//not adding an extra setting for 1280 on server cause well it just depends on the aspect ratio of your screen
+            //else if (p.Resolution >= 1366 && Settings.Resolution >= 1366) Settings.Resolution = 1366;
 
-            if (p.Resolution < 1024 || Settings.Resolution < 1024) Settings.Resolution = 800;
-            else if (p.Resolution < 1366 || Settings.Resolution < 1280) Settings.Resolution = 1024;
-            else if (p.Resolution < 1366 || Settings.Resolution < 1366) Settings.Resolution = 1280;//not adding an extra setting for 1280 on server cause well it just depends on the aspect ratio of your screen
-            else if (p.Resolution >= 1366 && Settings.Resolution >= 1366) Settings.Resolution = 1366;
-
-            switch (p.Result)
+            switch (p.wParam)
             {
                 case 0:
                     MirMessageBox.Show("Starting the game is currently disabled.");
@@ -469,12 +469,31 @@ namespace Client.MirScenes
                     MirMessageBox.Show("No active map and/or start point found.");
                     break;
                 case 4:
-                    if (Settings.Resolution == 1024)
-                        CMain.SetResolution(1024, 768);
-                    else if (Settings.Resolution == 1280)
-                        CMain.SetResolution(1280, 800);
-                    else if (Settings.Resolution == 1366)
-                        CMain.SetResolution(1366, 768);
+                    //2017.06.20
+                    //if (Settings.Resolution == 1024)
+                    //    CMain.SetResolution(1024, 768);
+                    //else if (Settings.Resolution == 1280)
+                    //    CMain.SetResolution(1280, 800);
+                    //else if (Settings.Resolution == 1366)
+                    //    CMain.SetResolution(1366, 768);
+                    string []ipInfo = System.Text.Encoding.Default.GetString(p.ServerIP).Replace('\0',' ').Trim().Split('/');
+                    if (ipInfo.Length < 3)
+                    {
+                        MirMessageBox.Show("Get server error.");
+                        return;
+                    }
+                    Network.Disconnect();
+                    Settings.IPAddress = ipInfo[0];
+                    Settings.Port = int.Parse(ipInfo[1]);
+                    Network.Connect();
+                    Network.Enqueue(new C.Certification
+                    {
+                        Account = g_Account,
+                        CharIndex = Characters[_selected].Index,
+                        nCertification = g_nCertifacation,
+                        StarNew=1
+                    }
+                    );
                     ActiveScene = new GameScene();
                     Dispose();
                     break;

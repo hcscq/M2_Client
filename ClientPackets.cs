@@ -229,6 +229,36 @@ namespace ClientPackets
             writer.Write(CharacterIndex);
         }
     }
+    public sealed class Certification : Packet
+    {
+        public override short Index
+        {
+            get
+            {
+                return ClientMsgIds.CM_CERTIFACATION;
+            }
+        }
+        public byte[] Account;
+        public byte CharIndex;
+        public int nCertification;
+        public byte StarNew;
+        protected override void ReadPacket(BinaryReader reader)
+        {
+
+        }
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write('*');
+            writer.Write('*');
+            writer.Write(Account);
+            writer.Write('/');
+            writer.Write(CharIndex);
+            writer.Write('/');
+            writer.Write(nCertification);
+            writer.Write('/');
+            writer.Write(StarNew);
+        }
+    }
     public sealed class LogOut : Packet
     {
         public override short Index { get { return (short)ClientPacketIds.LogOut; } }

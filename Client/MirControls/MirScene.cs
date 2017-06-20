@@ -17,11 +17,12 @@ namespace Client.MirControls
         private static long _lastClickTime;
         private static MirControl _clickedControl;
 
-        protected static int g_nRecog;
+        protected static int g_nCertifacation;
 
         protected static byte[] g_Account=new byte[20];
 
         protected static string g_ServerName;
+
         //private bool _redraw;
 
         protected MirScene()

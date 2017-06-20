@@ -100,6 +100,9 @@
     <Compile Include="..\ServerPackets.cs">
       <Link>MirNetwork\ServerPackets.cs</Link>
     </Compile>
+    <Compile Include="..\ServerPacketsEx.cs">
+      <Link>MirNetwork\ServerPacketsEx.cs</Link>
+    </Compile>
     <Compile Include="MirDatabase\MailInfo.cs" />
     <Compile Include="MirDatabase\ConquestInfo.cs" />
     <Compile Include="MirEnvir\Reporting.cs" />

@@ -69,7 +69,7 @@ namespace Client.MirObjects
         public MirDirection NextMagicDirection;
         public QueuedAction QueuedAction;
 
-        public UserObject(uint objectID) : base(objectID)
+        public UserObject(Guid objectID) : base(objectID)
         {
         }
 

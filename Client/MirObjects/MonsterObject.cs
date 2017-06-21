@@ -56,7 +56,7 @@ namespace Client.MirObjects
         public Frame Frame;
         public int FrameIndex, FrameInterval, EffectFrameIndex, EffectFrameInterval;
 
-        public uint TargetID;
+        public Guid TargetID;
         public Point TargetPoint;
 
         public bool Stoned;
@@ -68,7 +68,7 @@ namespace Client.MirObjects
 
         public Color OldNameColor;
 
-        public MonsterObject(uint objectID)
+        public MonsterObject(Guid objectID)
             : base(objectID)
         {
         }
@@ -1602,11 +1602,11 @@ namespace Client.MirObjects
                                 break;
                         }
 
-                        TargetID = (uint)action.Params[0];
+                        TargetID = (Guid)action.Params[0];
                         break;
                     case MirAction.AttackRange2:
                         PlaySecondRangeSound();
-                        TargetID = (uint)action.Params[0];
+                        TargetID = (Guid)action.Params[0];
                         switch(BaseImage)
                         {
                             case Monster.TurtleKing:
@@ -1624,7 +1624,7 @@ namespace Client.MirObjects
                         break;
                     case MirAction.AttackRange3:
                         PlayThirdRangeSound();
-                        TargetID = (uint)action.Params[0];
+                        TargetID = (Guid)action.Params[0];
                         switch (BaseImage)
                         {
                             case Monster.TurtleKing:
@@ -1633,7 +1633,7 @@ namespace Client.MirObjects
                         }
                         break;
                     case MirAction.Struck:
-                        uint attackerID = (uint)action.Params[0];
+                        Guid attackerID = (Guid)action.Params[0];
                         StruckWeapon = -2;
                         for (int i = 0; i < MapControl.Objects.Count; i++)
                         {

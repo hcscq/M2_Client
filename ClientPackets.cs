@@ -681,18 +681,18 @@ namespace ClientPackets
             get { return (short)ClientPacketIds.Inspect; }
         }
 
-        public uint ObjectID;
+        public Guid ObjectID;
         public bool Ranking = false;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = reader.ReadUInt32();
+            ObjectID =new Guid(reader.ReadBytes(64));
             Ranking = reader.ReadBoolean();
         }
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID);
+            writer.Write(ObjectID.ToByteArray());
             writer.Write(Ranking);
         }
     }
@@ -803,17 +803,17 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.CallNPC; } }
 
-        public uint ObjectID;
+        public Guid ObjectID;
         public string Key = string.Empty;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = reader.ReadUInt32();
+            ObjectID =new Guid(reader.ReadBytes(64));
             Key = reader.ReadString();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID);
+            writer.Write(ObjectID.ToByteArray());
             writer.Write(Key);
         }
     }
@@ -821,15 +821,15 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.TalkMonsterNPC; } }
 
-        public uint ObjectID;
+        public Guid ObjectID;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = reader.ReadUInt32();
+            ObjectID =new Guid(reader.ReadBytes(64));
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID);
+            writer.Write(ObjectID.ToByteArray());
         }
     }
     public sealed class BuyItem : Packet
@@ -1556,17 +1556,17 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.AcceptQuest; } }
 
-        public uint NPCIndex;
+        public Guid NPCIndex;
         public int QuestIndex;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            NPCIndex = reader.ReadUInt32();
+            NPCIndex =new Guid(reader.ReadBytes(Packet.GUIDLEN));
             QuestIndex = reader.ReadInt32();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(NPCIndex);
+            writer.Write(NPCIndex.ToByteArray());
             writer.Write(QuestIndex);
         }
     }
@@ -1667,19 +1667,19 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.SetConcentration; } }
 
-        public uint ObjectID;
+        public Guid ObjectID;
         public bool Enabled;
         public bool Interrupted;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = reader.ReadUInt32();
+            ObjectID =new Guid(reader.ReadBytes(64));
             Enabled = reader.ReadBoolean();
             Interrupted = reader.ReadBoolean();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID);
+            writer.Write(ObjectID.ToByteArray());
             writer.Write(Enabled);
             writer.Write(Interrupted);
         }

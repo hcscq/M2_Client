@@ -70,7 +70,7 @@ namespace Client.MirObjects
         public byte SpellLevel;
         public int JumpDistance;
         public bool Cast;
-        public uint TargetID;
+        public Guid TargetID;
         public Point TargetPoint;
 
         public bool MagicShield;
@@ -109,7 +109,7 @@ namespace Client.MirObjects
 
         public LevelEffects LevelEffects;
 
-        public PlayerObject(uint objectID)
+        public PlayerObject(Guid objectID)
             : base(objectID)
         {
             Frames = FrameSet.Players;
@@ -1616,7 +1616,7 @@ namespace Client.MirObjects
                         break;
                     case MirAction.Struck:
                     case MirAction.MountStruck:
-                        uint attackerID = (uint)action.Params[0];
+                        Guid attackerID = (Guid)action.Params[0];
                         StruckWeapon = -2;
                         for (int i = 0; i < MapControl.Objects.Count; i++)
                         {
@@ -1636,7 +1636,7 @@ namespace Client.MirObjects
                     case MirAction.AttackRange1: //ArcherTest - Assign Target for other users
                         if (this != User)
                         {
-                            TargetID = (uint)action.Params[0];
+                            TargetID = (Guid)action.Params[0];
                             TargetPoint = (Point)action.Params[1];
                             Spell = (Spell)action.Params[2];
                         }
@@ -1646,7 +1646,7 @@ namespace Client.MirObjects
                         if (this != User)
                         {
                             Spell = (Spell)action.Params[0];
-                            TargetID = (uint)action.Params[1];
+                            TargetID = (Guid)action.Params[1];
                             TargetPoint = (Point)action.Params[2];
                             Cast = (bool)action.Params[3];
                             SpellLevel = (byte)action.Params[4];

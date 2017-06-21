@@ -262,7 +262,7 @@ namespace Client.MirScenes.Dialogs
         {
             public Rank_Character_Info Listing;
             public MirLabel RankLabel, NameLabel, LevelLabel, ClassLabel;
-            public long Index;
+            public Guid Index;
 
             public RankingRow()
             {
@@ -312,8 +312,8 @@ namespace Client.MirScenes.Dialogs
                 if (CMain.Time <= GameScene.InspectTime/* && Index == InspectDialog.InspectID*/) return;
 
                 GameScene.InspectTime = CMain.Time + 500;
-                InspectDialog.InspectID = (uint)Index;
-                MirNetwork.Network.Enqueue(new ClientPackets.Inspect { ObjectID = (uint)Index, Ranking = true });
+                InspectDialog.InspectID = Index;
+                MirNetwork.Network.Enqueue(new ClientPackets.Inspect { ObjectID = Index, Ranking = true });
             }
 
             public void Clear()

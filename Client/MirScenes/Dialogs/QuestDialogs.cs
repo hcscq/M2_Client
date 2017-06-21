@@ -33,7 +33,7 @@ namespace Client.MirScenes.Dialogs
 
         public int StartIndex = 0;
 
-        public uint CurrentNPCID = 0;
+        public Guid CurrentNPCID = Guid.Empty;
 
         public QuestListDialog()
         {

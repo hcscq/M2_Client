@@ -1235,9 +1235,12 @@ public class ServerMsgIds
 
     public const short SM_STARTPLAY = 525;
 
+    private const short OFFEST= 1000;
     /*G sence begin*/
-    public const short SM_LOGON = 50;
-    public const short SM_NEWMAP = 51;
+    public const short SM_LOGON = 50+OFFEST;
+    public const short SM_NEWMAP = 51+OFFEST;
+
+    public const short SM_USERNAME = 42+OFFEST;
 
 }
 public class ClientMsgIds
@@ -3844,7 +3847,7 @@ public class ClientQuestInfo
 {
     public int Index;
 
-    public uint NPCIndex;
+    public Guid NPCIndex;
 
     public string Name, Group;
     public List<string> Description = new List<string>();
@@ -3863,7 +3866,7 @@ public class ClientQuestInfo
     public List<QuestItemReward> RewardsFixedItem = new List<QuestItemReward>();
     public List<QuestItemReward> RewardsSelectItem = new List<QuestItemReward>();
 
-    public uint FinishNPCIndex;
+    public Guid FinishNPCIndex;
 
     public bool SameFinishNPC
     {
@@ -3875,7 +3878,7 @@ public class ClientQuestInfo
     public ClientQuestInfo(BinaryReader reader)
     {
         Index = reader.ReadInt32();
-        NPCIndex = reader.ReadUInt32();
+        NPCIndex =new Guid(reader.ReadBytes(64));
         Name = reader.ReadString();
         Group = reader.ReadString();
 
@@ -3910,12 +3913,12 @@ public class ClientQuestInfo
         for (int i = 0; i < count; i++)
             RewardsSelectItem.Add(new QuestItemReward(reader));
 
-        FinishNPCIndex = reader.ReadUInt32();
+        FinishNPCIndex =new Guid(reader.ReadBytes(64));
     }
     public void Save(BinaryWriter writer)
     {
         writer.Write(Index);
-        writer.Write(NPCIndex);
+        writer.Write(NPCIndex.ToByteArray());
         writer.Write(Name);
         writer.Write(Group);
 
@@ -3950,7 +3953,7 @@ public class ClientQuestInfo
         for (int i = 0; i < RewardsSelectItem.Count; i++)
             RewardsSelectItem[i].Save(writer);
 
-        writer.Write(FinishNPCIndex);
+        writer.Write(FinishNPCIndex.ToByteArray());
     }
 
     public QuestIcon GetQuestIcon(bool taken = false, bool completed = false)
@@ -4499,6 +4502,7 @@ public abstract class Packet
     public short wParam;
     public short wTag;
     public short wSeries;
+    public const short GUIDLEN = 64;
     public void WriteBaseBytes(BinaryWriter writer)
     {
         writer.Write(nLen);
@@ -6483,7 +6487,7 @@ public class GuildBuffOld
 #region Ranking Pete107|Petesn00beh 15/1/2016
 public class Rank_Character_Info
 {
-    public long PlayerId;
+    public Guid PlayerId;
     public string Name;
     public MirClass Class;
     public int level;
@@ -6498,7 +6502,7 @@ public class Rank_Character_Info
     public Rank_Character_Info(BinaryReader reader)
     {
         //rank = reader.ReadInt32();
-        PlayerId = reader.ReadInt64();
+        PlayerId =new Guid(reader.ReadBytes(Packet.GUIDLEN));
         Name = reader.ReadString();
         level = reader.ReadInt32();
         Class = (MirClass)reader.ReadByte();
@@ -6507,7 +6511,7 @@ public class Rank_Character_Info
     public void Save(BinaryWriter writer)
     {
         //writer.Write(rank);
-        writer.Write(PlayerId);
+        writer.Write(PlayerId.ToByteArray());
         writer.Write(Name);
         writer.Write(level);
         writer.Write((byte)Class);

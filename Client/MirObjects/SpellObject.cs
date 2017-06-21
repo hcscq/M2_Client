@@ -26,7 +26,7 @@ namespace Client.MirObjects
         public bool Repeat;
         
 
-        public SpellObject(uint objectID) : base(objectID)
+        public SpellObject(Guid objectID) : base(objectID)
         {
         }
 

@@ -24,7 +24,7 @@ namespace Client.MirObjects
         public Size Size;
 
 
-        public ItemObject(uint objectID) : base(objectID)
+        public ItemObject(Guid objectID) : base(objectID)
         {
         }
 

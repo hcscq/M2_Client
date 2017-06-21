@@ -155,9 +155,9 @@ namespace Client.MirScenes
         public LightSetting Lights;
 
         public static long NPCTime;
-        public static uint NPCID;
+        public static Guid NPCID;
         public static float NPCRate;
-        public static uint DefaultNPCID;
+        public static Guid DefaultNPCID;
 
 
         public long ToggleTime;
@@ -1017,11 +1017,6 @@ namespace Client.MirScenes
                 case (short)ServerPacketIds.KeepAlive:
                     KeepAlive((S.KeepAlive)p);
                     break;
-                /*EX process begin*/
-                case ServerMsgIds.SM_NEWMAP:
-
-                    break;
-                    /*EX process end*/
                 case (short)ServerPacketIds.MapInformation: //MapInfo
                     MapInformation((S.MapInformation)p);
                     break;
@@ -1672,12 +1667,56 @@ namespace Client.MirScenes
                 case (short)ServerPacketIds.ConfirmItemRental:
                     ConfirmItemRental((S.ConfirmItemRental)p);
                     break;
+                /*EX process begin*/
+                case ServerMsgIds.SM_NEWMAP:
+                    NewMap((SEX.NewMap)p);
+                    break;
+                case ServerMsgIds.SM_USERNAME:
+                    UserName((SEX.UserName)p);
+                    break;
+                case ServerMsgIds.SM_LOGON:
+                    break;
+                /*EX process end*/
                 default:
                     base.ProcessPacket(p);
                     break;
             }
         }
-
+        private void Logon(SEX.MapLogon P)
+        {
+            User = new UserObject(Guid.Empty);
+            User.Direction= P.btDirection;
+            User.Light = P.btLight;
+            User.Gender = (MirGender)P.btGender;
+            User.Weapon = P.btWeapon;
+            User.Hair = P.btHair;
+            User.ObjectID = P.CharID;
+            MapControl.AddObject(User);
+        }
+        private void UserName(SEX.UserName P)
+        {
+            User.Name = Packet.GetString(P.CharName);
+            User.NameColour = P.NameColour;
+        }
+        private void NewMap(SEX.NewMap p)
+        {
+            if (MapControl != null && !MapControl.IsDisposed)
+                MapControl.Dispose();
+            MapControl = new MapControl
+            {
+                FileName = Path.Combine(Settings.MapPath, Packet.GetString(p.MapName) + ".map"),
+                Title = Packet.GetString(p.MapName),
+                MiniMap = p.MiniMap,
+                BigMap = p.BigMap,
+                Lights = p.Lights,
+                Lightning = p.Lightning,
+                Fire = p.Fire,
+                MapDarkLight = p.MapDarkLight,
+                Music = p.Music
+            };
+            MapControl.LoadMap();
+            InsertControl(0, MapControl);
+        }
         private void KeepAlive(S.KeepAlive p)
         {
             if (p.Time == 0) return;
@@ -1691,24 +1730,7 @@ namespace Client.MirScenes
             MapControl.LoadMap();
             InsertControl(0, MapControl);
         }
-        private void MapInformationEx(SEX.NewMap p)
-        {
-            if (MapControl != null && !MapControl.IsDisposed)
-                MapControl.Dispose();
-            MapControl = new MapControl {
-                FileName = Path.Combine(Settings.MapPath,Packet.GetString(p.MapName) + ".map"),
-                Title =Packet.GetString(p.MapName),
-                MiniMap = p.MiniMap,
-                BigMap = p.BigMap,
-                Lights = p.Lights,
-                Lightning = p.Lightning,
-                Fire = p.Fire,
-                MapDarkLight = p.MapDarkLight,
-                Music = p.Music
-            };
-            MapControl.LoadMap();
-            InsertControl(0, MapControl);
-        }
+
         private void UserInformation(S.UserInformation p)
         {
             User = new UserObject(p.ObjectID);
@@ -2434,7 +2456,7 @@ namespace Client.MirScenes
 
             MirMessageBox messageBox = new MirMessageBox(string.Format("{0} would like to share a quest with you. Do you accept?", p.SharerName), MirMessageBoxButtons.YesNo);
 
-            messageBox.YesButton.Click += (o, e) => Network.Enqueue(new C.AcceptQuest { NPCIndex = 0, QuestIndex = quest.Index });
+            messageBox.YesButton.Click += (o, e) => Network.Enqueue(new C.AcceptQuest { NPCIndex = Guid.Empty, QuestIndex = quest.Index });
 
             messageBox.Show();
         }
@@ -3731,11 +3753,11 @@ namespace Client.MirScenes
                         }
                         else if (effectid >= 0)
                         {
-                            if (DelayedExplosionEffect.effectlist[effectid].stage < p.EffectType)
-                            {
-                                DelayedExplosionEffect.effectlist[effectid].Remove();
-                                ob.Effects.Add(new DelayedExplosionEffect(Libraries.Magic3, 1590 + ((int)p.EffectType * 10), 8, 1200, ob, true, (int)p.EffectType, 0));
-                            }
+                            //if (DelayedExplosionEffect.effectlist[effectid].stage < p.EffectType)
+                            //{
+                            //    DelayedExplosionEffect.effectlist[effectid].Remove();
+                            //    ob.Effects.Add(new DelayedExplosionEffect(Libraries.Magic3, 1590 + ((int)p.EffectType * 10), 8, 1200, ob, true, (int)p.EffectType, 0));
+                            //}
                         }
 
                         //else
@@ -4052,7 +4074,7 @@ namespace Client.MirScenes
                 ShowMentalState(buff);               
             }
 
-            if (!buff.Visible || buff.ObjectID <= 0) return;
+            if (!buff.Visible || buff.ObjectID ==null) return;
 
             for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
             {
@@ -4093,7 +4115,7 @@ namespace Client.MirScenes
             if (User.ObjectID == p.ObjectID)
                 User.RefreshStats();
 
-            if (p.ObjectID <= 0) return;
+            if (p.ObjectID ==null ) return;
 
             for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
             {
@@ -8259,8 +8281,8 @@ namespace Client.MirScenes
                 Lights = 0;
 
                 NPCTime = 0;
-                NPCID = 0;
-                DefaultNPCID = 0;
+                NPCID = Guid.Empty;
+                DefaultNPCID = Guid.Empty;
 
                 for (int i = 0; i < OutputLines.Length; i++)
                     if (OutputLines[i] != null && OutputLines[i].IsDisposed)
@@ -8485,7 +8507,7 @@ namespace Client.MirScenes
             }
         }
 
-        public static MapObject GetObject(uint targetID)
+        public static MapObject GetObject(Guid targetID)
         {
             for (int i = 0; i < Objects.Count; i++)
             {
@@ -9302,7 +9324,7 @@ namespace Client.MirScenes
                             if (CMain.Time > GameScene.AttackTime)
                             {
                                 User.QueuedAction = new QueuedAction { Action = MirAction.AttackRange1, Direction = Functions.DirectionFromPoint(User.CurrentLocation, MapObject.TargetObject.CurrentLocation), Location = User.CurrentLocation, Params = new List<object>() };
-                                User.QueuedAction.Params.Add(MapObject.TargetObject != null ? MapObject.TargetObject.ObjectID : (uint)0);
+                                User.QueuedAction.Params.Add(MapObject.TargetObject != null ? MapObject.TargetObject.ObjectID : Guid.Empty);
                                 User.QueuedAction.Params.Add(MapObject.TargetObject.CurrentLocation);
 
                                 // MapObject.TargetObject = null; //stop constant attack when close up
@@ -9407,7 +9429,7 @@ namespace Client.MirScenes
                                     }
 
                                     User.QueuedAction = new QueuedAction { Action = MirAction.AttackRange1, Direction = MouseDirection(), Location = User.CurrentLocation, Params = new List<object>() };
-                                    User.QueuedAction.Params.Add(target != null ? target.ObjectID : (uint)0);
+                                    User.QueuedAction.Params.Add(target != null ? target.ObjectID : Guid.Empty);
                                     User.QueuedAction.Params.Add(Functions.PointMove(User.CurrentLocation, MouseDirection(), 9));
                                     return;
                                 }
@@ -9744,7 +9766,7 @@ namespace Client.MirScenes
 
             User.QueuedAction = new QueuedAction { Action = MirAction.Spell, Direction = dir, Location = User.CurrentLocation, Params = new List<object>() };
             User.QueuedAction.Params.Add(magic.Spell);
-            User.QueuedAction.Params.Add(target != null ? target.ObjectID : 0);
+            User.QueuedAction.Params.Add(target != null ? target.ObjectID : Guid.Empty);
             User.QueuedAction.Params.Add(location);
             User.QueuedAction.Params.Add(magic.Level);
         }
@@ -10005,7 +10027,7 @@ namespace Client.MirScenes
         {
             M2CellInfo[ob.MapLocation.X, ob.MapLocation.Y].AddObject(ob);
         }
-        public MapObject FindObject(uint ObjectID, int x, int y)
+        public MapObject FindObject(Guid ObjectID, int x, int y)
         {
             return M2CellInfo[x, y].FindObject(ObjectID);
         }
@@ -10067,7 +10089,7 @@ namespace Client.MirScenes
         public BuffType Type;
         public string Caster;
         public bool Visible;
-        public uint ObjectID;
+        public Guid ObjectID;
         public long Expire;
         public int[] Values;
         public bool Infinite;

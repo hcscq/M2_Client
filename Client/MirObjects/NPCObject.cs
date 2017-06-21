@@ -48,7 +48,7 @@ namespace Client.MirObjects
         public List<ClientQuestInfo> Quests;
 
 
-        public NPCObject(uint objectID) : base(objectID)
+        public NPCObject(Guid objectID) : base(objectID)
         {
         }
 

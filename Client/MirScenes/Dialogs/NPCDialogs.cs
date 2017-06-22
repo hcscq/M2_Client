@@ -1574,7 +1574,7 @@ namespace Client.MirScenes.Dialogs
 
 
 
-        public MirItemCell GetCell(ulong id)
+        public MirItemCell GetCell(Guid id)
         {
             for (int i = 0; i < Grid.Length; i++)
             {
@@ -1800,7 +1800,7 @@ namespace Client.MirScenes.Dialogs
             }
         }
 
-        public MirItemCell GetCell(ulong id)
+        public MirItemCell GetCell(Guid id)
         {
             for (int i = 0; i < Grid.Length; i++)
             {

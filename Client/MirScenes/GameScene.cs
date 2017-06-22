@@ -1675,12 +1675,19 @@ namespace Client.MirScenes
                     UserName((SEX.UserName)p);
                     break;
                 case ServerMsgIds.SM_LOGON:
+                    Logon((SEX.MapLogon)p);
+                    break;
+                case ServerMsgIds.SM_SENDUSEITEMS:
                     break;
                 /*EX process end*/
                 default:
                     base.ProcessPacket(p);
                     break;
             }
+        }
+        private void UseItems()
+        {
+
         }
         private void Logon(SEX.MapLogon P)
         {
@@ -5067,7 +5074,7 @@ namespace Client.MirScenes
             if (InventoryDialog.Visible)
                 InventoryDialog.Hide();
 
-            MirItemCell cell = InventoryDialog.GetCell((ulong)p.removeID);
+            MirItemCell cell = InventoryDialog.GetCell(p.removeID);
             if (cell != null)
             {
                 cell.Locked = false;

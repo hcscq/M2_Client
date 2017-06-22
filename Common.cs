@@ -1242,6 +1242,8 @@ public class ServerMsgIds
 
     public const short SM_USERNAME = 42+OFFEST;
 
+    public const short SM_SENDUSEITEMS = 621 + OFFEST;
+
 }
 public class ClientMsgIds
 {
@@ -2586,7 +2588,7 @@ public class SelectInfo
 
 public class ItemInfo
 {
-    public int Index;
+    public ushort Index;
     public string Name = string.Empty;
     public ItemType Type;
     public ItemGrade Grade;
@@ -2653,7 +2655,7 @@ public class ItemInfo
     }
     public ItemInfo(BinaryReader reader, int version = int.MaxValue, int Customversion = int.MaxValue)
     {
-        Index = reader.ReadInt32();
+        Index = reader.ReadUInt16();
         Name = reader.ReadString();
         Type = (ItemType) reader.ReadByte();
         if (version >= 40) Grade = (ItemGrade)reader.ReadByte();
@@ -2984,14 +2986,19 @@ public class ItemInfo
 }
 public class UserItem
 {
-    public ulong UniqueID;
-    public int ItemIndex;
+    public Guid UniqueID;
+    sbyte STDType;
+    byte[] MakeDate;  
+    public ushort ItemIndex;
 
     public ItemInfo Info;
     public ushort CurrentDura, MaxDura;
-    public uint Count = 1, GemCount = 0;
+    public ushort Count = 1, GemCount = 0;
 
-    public byte AC, MAC, DC, MC, SC, Accuracy, Agility, HP, MP, Strong, MagicResist, PoisonResist, HealthRecovery, ManaRecovery, PoisonRecovery, CriticalRate, CriticalDamage, Freezing, PoisonAttack;
+    public byte AC, MAC, DC, MC, SC, Accuracy, 
+        Agility, HP, MP, Strong, MagicResist, PoisonResist, 
+        HealthRecovery, ManaRecovery, PoisonRecovery, 
+        CriticalRate, CriticalDamage, Freezing, PoisonAttack;
     public sbyte AttackSpeed, Luck;
 
     public RefinedValue RefinedValue = RefinedValue.None;
@@ -3023,7 +3030,7 @@ public class UserItem
 
     public uint Weight
     {
-        get { return Info.Type == ItemType.Amulet ? Info.Weight : Info.Weight*Count; }
+        get { return (uint)(Info.Type == ItemType.Amulet ? Info.Weight : Info.Weight*Count); }
     }
 
     public string Name
@@ -3046,13 +3053,15 @@ public class UserItem
     }
     public UserItem(BinaryReader reader, int version = int.MaxValue, int Customversion = int.MaxValue)
     {
-        UniqueID = reader.ReadUInt64();
-        ItemIndex = reader.ReadInt32();
+        STDType = reader.ReadSByte();
+        MakeDate = reader.ReadBytes(6);
+        UniqueID = new Guid(reader.ReadBytes(Packet.GUIDLEN));
+        ItemIndex = reader.ReadUInt16();
 
         CurrentDura = reader.ReadUInt16();
         MaxDura = reader.ReadUInt16();
 
-        Count = reader.ReadUInt32();
+        Count = reader.ReadUInt16();
 
         AC = reader.ReadByte();
         MAC = reader.ReadByte();
@@ -3097,7 +3106,7 @@ public class UserItem
 
         if (version <= 38) return;
 
-        GemCount = reader.ReadUInt32();
+        GemCount = reader.ReadUInt16();
 
         if (version <= 40) return;
 
@@ -3124,7 +3133,7 @@ public class UserItem
 
     public void Save(BinaryWriter writer)
     {
-        writer.Write(UniqueID);
+        writer.Write(UniqueID.ToByteArray());
         writer.Write(ItemIndex);
 
         writer.Write(CurrentDura);

@@ -414,15 +414,15 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.RefineItem; } }
 
-        public ulong UniqueID;
+        public Guid UniqueID;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            UniqueID = reader.ReadUInt64();
+            UniqueID = new Guid(reader.ReadBytes(Packet.GUIDLEN));
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(UniqueID);
+            writer.Write(UniqueID.ToByteArray());
         }
     }
 
@@ -430,15 +430,15 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.CheckRefine; } }
 
-        public ulong UniqueID;
+        public Guid UniqueID;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            UniqueID = reader.ReadUInt64();
+            UniqueID = new Guid(reader.ReadBytes(Packet.GUIDLEN));
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(UniqueID);
+            writer.Write(UniqueID.ToByteArray());
         }
     }
 
@@ -446,15 +446,15 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.ReplaceWedRing; } }
 
-        public ulong UniqueID;
+        public Guid UniqueID;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            UniqueID = reader.ReadUInt64();
+            UniqueID = new Guid(reader.ReadBytes(Packet.GUIDLEN));
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(UniqueID);
+            writer.Write(UniqueID.ToByteArray());
         }
     }
 
@@ -513,20 +513,20 @@ namespace ClientPackets
         public override short Index { get { return (short)ClientPacketIds.MergeItem; } }
 
         public MirGridType GridFrom, GridTo;
-        public ulong IDFrom, IDTo;
+        public Guid IDFrom, IDTo;
         protected override void ReadPacket(BinaryReader reader)
         {
             GridFrom = (MirGridType)reader.ReadByte();
             GridTo = (MirGridType)reader.ReadByte();
-            IDFrom = reader.ReadUInt64();
-            IDTo = reader.ReadUInt64();
+            IDFrom = new Guid(reader.ReadBytes(Packet.GUIDLEN));
+            IDTo = new Guid(reader.ReadBytes(Packet.GUIDLEN));
         }
         protected override void WritePacket(BinaryWriter writer)
         {
             writer.Write((byte)GridFrom);
             writer.Write((byte)GridTo);
-            writer.Write(IDFrom);
-            writer.Write(IDTo);
+            writer.Write(IDFrom.ToByteArray());
+            writer.Write(IDTo.ToByteArray());
         }
     }
     public sealed class EquipItem : Packet
@@ -534,19 +534,19 @@ namespace ClientPackets
         public override short Index { get { return (short)ClientPacketIds.EquipItem; } }
 
         public MirGridType Grid;
-        public ulong UniqueID;
+        public Guid UniqueID;
         public int To;
 
         protected override void ReadPacket(BinaryReader reader)
         {
             Grid = (MirGridType)reader.ReadByte();
-            UniqueID = reader.ReadUInt64();
+            UniqueID = new Guid(reader.ReadBytes(Packet.GUIDLEN));
             To = reader.ReadInt32();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
             writer.Write((byte)Grid);
-            writer.Write(UniqueID);
+            writer.Write(UniqueID.ToByteArray());
             writer.Write(To);
         }
     }
@@ -555,19 +555,19 @@ namespace ClientPackets
         public override short Index { get { return (short)ClientPacketIds.RemoveItem; } }
 
         public MirGridType Grid;
-        public ulong UniqueID;
+        public Guid UniqueID;
         public int To;
 
         protected override void ReadPacket(BinaryReader reader)
         {
             Grid = (MirGridType)reader.ReadByte();
-            UniqueID = reader.ReadUInt64();
+            UniqueID = new Guid(reader.ReadBytes(Packet.GUIDLEN));
             To = reader.ReadInt32();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
             writer.Write((byte)Grid);
-            writer.Write(UniqueID);
+            writer.Write(UniqueID.ToByteArray());
             writer.Write(To);
         }
     }
@@ -577,21 +577,21 @@ namespace ClientPackets
 
         public MirGridType Grid;
         public MirGridType GridTo;
-        public ulong UniqueID;
+        public Guid UniqueID;
         public int To;
 
         protected override void ReadPacket(BinaryReader reader)
         {
             Grid = (MirGridType)reader.ReadByte();
             GridTo = (MirGridType)reader.ReadByte();
-            UniqueID = reader.ReadUInt64();
+            UniqueID = new Guid(reader.ReadBytes(Packet.GUIDLEN));
             To = reader.ReadInt32();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
             writer.Write((byte)Grid);
             writer.Write((byte)GridTo);
-            writer.Write(UniqueID);
+            writer.Write(UniqueID.ToByteArray());
             writer.Write(To);
         }
     }
@@ -600,19 +600,19 @@ namespace ClientPackets
         public override short Index { get { return (short)ClientPacketIds.SplitItem; } }
 
         public MirGridType Grid;
-        public ulong UniqueID;
+        public Guid UniqueID;
         public uint Count;
 
         protected override void ReadPacket(BinaryReader reader)
         {
             Grid = (MirGridType)reader.ReadByte();
-            UniqueID = reader.ReadUInt64();
+            UniqueID = new Guid(reader.ReadBytes(Packet.GUIDLEN));
             Count = reader.ReadUInt32();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
             writer.Write((byte)Grid);
-            writer.Write(UniqueID);
+            writer.Write(UniqueID.ToByteArray());
             writer.Write(Count);
         }
     }
@@ -620,31 +620,31 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.UseItem; } }
 
-        public ulong UniqueID;
+        public Guid UniqueID;
         protected override void ReadPacket(BinaryReader reader)
         {
-            UniqueID = reader.ReadUInt64();
+            UniqueID = new Guid(reader.ReadBytes(Packet.GUIDLEN));
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(UniqueID);
+            writer.Write(UniqueID.ToByteArray());
         }
     }
     public sealed class DropItem : Packet
     {
         public override short Index { get { return (short)ClientPacketIds.DropItem; } }
 
-        public ulong UniqueID;
+        public Guid UniqueID;
         public uint Count;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            UniqueID = reader.ReadUInt64();
+            UniqueID = new Guid(reader.ReadBytes(Packet.GUIDLEN));
             Count = reader.ReadUInt32();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(UniqueID);
+            writer.Write(UniqueID.ToByteArray());
             writer.Write(Count);
         }
     }
@@ -836,17 +836,17 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.BuyItem; } }
 
-        public ulong ItemIndex;
+        public Guid ItemIndex;
         public uint Count;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ItemIndex = reader.ReadUInt64();
+            ItemIndex =new Guid(reader.ReadBytes(Packet.GUIDLEN));
             Count = reader.ReadUInt32();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ItemIndex);
+            writer.Write(ItemIndex.ToByteArray());
             writer.Write(Count);
         }
     }
@@ -854,17 +854,17 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.SellItem; } }
 
-        public ulong UniqueID;
+        public Guid UniqueID;
         public uint Count;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            UniqueID = reader.ReadUInt64();
+            UniqueID = new Guid(reader.ReadBytes(Packet.GUIDLEN));
             Count = reader.ReadUInt32();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(UniqueID);
+            writer.Write(UniqueID.ToByteArray());
             writer.Write(Count);
         }
     }
@@ -872,32 +872,32 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.RepairItem; } }
 
-        public ulong UniqueID;
+        public Guid UniqueID;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            UniqueID = reader.ReadUInt64();
+            UniqueID = new Guid(reader.ReadBytes(Packet.GUIDLEN));
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(UniqueID);
+            writer.Write(UniqueID.ToByteArray());
         }
     }
     public sealed class BuyItemBack : Packet
     {
         public override short Index { get { return (short)ClientPacketIds.BuyItemBack; } }
 
-        public ulong UniqueID;
+        public Guid UniqueID;
         public uint Count;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            UniqueID = reader.ReadUInt64();
+            UniqueID = new Guid(reader.ReadBytes(Packet.GUIDLEN));
             Count = reader.ReadUInt32();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(UniqueID);
+            writer.Write(UniqueID.ToByteArray());
             writer.Write(Count);
         }
     }
@@ -905,15 +905,15 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.SRepairItem; } }
 
-        public ulong UniqueID;
+        public Guid UniqueID;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            UniqueID = reader.ReadUInt64();
+            UniqueID = new Guid(reader.ReadBytes(Packet.GUIDLEN));
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(UniqueID);
+            writer.Write(UniqueID.ToByteArray());
         }
     }
     public sealed class MagicKey : Packet
@@ -1235,17 +1235,17 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.ConsignItem; } }
 
-        public ulong UniqueID;
+        public Guid UniqueID;
         public uint Price;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            UniqueID = reader.ReadUInt64();
+            UniqueID = new Guid(reader.ReadBytes(Packet.GUIDLEN));
             Price = reader.ReadUInt32();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(UniqueID);
+            writer.Write(UniqueID.ToByteArray());
             writer.Write(Price);
         }
     }
@@ -1500,21 +1500,21 @@ namespace ClientPackets
         public override short Index { get { return (short)ClientPacketIds.EquipSlotItem; } }
 
         public MirGridType Grid;
-        public ulong UniqueID;
+        public Guid UniqueID;
         public int To;
         public MirGridType GridTo;
 
         protected override void ReadPacket(BinaryReader reader)
         {
             Grid = (MirGridType)reader.ReadByte();
-            UniqueID = reader.ReadUInt64();
+            UniqueID = new Guid(reader.ReadBytes(Packet.GUIDLEN));
             To = reader.ReadInt32();
             GridTo = (MirGridType)reader.ReadByte();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
             writer.Write((byte)Grid);
-            writer.Write(UniqueID);
+            writer.Write(UniqueID.ToByteArray());
             writer.Write(To);
             writer.Write((byte)GridTo);
         }
@@ -1650,16 +1650,16 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.CombineItem; } }
 
-        public ulong IDFrom, IDTo;
+        public Guid IDFrom, IDTo;
         protected override void ReadPacket(BinaryReader reader)
         {
-            IDFrom = reader.ReadUInt64();
-            IDTo = reader.ReadUInt64();
+            IDFrom = new Guid(reader.ReadBytes(Packet.GUIDLEN));
+            IDTo =new Guid(reader.ReadBytes(Packet.GUIDLEN));
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(IDFrom);
-            writer.Write(IDTo);
+            writer.Write(IDFrom.ToByteArray());
+            writer.Write(IDTo.ToByteArray());
         }
     }
 
@@ -1688,17 +1688,17 @@ public sealed class AwakeningNeedMaterials : Packet
     {
         public override short Index { get { return (short)ClientPacketIds.AwakeningNeedMaterials; } }
 
-        public ulong UniqueID;
+        public Guid UniqueID;
         public AwakeType Type;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            UniqueID = reader.ReadUInt64();
+            UniqueID = new Guid(reader.ReadBytes(Packet.GUIDLEN));
             Type = (AwakeType)reader.ReadByte();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(UniqueID);
+            writer.Write(UniqueID.ToByteArray());
             writer.Write((byte)Type);
         }
     }
@@ -1707,17 +1707,17 @@ public sealed class AwakeningNeedMaterials : Packet
     {
         public override short Index { get { return (short)ClientPacketIds.AwakeningLockedItem; } }
 
-        public ulong UniqueID;
+        public Guid UniqueID;
         public bool Locked;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            UniqueID = reader.ReadUInt64();
+            UniqueID =new Guid(reader.ReadBytes(Packet.GUIDLEN));
             Locked = reader.ReadBoolean();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(UniqueID);
+            writer.Write(UniqueID.ToByteArray());
             writer.Write(Locked);
         }
     }
@@ -1726,19 +1726,19 @@ public sealed class AwakeningNeedMaterials : Packet
     {
         public override short Index { get { return (short)ClientPacketIds.Awakening; } }
 
-        public ulong UniqueID;
+        public Guid UniqueID;
         public AwakeType Type;
         public uint PositionIdx;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            UniqueID = reader.ReadUInt64();
+            UniqueID =new Guid(reader.ReadBytes(Packet.GUIDLEN));
             Type = (AwakeType)reader.ReadByte();
             PositionIdx = reader.ReadUInt32();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(UniqueID);
+            writer.Write(UniqueID.ToByteArray());
             writer.Write((byte)Type);
             writer.Write(PositionIdx);
         }
@@ -1748,15 +1748,15 @@ public sealed class AwakeningNeedMaterials : Packet
     {
         public override short Index { get { return (short)ClientPacketIds.DisassembleItem; } }
 
-        public ulong UniqueID;
+        public Guid UniqueID;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            UniqueID = reader.ReadUInt64();
+            UniqueID = new Guid(reader.ReadBytes(Packet.GUIDLEN));
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(UniqueID);
+            writer.Write(UniqueID.ToByteArray());
         }
     }
 
@@ -1764,15 +1764,15 @@ public sealed class AwakeningNeedMaterials : Packet
     {
         public override short Index { get { return (short)ClientPacketIds.DowngradeAwakening; } }
 
-        public ulong UniqueID;
+        public Guid UniqueID;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            UniqueID = reader.ReadUInt64();
+            UniqueID = new Guid(reader.ReadBytes(Packet.GUIDLEN));
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(UniqueID);
+            writer.Write(UniqueID.ToByteArray());
         }
     }
 
@@ -1780,15 +1780,15 @@ public sealed class AwakeningNeedMaterials : Packet
     {
         public override short Index { get { return (short)ClientPacketIds.ResetAddedItem; } }
 
-        public ulong UniqueID;
+        public Guid UniqueID;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            UniqueID = reader.ReadUInt64();
+            UniqueID = new Guid(reader.ReadBytes(Packet.GUIDLEN));
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(UniqueID);
+            writer.Write(UniqueID.ToByteArray());
         }
     }
 
@@ -1799,7 +1799,7 @@ public sealed class AwakeningNeedMaterials : Packet
         public string Name;
         public string Message;
         public uint Gold;
-        public ulong[] ItemsIdx = new ulong[5];
+        public Guid[] ItemsIdx = new Guid[5];
         public bool Stamped;
 
         protected override void ReadPacket(BinaryReader reader)
@@ -1810,7 +1810,7 @@ public sealed class AwakeningNeedMaterials : Packet
 
             for (int i = 0; i < 5; i++)
             {
-                ItemsIdx[i] = reader.ReadUInt64();
+                ItemsIdx[i] =new Guid(reader.ReadBytes(Packet.GUIDLEN));
             }
 
             Stamped = reader.ReadBoolean();
@@ -1823,7 +1823,7 @@ public sealed class AwakeningNeedMaterials : Packet
 
             for (int i = 0; i < 5; i++)
             {
-                writer.Write(ItemsIdx[i]);
+                writer.Write(ItemsIdx[i].ToByteArray());
             }
 
             writer.Write(Stamped);
@@ -1901,17 +1901,17 @@ public sealed class AwakeningNeedMaterials : Packet
     {
         public override short Index { get { return (short)ClientPacketIds.MailLockedItem; } }
 
-        public ulong UniqueID;
+        public Guid UniqueID;
         public bool Locked;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            UniqueID = reader.ReadUInt64();
+            UniqueID = new Guid(reader.ReadBytes(Packet.GUIDLEN));
             Locked = reader.ReadBoolean();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(UniqueID);
+            writer.Write(UniqueID.ToByteArray());
             writer.Write(Locked);
         }
     }
@@ -1921,7 +1921,7 @@ public sealed class AwakeningNeedMaterials : Packet
         public override short Index { get { return (short)ClientPacketIds.MailCost; } }
 
         public uint Gold;
-        public ulong[] ItemsIdx = new ulong[5];
+        public Guid[] ItemsIdx = new Guid[5];
         public bool Stamped;
 
         protected override void ReadPacket(BinaryReader reader)
@@ -1930,7 +1930,7 @@ public sealed class AwakeningNeedMaterials : Packet
 
             for (int i = 0; i < 5; i++)
             {
-                ItemsIdx[i] = reader.ReadUInt64();
+                ItemsIdx[i] =new Guid(reader.ReadBytes(Packet.GUIDLEN));
             }
 
             Stamped = reader.ReadBoolean();
@@ -1941,7 +1941,7 @@ public sealed class AwakeningNeedMaterials : Packet
 
             for (int i = 0; i < 5; i++)
             {
-                writer.Write(ItemsIdx[i]);
+                writer.Write(ItemsIdx[i].ToByteArray());
             }
 
             writer.Write(Stamped);

@@ -664,7 +664,7 @@ namespace Client.MirScenes.Dialogs
         public MirItemCell[] Cells = new MirItemCell[_cellCount];
 
         public static UserItem[] Items = new UserItem[_cellCount];
-        public static ulong[] ItemsIdx = new ulong[_cellCount];
+        public static Guid[] ItemsIdx = new Guid[_cellCount];
 
         public uint GiftGoldAmount = 0;
         public bool Stamped = false;
@@ -858,7 +858,7 @@ namespace Client.MirScenes.Dialogs
                     cell.Item = null;
                 }
 
-                ItemsIdx[i] = 0;
+                ItemsIdx[i] = Guid.Empty;
             }
         }
 

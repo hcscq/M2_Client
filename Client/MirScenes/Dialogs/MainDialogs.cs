@@ -1704,7 +1704,7 @@ namespace Client.MirScenes.Dialogs
         }
 
 
-        public MirItemCell GetCell(ulong id)
+        public MirItemCell GetCell(Guid id)
         {
             for (int i = 0; i < Grid.Length; i++)
             {
@@ -1714,12 +1714,12 @@ namespace Client.MirScenes.Dialogs
             return null;
         }
 
-        public MirItemCell GetQuestCell(ulong id)
+        public MirItemCell GetQuestCell(Guid id)
         {
             return QuestGrid.FirstOrDefault(t => t.Item != null && t.Item.UniqueID == id);
         }
 
-        public void DisplayItemGridEffect(ulong id, int type = 0)
+        public void DisplayItemGridEffect(Guid id, int type = 0)
         {
             MirItemCell cell = GetCell(id);
 
@@ -1888,7 +1888,7 @@ namespace Client.MirScenes.Dialogs
         }
 
 
-        public MirItemCell GetCell(ulong id)
+        public MirItemCell GetCell(Guid id)
         {
             for (int i = 0; i < Grid.Length; i++)
             {
@@ -2855,7 +2855,7 @@ namespace Client.MirScenes.Dialogs
             }
         }
 
-        public MirItemCell GetCell(ulong id)
+        public MirItemCell GetCell(Guid id)
         {
 
             for (int i = 0; i < Grid.Length; i++)

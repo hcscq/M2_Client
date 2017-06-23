@@ -491,7 +491,7 @@ namespace ServerPackets
         }
 
         public Guid ObjectID;
-        public uint RealId;
+        public Guid RealId;
         public string Name = string.Empty;
         public string GuildName = string.Empty;
         public string GuildRank = string.Empty;
@@ -524,7 +524,7 @@ namespace ServerPackets
         protected override void ReadPacket(BinaryReader reader)
         {
             ObjectID = new Guid(reader.ReadBytes(64));
-            RealId = reader.ReadUInt32();
+            RealId =new Guid(reader.ReadBytes(64));
             Name = reader.ReadString();
             GuildName = reader.ReadString();
             GuildRank = reader.ReadString();
@@ -595,7 +595,7 @@ namespace ServerPackets
         protected override void WritePacket(BinaryWriter writer)
         {
             writer.Write(ObjectID.ToByteArray());
-            writer.Write(RealId);
+            writer.Write(RealId.ToByteArray());
             writer.Write(Name);
             writer.Write(GuildName);
             writer.Write(GuildRank);
@@ -1350,14 +1350,14 @@ namespace ServerPackets
 
         public MirGridType Grid;
         public Guid UniqueID;
-        public uint Count;
+        public ushort Count;
         public bool Success;
 
         protected override void ReadPacket(BinaryReader reader)
         {
             Grid = (MirGridType)reader.ReadByte();
             UniqueID =new Guid(reader.ReadBytes(Packet.GUIDLEN));
-            Count = reader.ReadUInt32();
+            Count = reader.ReadUInt16();
             Success = reader.ReadBoolean();
         }
 
@@ -1399,13 +1399,13 @@ namespace ServerPackets
         }
 
         public Guid UniqueID;
-        public uint Count;
+        public ushort Count;
         public bool Success;
 
         protected override void ReadPacket(BinaryReader reader)
         {
             UniqueID =new Guid(reader.ReadBytes(Packet.GUIDLEN));
-            Count = reader.ReadUInt32();
+            Count = reader.ReadUInt16();
             Success = reader.ReadBoolean();
         }
 
@@ -2152,12 +2152,12 @@ namespace ServerPackets
         }
 
         public Guid UniqueID;
-        public uint Count;
+        public ushort Count;
 
         protected override void ReadPacket(BinaryReader reader)
         {
             UniqueID =new Guid(reader.ReadBytes(Packet.GUIDLEN));
-            Count = reader.ReadUInt32();
+            Count = reader.ReadUInt16();
         }
 
         protected override void WritePacket(BinaryWriter writer)
@@ -2767,13 +2767,13 @@ namespace ServerPackets
         public override short Index { get { return (short)ServerPacketIds.SellItem; } }
 
         public Guid UniqueID;
-        public uint Count;
+        public ushort Count;
         public bool Success;
 
         protected override void ReadPacket(BinaryReader reader)
         {
             UniqueID =new Guid(reader.ReadBytes(Packet.GUIDLEN));
-            Count = reader.ReadUInt32();
+            Count = reader.ReadUInt16();
             Success = reader.ReadBoolean();
         }
         protected override void WritePacket(BinaryWriter writer)
@@ -3759,16 +3759,16 @@ namespace ServerPackets
     public sealed class UserName : Packet
     {
         public override short Index { get { return (short)ServerPacketIds.UserName; } }
-        public uint Id;
+        public Guid Id;
         public string Name;
         protected override void ReadPacket(BinaryReader reader)
         {
-            Id = reader.ReadUInt32();
+            Id = new Guid(reader.ReadBytes(Packet.GUIDLEN));
             Name = reader.ReadString();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(Id);
+            writer.Write(Id.ToByteArray());
             writer.Write(Name);
         }
     }
@@ -3971,7 +3971,7 @@ namespace ServerPackets
     public sealed class GuildStorageItemChange : Packet
     {
         public override short Index { get { return (short)ServerPacketIds.GuildStorageItemChange; } }
-        public int User = 0;
+        public Guid User = Guid.Empty;
         public byte Type = 0;
         public int To = 0;
         public int From = 0;
@@ -3981,7 +3981,7 @@ namespace ServerPackets
             Type = reader.ReadByte();
             To = reader.ReadInt32();
             From = reader.ReadInt32();
-            User = reader.ReadInt32();
+            User =new Guid(reader.ReadBytes(Packet.GUIDLEN));
             if (!reader.ReadBoolean()) return;
             Item = new GuildStorageItem();
             Item.UserId = reader.ReadInt64();
@@ -3992,7 +3992,7 @@ namespace ServerPackets
             writer.Write(Type);
             writer.Write(To);
             writer.Write(From);
-            writer.Write(User);
+            writer.Write(User.ToByteArray());
             writer.Write(Item != null);
             if (Item == null) return;
             writer.Write(Item.UserId);
@@ -4347,12 +4347,12 @@ namespace ServerPackets
         }
 
         public Guid UniqueID;
-        public uint Count;
+        public ushort Count;
 
         protected override void ReadPacket(BinaryReader reader)
         {
             UniqueID =new Guid(reader.ReadBytes(Packet.GUIDLEN));
-            Count = reader.ReadUInt32();
+            Count = reader.ReadUInt16();
         }
 
         protected override void WritePacket(BinaryWriter writer)

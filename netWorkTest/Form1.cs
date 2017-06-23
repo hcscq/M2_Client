@@ -206,13 +206,13 @@ namespace netWorkTest
                 MirConnectionSimply connectInfo = new MirConnectionSimply(++Envir._sessionID, e.ConnectSocket, socketArgs);
                 byte[] acc = new byte[20];
                 Encoding.Default.GetBytes("hcscq").CopyTo(acc, 0);
-                connectInfo._sendList.Enqueue(new C.DeleteCharacter
+                connectInfo._sendList.Enqueue(new C.StartGame
                 {
                     //Name = Encoding.Default.GetBytes("黑色星期Ⅷ"),
                     //Class = 0,
                     //Gender = 0,
                     Account = acc,
-                    CharacterIndex=1
+                    CharacterIndex=0
                     //CharIndex = 0
                 });
                 connectInfo.Process();

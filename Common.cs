@@ -3005,7 +3005,7 @@ public class UserItem
     public byte RefineAdded = 0;
 
     public bool DuraChanged;
-    public int SoulBoundId = -1;
+    public Guid SoulBoundId = Guid.Empty;
     public bool Identified = false;
     public bool Cursed = false;
 
@@ -3045,7 +3045,7 @@ public class UserItem
 
     public UserItem(ItemInfo info)
     {
-        SoulBoundId = -1;
+        SoulBoundId = Guid.Empty;
         ItemIndex = info.Index;
         Info = info;
 
@@ -3074,14 +3074,6 @@ public class UserItem
         HP = reader.ReadByte();
         MP = reader.ReadByte();
 
-        AttackSpeed = reader.ReadSByte();
-        Luck = reader.ReadSByte();
-
-        if (version <= 19) return;
-        SoulBoundId = reader.ReadInt32();
-        byte Bools = reader.ReadByte();        
-        Identified = (Bools & 0x01) == 0x01;
-        Cursed = (Bools & 0x02) == 0x02;
         Strong = reader.ReadByte();
         MagicResist = reader.ReadByte();
         PoisonResist = reader.ReadByte();
@@ -3092,7 +3084,20 @@ public class UserItem
         CriticalDamage = reader.ReadByte();
         Freezing = reader.ReadByte();
         PoisonAttack = reader.ReadByte();
-        
+        RefinedValue = (RefinedValue)reader.ReadByte();
+        RefineAdded = reader.ReadByte();
+
+        byte Bools = reader.ReadByte();
+        Identified = (Bools & 0x04) == 0x04;
+        Cursed = (Bools & 0x02) == 0x02;
+
+        if (version <= 19) return;
+        SoulBoundId =new Guid(reader.ReadBytes(Packet.GUIDLEN));
+
+
+
+        AttackSpeed = reader.ReadSByte();
+        Luck = reader.ReadSByte();
 
         if (version <= 31) return;
 
@@ -3114,8 +3119,7 @@ public class UserItem
 
         if (version <= 56) return;
 
-        RefinedValue = (RefinedValue)reader.ReadByte();
-        RefineAdded = reader.ReadByte();
+
         if (version < 60) return;
         WeddingRing = reader.ReadInt32();
 
@@ -3154,7 +3158,7 @@ public class UserItem
 
         writer.Write(AttackSpeed);
         writer.Write(Luck);
-        writer.Write(SoulBoundId);
+        writer.Write(SoulBoundId.ToByteArray());
         byte Bools=0;        
         if (Identified) Bools |= 0x01;
         if (Cursed) Bools |= 0x02;
@@ -5898,7 +5902,7 @@ public class ChatItem
 
 public class UserId
 {
-    public long Id = 0;
+    public Guid Id = Guid.Empty;
     public string UserName = "";
 }
 

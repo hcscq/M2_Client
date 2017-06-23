@@ -531,7 +531,7 @@ namespace Client.MirScenes.Dialogs
                 uint tempCount = SelectedItem.Count;
                 uint maxQuantity = SelectedItem.Info.StackSize;
 
-                SelectedItem.Count = maxQuantity;
+                SelectedItem.Count = (ushort)maxQuantity;
 
                 if (usePearls)//pearl currency
                 {
@@ -560,7 +560,7 @@ namespace Client.MirScenes.Dialogs
 
                 if (SelectedItem.Count > tempCount)
                 {
-                    SelectedItem.Count = tempCount;
+                    SelectedItem.Count = (ushort)tempCount;
                 }
 
                 if (SelectedItem.Count == 0) return;

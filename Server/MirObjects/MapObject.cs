@@ -17,7 +17,7 @@ namespace Server.MirObjects
             get { return SMain.Envir; }
         }
 
-        public readonly uint ObjectID = SMain.Envir.ObjectID;
+        public readonly Guid ObjectID = SMain.Envir.ObjectID;
 
         public abstract ObjectType Race { get; }
 

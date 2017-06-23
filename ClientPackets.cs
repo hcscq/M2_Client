@@ -1322,16 +1322,16 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.RequestUserName; } }
 
-        public uint UserID;
+        public Guid UserID;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            UserID = reader.ReadUInt32();
+            UserID =new Guid(reader.ReadBytes(Packet.GUIDLEN));
         }
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(UserID);
+            writer.Write(UserID.ToByteArray());
         }
     }
     public sealed class RequestChatItem : Packet

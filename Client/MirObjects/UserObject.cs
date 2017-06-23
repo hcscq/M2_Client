@@ -10,7 +10,7 @@ namespace Client.MirObjects
 {
     public class UserObject : PlayerObject
     {
-        public uint Id;
+        public Guid Id;
 
         public ushort HP, MaxHP, MP, MaxMP;
 
@@ -889,14 +889,14 @@ namespace Client.MirObjects
 
                     if (bagItem.Count + item.Count <= bagItem.Info.StackSize)
                     {
-                        item.Count = max;
+                        item.Count = (ushort)max;
                         return;
                     }
-                    item.Count = bagItem.Info.StackSize - bagItem.Count;
+                    item.Count =(ushort)( bagItem.Info.StackSize - bagItem.Count);
                     min += item.Count;
                     if (min >= max)
                     {
-                        item.Count = max;
+                        item.Count = (ushort)max;
                         return;
                     }
                 }
@@ -909,13 +909,13 @@ namespace Client.MirObjects
                     return;
                 }
 
-                item.Count = min;
+                item.Count = (ushort)min;
                 return;
             }
 
             if (CurrentBagWeight + item.Weight > MaxBagWeight)
             {
-                item.Count = (uint)(Math.Max((MaxBagWeight - CurrentBagWeight), uint.MinValue) / item.Info.Weight);
+                item.Count = (ushort)(Math.Max((MaxBagWeight - CurrentBagWeight), uint.MinValue) / item.Info.Weight);
                 max = item.Count;
                 if (item.Count == 0)
                 {
@@ -935,15 +935,15 @@ namespace Client.MirObjects
 
                     if (bagItem.Count + item.Count <= bagItem.Info.StackSize)
                     {
-                        item.Count = max;
+                        item.Count = (ushort)max;
                         return;
                     }
 
-                    item.Count = bagItem.Info.StackSize - bagItem.Count;
+                    item.Count =(ushort)( bagItem.Info.StackSize - bagItem.Count);
                     min += item.Count;
                     if (min >= max)
                     {
-                        item.Count = max;
+                        item.Count = (ushort)max;
                         return;
                     }
                 }

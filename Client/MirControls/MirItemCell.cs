@@ -206,7 +206,7 @@ namespace Client.MirControls
 
                                 if (Item.Count > 1)
                                 {
-                                    MirAmountBox amountBox = new MirAmountBox("Split Amount:", Item.Image, Item.Count - 1);
+                                    MirAmountBox amountBox = new MirAmountBox("Split Amount:", Item.Image, (uint)Item.Count - 1);
 
                                     amountBox.OKButton.Click += (o, a) =>
                                     {
@@ -291,7 +291,7 @@ namespace Client.MirControls
 
             CharacterDialog dialog = GameScene.Scene.CharacterDialog;
 
-            if ((Item.SoulBoundId != -1)  && (MapObject.User.Id != Item.SoulBoundId))
+            if ((Item.SoulBoundId != Guid.Empty)  && (MapObject.User.Id != Item.SoulBoundId))
                 return;
             switch (Item.Info.Type)
             {

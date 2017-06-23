@@ -2061,8 +2061,8 @@ namespace Client.MirScenes
             }
             else
             {
-                fromCell.Item.Count -= toCell.Item.Info.StackSize - toCell.Item.Count;
-                toCell.Item.Count = toCell.Item.Info.StackSize;
+                fromCell.Item.Count -=(ushort)( toCell.Item.Info.StackSize - toCell.Item.Count);
+                toCell.Item.Count =(ushort)(toCell.Item.Info.StackSize);
             }
 
             User.RefreshStats();
@@ -5260,8 +5260,8 @@ namespace Client.MirScenes
                         temp.Count += item.Count;
                         return;
                     }
-                    item.Count -= temp.Info.StackSize - temp.Count;
-                    temp.Count = temp.Info.StackSize;
+                    item.Count -= (ushort)(temp.Info.StackSize - temp.Count);
+                    temp.Count = (ushort)temp.Info.StackSize;
                 }
             }
 
@@ -5422,8 +5422,8 @@ namespace Client.MirScenes
                         temp.Count += item.Count;
                         return;
                     }
-                    item.Count -= temp.Info.StackSize - temp.Count;
-                    temp.Count = temp.Info.StackSize;
+                    item.Count -= (ushort)(temp.Info.StackSize - temp.Count);
+                    temp.Count = (ushort)temp.Info.StackSize;
                 }
             }
 
@@ -7285,7 +7285,7 @@ namespace Client.MirScenes
 
             #region BIND_ON_EQUIP
 
-            if ((HoverItem.Info.Bind.HasFlag(BindMode.BindOnEquip)) & HoverItem.SoulBoundId == -1)
+            if ((HoverItem.Info.Bind.HasFlag(BindMode.BindOnEquip)) & HoverItem.SoulBoundId == Guid.Empty)
             {
                 count++;
                 MirLabel BOELabel = new MirLabel
@@ -7301,7 +7301,7 @@ namespace Client.MirScenes
                 ItemLabel.Size = new Size(Math.Max(ItemLabel.Size.Width, BOELabel.DisplayRectangle.Right + 4),
                     Math.Max(ItemLabel.Size.Height, BOELabel.DisplayRectangle.Bottom));
             }
-            else if (HoverItem.SoulBoundId != -1)
+            else if (HoverItem.SoulBoundId != Guid.Empty)
             {
                 count++;
                 MirLabel BOELabel = new MirLabel
@@ -7311,7 +7311,7 @@ namespace Client.MirScenes
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
                     OutLine = true,
                     Parent = ItemLabel,
-                    Text = "Soulbound to: " + GetUserName((uint)HoverItem.SoulBoundId)
+                    Text = "Soulbound to: " + GetUserName(HoverItem.SoulBoundId)
                 };
 
                 ItemLabel.Size = new Size(Math.Max(ItemLabel.Size.Width, BOELabel.DisplayRectangle.Right + 4),
@@ -8074,7 +8074,7 @@ namespace Client.MirScenes
             return null;
         }
 
-        public string GetUserName(uint id)
+        public string GetUserName(Guid id)
         {
             for (int i = 0; i < UserIdList.Count; i++)
             {

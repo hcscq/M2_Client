@@ -14127,7 +14127,7 @@ namespace Server.MirObjects
                 ob.Buy(this, index, count);
             }
         }
-        public void SellItem(ulong uniqueID, uint count)
+        public void SellItem(Guid UniqueID, uint count)
         {
             S.SellItem p = new S.SellItem { UniqueID = uniqueID, Count = count };
             if (Dead || count == 0)
@@ -14212,7 +14212,7 @@ namespace Server.MirObjects
 
             Enqueue(p);
         }
-        public void RepairItem(ulong uniqueID, bool special = false)
+        public void RepairItem(Guid UniqueID, bool special = false)
         {
             Enqueue(new S.RepairItem { UniqueID = uniqueID });
 
@@ -14289,7 +14289,7 @@ namespace Server.MirObjects
 
         #region Consignment
 
-        public void ConsignItem(ulong uniqueID, uint price)
+        public void ConsignItem(Guid UniqueID, uint price)
         {
             S.ConsignItem p = new S.ConsignItem { UniqueID = uniqueID };
             if (price < Globals.MinConsignment || price > Globals.MaxConsignment || Dead)
@@ -14618,7 +14618,7 @@ namespace Server.MirObjects
 
         #region Awakening
 
-        public void Awakening(ulong UniqueID, AwakeType type)
+        public void Awakening(Guid UniqueID, AwakeType type)
         {
             if (NPCPage == null || !String.Equals(NPCPage.Key, NPCObject.AwakeningKey, StringComparison.CurrentCultureIgnoreCase))
                 return;
@@ -14634,31 +14634,31 @@ namespace Server.MirObjects
 
                 if (item.Info.Bind.HasFlag(BindMode.DontUpgrade))
                 {
-                    Enqueue(new S.Awakening { result = -1, removeID = -1 });
+                    Enqueue(new S.Awakening { result = -1, removeID = Guid.Empty });
                     return;
                 }
 
                 if (item.RentalInformation != null && item.RentalInformation.BindingFlags.HasFlag(BindMode.DontUpgrade))
                 {
-                    Enqueue(new S.Awakening { result = -1, removeID = -1 });
+                    Enqueue(new S.Awakening { result = -1, removeID = Guid.Empty });
                     return;
                 }
 
                 if (!item.Info.CanAwakening)
                 {
-                    Enqueue(new S.Awakening { result = -1, removeID = -1 });
+                    Enqueue(new S.Awakening { result = -1, removeID = Guid.Empty });
                     return;
                 }
 
                 if (awake.IsMaxLevel())
                 {
-                    Enqueue(new S.Awakening { result = -2, removeID = -1 });
+                    Enqueue(new S.Awakening { result = -2, removeID = Guid.Empty });
                     return;
                 }
 
                 if (Info.AccountInfo.Gold < item.AwakeningPrice())
                 {
-                    Enqueue(new S.Awakening { result = -3, removeID = -1 });
+                    Enqueue(new S.Awakening { result = -3, removeID = Guid.Empty });
                     return;
                 }
 
@@ -14672,17 +14672,17 @@ namespace Server.MirObjects
                     switch (awake.UpgradeAwake(item, type, out isHit))
                     {
                         case -1:
-                            Enqueue(new S.Awakening { result = -1, removeID = -1 });
+                            Enqueue(new S.Awakening { result = -1, removeID = Guid.Empty });
                             break;
                         case 0:
                             AwakeningEffect(false, isHit);
                             Info.Inventory[i] = null;
-                            Enqueue(new S.Awakening { result = 0, removeID = (long)item.UniqueID });
+                            Enqueue(new S.Awakening { result = 0, removeID = item.UniqueID });
                             break;
                         case 1:
                             Enqueue(new S.RefreshItem { Item = item });
                             AwakeningEffect(true, isHit);
-                            Enqueue(new S.Awakening { result = 1, removeID = -1 });
+                            Enqueue(new S.Awakening { result = 1, removeID = Guid.Empty });
                             break;
                         default:
                             break;
@@ -14691,7 +14691,7 @@ namespace Server.MirObjects
             }
         }
 
-        public void DowngradeAwakening(ulong UniqueID)
+        public void DowngradeAwakening(Guid UniqueID)
         {
             if (NPCPage == null || !String.Equals(NPCPage.Key, NPCObject.DowngradeKey, StringComparison.CurrentCultureIgnoreCase))
                 return;
@@ -14739,7 +14739,7 @@ namespace Server.MirObjects
             }
         }
 
-        public void DisassembleItem(ulong UniqueID)
+        public void DisassembleItem(Guid UniqueID)
         {
             if (NPCPage == null || !String.Equals(NPCPage.Key, NPCObject.DisassembleKey, StringComparison.CurrentCultureIgnoreCase))
                 return;
@@ -14787,7 +14787,7 @@ namespace Server.MirObjects
 
                     UserItem gainItem = Envir.CreateDropItem(dropList[Envir.Random.Next(dropList.Count)]);
                     if (gainItem == null) continue;
-                    gainItem.Count = (uint)Envir.Random.Next((int)((((int)item.Info.Grade * item.Info.RequiredAmount) / 10) + item.Quality()));
+                    gainItem.Count = (ushort)Envir.Random.Next((int)((((int)item.Info.Grade * item.Info.RequiredAmount) / 10) + item.Quality()));
                     if (gainItem.Count < 1) gainItem.Count = 1;
 
                     GainItem(gainItem);
@@ -14801,7 +14801,7 @@ namespace Server.MirObjects
             }
         }
 
-        public void ResetAddedItem(ulong UniqueID)
+        public void ResetAddedItem(Guid UniqueID)
         {
             if (NPCPage == null || !String.Equals(NPCPage.Key, NPCObject.ResetKey, StringComparison.CurrentCultureIgnoreCase))
                 return;
@@ -14846,7 +14846,7 @@ namespace Server.MirObjects
             }
         }
 
-        public void AwakeningNeedMaterials(ulong UniqueID, AwakeType type)
+        public void AwakeningNeedMaterials(Guid UniqueID, AwakeType type)
         {
             if (type == AwakeType.None) return;
 
@@ -14962,7 +14962,7 @@ namespace Server.MirObjects
             {
                 if (materialCount[i] != currentCount[i])
                 {
-                    Enqueue(new S.Awakening { result = -4, removeID = -1 });
+                    Enqueue(new S.Awakening { result = -4, removeID = Guid.Empty });
                     return false;
                 }
             }
@@ -18091,7 +18091,7 @@ namespace Server.MirObjects
                 }
             }
         }
-        public void RefineItem(ulong uniqueID)
+        public void RefineItem(Guid UniqueID)
         {
             Enqueue(new S.RepairItem { UniqueID = uniqueID }); //CHECK THIS.
 
@@ -18362,7 +18362,7 @@ namespace Server.MirObjects
             Info.CollectTime = 0;
             Enqueue(p);
         }
-        public void CheckRefine(ulong uniqueID)
+        public void CheckRefine(Guid UniqueID)
         {
             //Enqueue(new S.RepairItem { UniqueID = uniqueID });
 
@@ -18510,7 +18510,7 @@ namespace Server.MirObjects
             }
         }
 
-        public void ReplaceWeddingRing(ulong uniqueID)
+        public void ReplaceWeddingRing(Guid UniqueID)
         {
             if (Dead) return;
 

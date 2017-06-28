@@ -211,12 +211,23 @@ namespace netWorkTest
                     //Name = Encoding.Default.GetBytes("黑色星期Ⅷ"),
                     //Class = 0,
                     //Gender = 0,
+                    //Account = acc,
+                    //CharIndex = 0,
+                    //nCertification = 1,
+                    //StarNew=1,
+                    //CharacterIndex=0
+                    //CharIndex = 0
+
+                    /*SEL CHAR*/
+                    //Account = acc,
+                    //CharacterIndex = 0,
+
+                    /*Certification G*/
                     Account = acc,
                     CharIndex = 0,
                     nCertification = 1,
-                    StarNew=1
-                    //CharacterIndex=0
-                    //CharIndex = 0
+                    StarNew = 1,
+
                 });
                 connectInfo.Process();
                 lock (Envir.Connections)

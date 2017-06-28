@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using C = ClientPackets;
 using S = ServerPackets;
+using SEX = ServerPacketsEx;
 using System.Linq;
 
 public enum BlendMode : sbyte
@@ -1235,7 +1236,7 @@ public class ServerMsgIds
 
     public const short SM_STARTPLAY = 525;
 
-    private const short OFFEST= 1000;
+    private const short OFFEST= 0;
     /*G sence begin*/
     public const short SM_LOGON = 50+OFFEST;
     public const short SM_NEWMAP = 51+OFFEST;
@@ -1243,6 +1244,11 @@ public class ServerMsgIds
     public const short SM_USERNAME = 42+OFFEST;
 
     public const short SM_SENDUSEITEMS = 621 + OFFEST;
+    public const short SM_CHARSTATUSCHANGED = 657 + OFFEST;
+    public const short SM_ABILITY = 52 + OFFEST;
+    public const short SM_SUBABILITY = 752 + OFFEST;
+    public const short SM_DAYCHANGING = 46 + OFFEST;
+    public const short SM_SENDMYMAGIC = 211;
 
 }
 public class ClientMsgIds
@@ -4515,7 +4521,7 @@ public abstract class Packet
     public short wParam;
     public short wTag;
     public short wSeries;
-    public const short GUIDLEN = 64;
+    public const short GUIDLEN = 36;
     public void WriteBaseBytes(BinaryWriter writer)
     {
         writer.Write(nLen);
@@ -4617,9 +4623,10 @@ public abstract class Packet
                 {
                     p.ReadPacket(reader);
                 }
-                catch
+                catch(Exception e1)
                 {
-                    return null;
+                    int error = 1;
+                    //return null;
                     //return new C.Disconnect();
                 }
             }
@@ -4991,6 +4998,13 @@ public abstract class Packet
 
             case ServerMsgIds.SM_STARTPLAY:
                 return new S.StartGame();
+
+            case ServerMsgIds.SM_NEWMAP:
+                return new SEX.NewMap();
+            case ServerMsgIds.SM_LOGON:
+                return new SEX.MapLogon();
+            case ServerMsgIds.SM_CHARSTATUSCHANGED:
+                return new SEX.CharStatusChanged();
 ///////////////////////////////////////////////////////////////////////////
             case (short)ServerPacketIds.Connected:
                 return new S.Connected();
@@ -5086,6 +5100,7 @@ public abstract class Packet
                 return new S.PlayerUpdate();
             case (short)ServerPacketIds.PlayerInspect:
                 return new S.PlayerInspect();
+/*
             case (short)ServerPacketIds.LogOutSuccess:
                 return new S.LogOutSuccess();
             case (short)ServerPacketIds.LogOutFailed:
@@ -5462,6 +5477,7 @@ public abstract class Packet
                 return new S.CanConfirmItemRental();
             case (short)ServerPacketIds.ConfirmItemRental:
                 return new S.ConfirmItemRental();
+                */
             default:
                 return null;
         }

@@ -121,7 +121,7 @@ namespace ServerPacketsEx
         public Guid CharID;
         protected override void ReadPacket(BinaryReader reader)
         {
-            CharID = new Guid(reader.ReadBytes(Packet.GUIDLEN));
+            CharID = new Guid(new string(reader.ReadChars(Packet.GUIDLEN)));
             btGender=reader.ReadByte();
             btWear=reader.ReadByte();
             btHair=reader.ReadByte();
@@ -130,6 +130,26 @@ namespace ServerPacketsEx
 
         protected override void WritePacket(BinaryWriter writer)
         {
+        }
+    }
+    public sealed class CharStatusChanged : Packet
+    {
+        public override short Index
+        {
+            get
+            {
+                return ServerMsgIds.SM_CHARSTATUSCHANGED;
+            }
+        }
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+           
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+
         }
     }
 }

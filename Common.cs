@@ -1249,6 +1249,7 @@ public class ServerMsgIds
     public const short SM_SUBABILITY = 752 + OFFEST;
     public const short SM_DAYCHANGING = 46 + OFFEST;
     public const short SM_SENDMYMAGIC = 211;
+    public const short SM_TURN = 10 + OFFEST;
 
 }
 public class ClientMsgIds
@@ -4522,6 +4523,7 @@ public abstract class Packet
     public short wTag;
     public short wSeries;
     public const short GUIDLEN = 36;
+    public const short CHARNAMELEN = 14;
     public void WriteBaseBytes(BinaryWriter writer)
     {
         writer.Write(nLen);
@@ -5005,6 +5007,12 @@ public abstract class Packet
                 return new SEX.MapLogon();
             case ServerMsgIds.SM_CHARSTATUSCHANGED:
                 return new SEX.CharStatusChanged();
+            case ServerMsgIds.SM_USERNAME:
+                return new SEX.UserName();
+            case ServerMsgIds.SM_TURN:
+                return new SEX.Turn();
+            case ServerMsgIds.SM_SENDUSEITEMS:
+                return new SEX.UseItems();
 ///////////////////////////////////////////////////////////////////////////
             case (short)ServerPacketIds.Connected:
                 return new S.Connected();
@@ -5028,8 +5036,8 @@ public abstract class Packet
             case (short)ServerPacketIds.LoginSuccess:
 
                 return new S.LoginSuccess();
-            case (short)ServerPacketIds.NewCharacter:
-                return new S.NewCharacter();
+            //case (short)ServerPacketIds.NewCharacter:
+            //    return new S.NewCharacter();
             case (short)ServerPacketIds.NewCharacterSuccess:
                 return new S.NewCharacterSuccess();
             case (short)ServerPacketIds.DeleteCharacter:
@@ -5086,8 +5094,8 @@ public abstract class Packet
                 return new S.RefineItem();
             case (short)ServerPacketIds.DepositTradeItem:
                 return new S.DepositTradeItem();
-            case (short)ServerPacketIds.RetrieveTradeItem:
-                return new S.RetrieveTradeItem();
+            //case (short)ServerPacketIds.RetrieveTradeItem:
+            //    return new S.RetrieveTradeItem();
             case (short)ServerPacketIds.SplitItem:
                 return new S.SplitItem();
             case (short)ServerPacketIds.SplitItem1:

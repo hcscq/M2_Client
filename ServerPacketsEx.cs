@@ -72,7 +72,7 @@ namespace ServerPacketsEx
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID = new Guid(new string(reader.ReadChars(GUIDLEN)));
 
             Equipment = new UserItem[10];
             for (int i = 0; i < Equipment.Length; i++)
@@ -150,6 +150,40 @@ namespace ServerPacketsEx
         protected override void WritePacket(BinaryWriter writer)
         {
 
+        }
+    }
+    public sealed class Turn : Packet
+    {
+        public override short Index
+        {
+            get
+            {
+                return ServerMsgIds.SM_TURN;
+            }
+        }
+        public long Feature;
+        public long Status;
+        byte btHorse;
+        short dwHairColor;
+        short dwWearColor;
+        byte[] CharName;
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            Feature= reader.ReadInt64();
+            Status = reader.ReadInt64();
+            if (reader.ReadBoolean())
+            {
+                btHorse = reader.ReadByte();
+                dwHairColor = reader.ReadInt16();
+                dwWearColor = reader.ReadInt16();
+            }
+            if (reader.ReadBoolean())
+                CharName = reader.ReadBytes(CHARNAMELEN);
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            throw new NotImplementedException();
         }
     }
 }

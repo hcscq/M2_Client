@@ -163,10 +163,10 @@ namespace ServerPacketsEx
         }
         public long Feature;
         public long Status;
-        byte btHorse;
-        short dwHairColor;
-        short dwWearColor;
-        byte[] CharName;
+        public byte btHorse;
+        public short dwHairColor;
+        public short dwWearColor;
+        public byte[] CharName;
         protected override void ReadPacket(BinaryReader reader)
         {
             Feature= reader.ReadInt64();
@@ -186,4 +186,146 @@ namespace ServerPacketsEx
             throw new NotImplementedException();
         }
     }
+    public sealed class Ablity : Packet
+    {
+        public byte Level;
+
+        public ushort HP;
+        public ushort MP;
+        public ushort MaxHP;
+        public ushort MaxMP;
+        public ushort Weight;
+        public ushort MaxWeight;
+
+        public uint Exp;
+        public uint MaxExp;
+
+        public byte WearWeight;
+        public byte MaxWearWeight;
+        public byte HandWeight;
+        public byte MaxHandWeight;
+
+        public ushort DC;
+        public ushort MC;
+        public ushort SC;
+        public ushort AC;
+        public ushort MAC;
+
+        public short m_wWater;
+        public short m_wFire;
+        public short m_wWind;
+        public short m_wLight;
+        public short m_wEarth;
+        public override short Index
+        {
+            get
+            {
+                return ServerMsgIds.SM_ABILITY;
+            }
+        }
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            Level = reader.ReadByte();
+
+            HP = reader.ReadUInt16();
+            MP = reader.ReadUInt16();
+            MaxHP = reader.ReadUInt16();
+            MaxMP = reader.ReadUInt16();
+            Weight = reader.ReadUInt16();
+            MaxWeight = reader.ReadUInt16();
+
+            Exp = reader.ReadUInt32();
+            MaxExp = reader.ReadUInt32();
+
+            WearWeight = reader.ReadByte();
+            MaxWearWeight = reader.ReadByte();
+            HandWeight = reader.ReadByte();
+
+            DC = reader.ReadUInt16();
+            MC = reader.ReadUInt16();
+            SC = reader.ReadUInt16();
+            AC = reader.ReadUInt16();
+            MAC = reader.ReadUInt16();
+
+            m_wWater = reader.ReadInt16();
+            m_wFire = reader.ReadInt16();
+            m_wWind = reader.ReadInt16();
+            m_wLight = reader.ReadInt16();
+            m_wEarth = reader.ReadInt16();
+
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public sealed class Subability : Packet
+    {
+        public override short Index
+        {
+            get
+            {
+                return ServerMsgIds.SM_SUBABILITY;
+            }
+        }
+        public byte m_btAntiMagic { get { return (byte)nRecog; } }
+        public byte m_btHitPoint { get { return (byte)wParam; } }
+        public byte m_btSpeedPoint { get { return (byte)(wParam>>8); } }
+        public byte m_btAntiPoison { get { return (byte)wTag; } }
+        public byte m_btPoisonRecover { get { return (byte)(wTag>>8); } }
+        public byte m_btHealthRecover { get { return (byte)wSeries; } }
+        public byte m_btSpellRecover { get { return (byte)(wSeries>>8); } }
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public sealed class DayChanging : Packet
+    {
+        public override short Index
+        {
+            get
+            {
+                return ServerMsgIds.SM_DAYCHANGING;
+            }
+        }
+        public byte m_btBright { get { return (byte)wParam; } }
+        protected override void ReadPacket(BinaryReader reader)
+        {
+
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public sealed class SendMagic : Packet
+    {
+        public override short Index
+        {
+            get
+            {
+                return ServerMsgIds.SM_SENDMYMAGIC;
+            }
+        }
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
 }

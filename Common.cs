@@ -3062,7 +3062,7 @@ public class UserItem
     {
         STDType = reader.ReadSByte();
         MakeDate = reader.ReadBytes(6);
-        UniqueID = new Guid(reader.ReadBytes(Packet.GUIDLEN));
+        UniqueID = new Guid(new string(reader.ReadChars(Packet.GUIDLEN)));
         ItemIndex = reader.ReadUInt16();
 
         CurrentDura = reader.ReadUInt16();
@@ -4627,8 +4627,8 @@ public abstract class Packet
                 }
                 catch(Exception e1)
                 {
-                    int error = 1;
-                    //return null;
+                    //int error = 1;
+                    return null;
                     //return new C.Disconnect();
                 }
             }
@@ -5013,6 +5013,12 @@ public abstract class Packet
                 return new SEX.Turn();
             case ServerMsgIds.SM_SENDUSEITEMS:
                 return new SEX.UseItems();
+            case ServerMsgIds.SM_ABILITY:
+                return new SEX.Ablity();
+            case ServerMsgIds.SM_SUBABILITY:
+                return new SEX.Subability();
+            case ServerMsgIds.SM_DAYCHANGING:
+                return new SEX.DayChanging();
 ///////////////////////////////////////////////////////////////////////////
             case (short)ServerPacketIds.Connected:
                 return new S.Connected();

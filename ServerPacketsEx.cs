@@ -77,7 +77,7 @@ namespace ServerPacketsEx
             Equipment = new UserItem[10];
             for (int i = 0; i < Equipment.Length; i++)
             {
-                if (reader.ReadBoolean()) continue;
+                if (reader.ReadBoolean()) { reader.ReadBytes(131); continue; }
                 Equipment[i] = new UserItem(reader);
             }
         }
@@ -316,10 +316,132 @@ namespace ServerPacketsEx
                 return ServerMsgIds.SM_SENDMYMAGIC;
             }
         }
-
+        public short Count{get{ return wSeries; }}
+        List<ClientMagic> Magics = new List<ClientMagic>();
         protected override void ReadPacket(BinaryReader reader)
         {
+            for (int i = 0; i < Count; i++)
+                Magics.Add(new ClientMagic(reader));
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
             throw new NotImplementedException();
+        }
+    }
+    public sealed class SysMessage : Packet
+    {
+        public override short Index
+        {
+            get
+            {
+                return ServerMsgIds.SM_SYSMESSAGE;
+            }
+        }
+        public byte []Text;
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            Text = reader.ReadBytes(MAXTEXTMSGLEN);
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public sealed class GroupMessage : Packet
+    {
+        public override short Index
+        {
+            get
+            {
+                return ServerMsgIds.SM_GROUPMESSAGE;
+            }
+        }
+        public byte[] Text;
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            Text = reader.ReadBytes(MAXTEXTMSGLEN);
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public sealed class CryMessage : Packet
+    {
+        public override short Index
+        {
+            get
+            {
+                return ServerMsgIds.SM_CRY;
+            }
+        }
+        public byte[] Text;
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            Text = reader.ReadBytes(MAXTEXTMSGLEN);
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public sealed class WhisperMessage : Packet
+    {
+        public override short Index
+        {
+            get
+            {
+                return ServerMsgIds.SM_WHISPER;
+            }
+        }
+        public byte[] Text;
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            Text = reader.ReadBytes(MAXTEXTMSGLEN);
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public sealed class GuildMessage : Packet
+    {
+        public override short Index
+        {
+            get
+            {
+                return ServerMsgIds.SM_GUILDMESSAGE;
+            }
+        }
+        public byte[] Text;
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            Text = reader.ReadBytes(MAXTEXTMSGLEN);
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public sealed class HearedMessage : Packet
+    {
+        public override short Index
+        {
+            get
+            {
+                return ServerMsgIds.SM_HEAR;
+            }
+        }
+        public byte[] Text;
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            Text = reader.ReadBytes(MAXTEXTMSGLEN);
         }
 
         protected override void WritePacket(BinaryWriter writer)

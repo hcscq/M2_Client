@@ -21,7 +21,7 @@ namespace netWorkTest
         private bool Running;
         private Thread _thread;
         private const string IP = "127.0.0.1";
-        private const int port = 7032;// 7132;
+        private const int port =  7132;
         public NetWork()
         {
             InitializeComponent();
@@ -206,7 +206,7 @@ namespace netWorkTest
                 MirConnectionSimply connectInfo = new MirConnectionSimply(++Envir._sessionID, e.ConnectSocket, socketArgs);
                 byte[] acc = new byte[20];
                 Encoding.Default.GetBytes("hcscq").CopyTo(acc, 0);
-                connectInfo._sendList.Enqueue(new C.StartGame
+                connectInfo._sendList.Enqueue(new C.Certification
                 {
                     //Name = Encoding.Default.GetBytes("黑色星期Ⅷ"),
                     //Class = 0,
@@ -219,14 +219,14 @@ namespace netWorkTest
                     //CharIndex = 0
 
                     /*SEL CHAR*/
-                    Account = acc,
-                    CharacterIndex = 0,
+                    //Account = acc,
+                    //CharacterIndex = 0,
 
                     /*Certification G*/
-                    //Account = acc,
-                    //CharIndex = 0,
-                    //nCertification = 1,
-                    //StarNew = 1,
+                    Account = acc,
+                    CharIndex = 0,
+                    nCertification = 1,
+                    StarNew = 1,
 
                 });
                 connectInfo.Process();

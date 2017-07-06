@@ -3106,12 +3106,16 @@ public class UserItem
         Cursed = (Bools & 0x02) == 0x02;
 
         if (version <= 19) return;
-        SoulBoundId =new Guid(new string(reader.ReadChars(Packet.GUIDLEN)));
+        Guid.TryParse(new string(reader.ReadChars(Packet.GUIDLEN)),out SoulBoundId);
+       // SoulBoundId =new Guid(new string(reader.ReadChars(Packet.GUIDLEN)));
 
 
 
         AttackSpeed = reader.ReadSByte();
         Luck = reader.ReadSByte();
+        /*Version 7.5 prefix*/
+        reader.ReadBytes(20);
+        return;
 
         if (version <= 31) return;
 

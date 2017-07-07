@@ -867,7 +867,7 @@ namespace Client.MirScenes.Dialogs
                     {
                         if (GameScene.Scene.RefineDialog.Grid[i].Item != null)
                         {
-                            if (GameScene.Gold >= ((TargetItem.Info.RequiredAmount * 10) * GameScene.NPCRate))
+                            if (GameScene.Gold >= ((TargetItem.Info.RequiredValue * 10) * GameScene.NPCRate))
                             {
                                 Network.Enqueue(new C.RefineItem { UniqueID = TargetItem.UniqueID });
                                 TargetItem = null;
@@ -1099,10 +1099,10 @@ namespace Client.MirScenes.Dialogs
                         text += TargetItem.ResetPrice().ToString();
                         break;
                     case PanelType.Refine:
-                        text += ((TargetItem.Info.RequiredAmount * 10) * GameScene.NPCRate).ToString();
+                        text += ((TargetItem.Info.RequiredValue * 10) * GameScene.NPCRate).ToString();
                         break;
                     case PanelType.ReplaceWedRing:
-                        text += ((TargetItem.Info.RequiredAmount * 10) * GameScene.NPCRate).ToString();
+                        text += ((TargetItem.Info.RequiredValue * 10) * GameScene.NPCRate).ToString();
                         break;
                     default: return;
                 }

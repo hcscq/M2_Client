@@ -2477,7 +2477,7 @@ public static class Functions
         {
             ItemInfo info = ItemList[i];
             if (info.Name.StartsWith(Origin.Name))
-                if ((info.RequiredType == RequiredType.Level) && (info.RequiredAmount <= level) && (output.RequiredAmount < info.RequiredAmount) && (Origin.RequiredGender == info.RequiredGender))
+                if ((info.RequiredType == RequiredType.Level) && (info.RequiredValue <= level) && (output.RequiredValue < info.RequiredValue) && (Origin.RequiredGender == info.RequiredGender))
                     output = info;
         }
         return output;
@@ -2502,7 +2502,7 @@ public static class Functions
             ItemInfo info = ItemList[i];
             if (info.Name.StartsWith(Origin.Name))
                 if ((byte)info.RequiredClass == (1 << (byte)job))
-                    if ((info.RequiredType == RequiredType.Level) && (info.RequiredAmount <= level) && (output.RequiredAmount <= info.RequiredAmount) && (Origin.RequiredGender == info.RequiredGender))
+                    if ((info.RequiredType == RequiredType.Level) && (info.RequiredValue <= level) && (output.RequiredValue <= info.RequiredValue) && (Origin.RequiredGender == info.RequiredGender))
                         output = info;
         }
         return output;
@@ -2604,6 +2604,7 @@ public class ItemInfo
 {
     public ushort Index;
     public string Name = string.Empty;
+    public string PrefixName = string.Empty;
     public ItemType Type;
     public ItemGrade Grade;
     public RequiredType RequiredType = RequiredType.Level;
@@ -2614,15 +2615,15 @@ public class ItemInfo
 
 
     public short Shape;
-    public byte Weight, Light, RequiredAmount;
+    public byte Weight, Light, RequiredValue;
 
     public ushort Image, Durability;
 
     public uint Price, StackSize = 1;
 
     public byte MinAC, MaxAC, MinMAC, MaxMAC, MinDC, MaxDC, MinMC, MaxMC, MinSC, MaxSC, Accuracy, Agility;
-    public ushort HP, MP;
-    public sbyte AttackSpeed, Luck;
+    public short HP, MP;
+    public byte AttackSpeed, Luck;
     public byte BagWeight, HandWeight, WearWeight;
 
     public bool StartItem;
@@ -2670,24 +2671,22 @@ public class ItemInfo
     public ItemInfo(BinaryReader reader, int version = int.MaxValue, int Customversion = int.MaxValue)
     {
         Index = reader.ReadUInt16();
-        Name = reader.ReadString();
+        Name = System.Text.Encoding.Default.GetString(reader.ReadBytes(20));
+        PrefixName= System.Text.Encoding.Default.GetString(reader.ReadBytes(20));
         Type = (ItemType) reader.ReadByte();
-        if (version >= 40) Grade = (ItemGrade)reader.ReadByte();
-        RequiredType = (RequiredType) reader.ReadByte();
-        RequiredClass = (RequiredClass) reader.ReadByte();
-        RequiredGender = (RequiredGender) reader.ReadByte();
-        if(version >= 17) Set = (ItemSet)reader.ReadByte();
-
-        Shape = version >= 30 ? reader.ReadInt16() : reader.ReadSByte();
+        Shape = reader.ReadSByte();//version >= 30 ? reader.ReadInt16() : reader.ReadSByte();
         Weight = reader.ReadByte();
-        Light = reader.ReadByte();
-        RequiredAmount = reader.ReadByte();
-
+        reader.ReadByte();//AniCount
+        reader.ReadByte();//source
+        NeedIdentify= reader.ReadBoolean();
+        Index = reader.ReadUInt16();
         Image = reader.ReadUInt16();
         Durability = reader.ReadUInt16();
 
-        StackSize = reader.ReadUInt32();
-        Price = reader.ReadUInt32();
+        HP = reader.ReadInt16();
+        MP = reader.ReadInt16();
+        AttackSpeed = reader.ReadByte();
+        Luck = reader.ReadByte();
 
         MinAC = reader.ReadByte();
         MaxAC = reader.ReadByte();
@@ -2699,6 +2698,32 @@ public class ItemInfo
         MaxMC = reader.ReadByte();
         MinSC = reader.ReadByte();
         MaxSC = reader.ReadByte();
+
+        RequiredType = (RequiredType)reader.ReadByte();
+        RequiredValue = reader.ReadByte();
+        Price = reader.ReadUInt32();
+
+        return;
+
+
+        if (version >= 40) Grade = (ItemGrade)reader.ReadByte();
+        RequiredType = (RequiredType) reader.ReadByte();
+        RequiredClass = (RequiredClass) reader.ReadByte();
+        RequiredGender = (RequiredGender) reader.ReadByte();
+        if(version >= 17) Set = (ItemSet)reader.ReadByte();
+
+
+
+        Light = reader.ReadByte();
+        RequiredValue = reader.ReadByte();
+
+        Image = reader.ReadUInt16();
+        Durability = reader.ReadUInt16();
+
+        StackSize = reader.ReadUInt32();
+
+
+
         if (version < 25)
         {
             HP = reader.ReadByte();
@@ -2706,14 +2731,14 @@ public class ItemInfo
         }
         else
         {
-            HP = reader.ReadUInt16();
-            MP = reader.ReadUInt16();
+            HP = reader.ReadInt16();
+            MP = reader.ReadInt16();
         }
         Accuracy = reader.ReadByte();
         Agility = reader.ReadByte();
 
-        Luck = reader.ReadSByte();
-        AttackSpeed = reader.ReadSByte();
+        Luck = reader.ReadByte();
+        AttackSpeed = reader.ReadByte();
 
         StartItem = reader.ReadBoolean();
 
@@ -2810,7 +2835,7 @@ public class ItemInfo
         writer.Write(Shape);
         writer.Write(Weight);
         writer.Write(Light);
-        writer.Write(RequiredAmount);     
+        writer.Write(RequiredValue);     
 
         writer.Write(Image);
         writer.Write(Durability);
@@ -2896,7 +2921,7 @@ public class ItemInfo
 
         if (!byte.TryParse(data[8], out info.Weight)) return null;
         if (!byte.TryParse(data[9], out info.Light)) return null;
-        if (!byte.TryParse(data[10], out info.RequiredAmount)) return null;
+        if (!byte.TryParse(data[10], out info.RequiredValue)) return null;
 
         if (!byte.TryParse(data[11], out info.MinAC)) return null;
         if (!byte.TryParse(data[12], out info.MaxAC)) return null;
@@ -2910,11 +2935,11 @@ public class ItemInfo
         if (!byte.TryParse(data[20], out info.MaxSC)) return null;
         if (!byte.TryParse(data[21], out info.Accuracy)) return null;
         if (!byte.TryParse(data[22], out info.Agility)) return null;
-        if (!ushort.TryParse(data[23], out info.HP)) return null;
-        if (!ushort.TryParse(data[24], out info.MP)) return null;
+        if (!short.TryParse(data[23], out info.HP)) return null;
+        if (!short.TryParse(data[24], out info.MP)) return null;
 
-        if (!sbyte.TryParse(data[25], out info.AttackSpeed)) return null;
-        if (!sbyte.TryParse(data[26], out info.Luck)) return null;
+        if (!byte.TryParse(data[25], out info.AttackSpeed)) return null;
+        if (!byte.TryParse(data[26], out info.Luck)) return null;
 
         if (!byte.TryParse(data[27], out info.BagWeight)) return null;
 
@@ -2985,7 +3010,7 @@ public class ItemInfo
         return string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23},{24},{25},{26}," +
                              "{27},{28},{29},{30},{31},{32},{33},{34},{35},{36},{37},{38},{39},{40},{41},{42},{43},{44},{45},{46},{47},{48},{49},{50},{51}," +
                              "{52},{53},{54},{55},{56},{57},{58},{59},{60},{61},{62},{63}",
-            Name, (byte)Type, (byte)Grade, (byte)RequiredType, (byte)RequiredClass, (byte)RequiredGender, (byte)Set, Shape, Weight, Light, RequiredAmount, MinAC, MaxAC, MinMAC, MaxMAC, MinDC, MaxDC,
+            Name, (byte)Type, (byte)Grade, (byte)RequiredType, (byte)RequiredClass, (byte)RequiredGender, (byte)Set, Shape, Weight, Light, RequiredValue, MinAC, MaxAC, MinMAC, MaxMAC, MinDC, MaxDC,
             MinMC, MaxMC, MinSC, MaxSC, Accuracy, Agility, HP, MP, AttackSpeed, Luck, BagWeight, HandWeight, WearWeight, StartItem, Image, Durability, Price,
             StackSize, Effect, Strong, MagicResist, PoisonResist, HealthRecovery, SpellRecovery, PoisonRecovery, HPrate, MPrate, CriticalRate, CriticalDamage, NeedIdentify,
             ShowGroupPickup, MaxAcRate, MaxMacRate, Holy, Freezing, PoisonAttack, ClassBased, LevelBased, (short)Bind, Reflect, HpDrainRate, (short)Unique,
@@ -3115,6 +3140,7 @@ public class UserItem
         Luck = reader.ReadSByte();
         /*Version 7.5 prefix*/
         reader.ReadBytes(20);
+        Info = new ItemInfo(reader);
         return;
 
         if (version <= 31) return;

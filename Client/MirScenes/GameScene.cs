@@ -6912,7 +6912,7 @@ namespace Client.MirScenes
             int count = 0;
 
             #region LEVEL
-            if (realItem.RequiredAmount > 0)
+            if (realItem.RequiredValue > 0)
             {
                 count++;
                 string text;
@@ -6920,33 +6920,33 @@ namespace Client.MirScenes
                 switch (realItem.RequiredType)
                 {
                     case RequiredType.Level:
-                        text = string.Format("Required Level : {0}", realItem.RequiredAmount);
-                        if (MapObject.User.Level < realItem.RequiredAmount)
+                        text = string.Format("Required Level : {0}", realItem.RequiredValue);
+                        if (MapObject.User.Level < realItem.RequiredValue)
                             colour = Color.Red;
                         break;
                     case RequiredType.AC:
-                        text = string.Format("Required AC : {0}", realItem.RequiredAmount);
-                        if (MapObject.User.MaxAC < realItem.RequiredAmount)
+                        text = string.Format("Required AC : {0}", realItem.RequiredValue);
+                        if (MapObject.User.MaxAC < realItem.RequiredValue)
                             colour = Color.Red;
                         break;
                     case RequiredType.MAC:
-                        text = string.Format("Required MAC : {0}", realItem.RequiredAmount);
-                        if (MapObject.User.MaxMAC < realItem.RequiredAmount)
+                        text = string.Format("Required MAC : {0}", realItem.RequiredValue);
+                        if (MapObject.User.MaxMAC < realItem.RequiredValue)
                             colour = Color.Red;
                         break;
                     case RequiredType.DC:
-                        text = string.Format("Required DC : {0}", realItem.RequiredAmount);
-                        if (MapObject.User.MaxDC < realItem.RequiredAmount)
+                        text = string.Format("Required DC : {0}", realItem.RequiredValue);
+                        if (MapObject.User.MaxDC < realItem.RequiredValue)
                             colour = Color.Red;
                         break;
                     case RequiredType.MC:
-                        text = string.Format("Required MC : {0}", realItem.RequiredAmount);
-                        if (MapObject.User.MaxMC < realItem.RequiredAmount)
+                        text = string.Format("Required MC : {0}", realItem.RequiredValue);
+                        if (MapObject.User.MaxMC < realItem.RequiredValue)
                             colour = Color.Red;
                         break;
                     case RequiredType.SC:
-                        text = string.Format("Required SC : {0}", realItem.RequiredAmount);
-                        if (MapObject.User.MaxSC < realItem.RequiredAmount)
+                        text = string.Format("Required SC : {0}", realItem.RequiredValue);
+                        if (MapObject.User.MaxSC < realItem.RequiredValue)
                             colour = Color.Red;
                         break;
                     default:

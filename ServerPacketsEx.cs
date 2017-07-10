@@ -77,7 +77,7 @@ namespace ServerPacketsEx
             Equipment = new UserItem[10];
             for (int i = 0; i < Equipment.Length; i++)
             {
-                if (reader.ReadBoolean()) { reader.ReadBytes(204); continue; }
+                if (reader.ReadBoolean()) continue;// { reader.ReadBytes(204); continue; }
                 Equipment[i] = new UserItem(reader);
             }
         }

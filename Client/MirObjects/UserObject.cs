@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Client.MirScenes;
 using S = ServerPackets;
+using SEX = ServerPacketsEx;
 
 namespace Client.MirObjects
 {
@@ -72,7 +73,35 @@ namespace Client.MirObjects
         public UserObject(Guid objectID) : base(objectID)
         {
         }
+        public void LoadAbility(SEX.Ablity ability)
+        {
+            Level = ability.Level;
+            HP = ability.HP;
+            MP = ability.MP;
+            MaxHP = ability.MaxHP;
+            MaxMP = ability.MaxMP;
+            CurrentWearWeight = ability.WearWeight;
+            MaxWearWeight = ability.MaxWearWeight;
+            CurrentHandWeight = ability.HandWeight;
+            MaxHandWeight = ability.MaxHandWeight;
+            Experience = ability.Exp;
+            MaxExperience = ability.MaxExp;
+            MinDC = (byte)ability.DC;
+            MaxDC = (ushort)(ability.DC>>8);
 
+            MinMC = (byte)ability.MC;
+            MaxMC = (ushort)(ability.MC>>8);
+
+            MinSC = (byte)ability.SC;
+            MaxSC = (ushort)(ability.SC>>8);
+
+            MinAC = (byte)ability.AC;
+            MaxAC = (ushort)(ability.AC >> 8);
+
+            MinMAC = (byte)ability.MAC;
+            MaxMAC = (ushort)(ability.MAC >> 8);
+            
+        }
         public void Load(S.UserInformation info)
         {
             Id = info.RealId;

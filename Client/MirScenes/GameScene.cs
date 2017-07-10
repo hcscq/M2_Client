@@ -1017,6 +1017,7 @@ namespace Client.MirScenes
                 case (short)ServerPacketIds.KeepAlive:
                     KeepAlive((S.KeepAlive)p);
                     break;
+                #region old message
                 //case (short)ServerPacketIds.MapInformation: //MapInfo
                 //    MapInformation((S.MapInformation)p);
                 //    break;
@@ -1667,6 +1668,7 @@ namespace Client.MirScenes
                 //case (short)ServerPacketIds.ConfirmItemRental:
                 //    ConfirmItemRental((S.ConfirmItemRental)p);
                 //    break;
+                #endregion
                 /*EX process begin*/
                 case ServerMsgIds.SM_NEWMAP:
                     NewMap((SEX.NewMap)p);
@@ -1680,15 +1682,22 @@ namespace Client.MirScenes
                 case ServerMsgIds.SM_SENDUSEITEMS:
                     UseItems((SEX.UseItems)p);
                     break;
+                case ServerMsgIds.SM_ABILITY:
+                    Ability((SEX.Ablity)p);
+                    break;
                 /*EX process end*/
                 default:
                     base.ProcessPacket(p);
                     break;
             }
         }
+        public void Ability(SEX.Ablity P)
+        {
+            User.LoadAbility(P);
+        }
         private void UseItems(SEX.UseItems P)
         {
-
+            User.Equipment = P.Equipment;
         }
         private void Logon(SEX.MapLogon P)
         {

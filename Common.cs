@@ -2670,7 +2670,6 @@ public class ItemInfo
     }
     public ItemInfo(BinaryReader reader, int version = int.MaxValue, int Customversion = int.MaxValue)
     {
-        Index = reader.ReadUInt16();
         Name = System.Text.Encoding.Default.GetString(reader.ReadBytes(20));
         PrefixName= System.Text.Encoding.Default.GetString(reader.ReadBytes(20));
         Type = (ItemType) reader.ReadByte();
@@ -3140,6 +3139,7 @@ public class UserItem
         Luck = reader.ReadSByte();
         /*Version 7.5 prefix*/
         reader.ReadBytes(20);
+  
         Info = new ItemInfo(reader);
         return;
 

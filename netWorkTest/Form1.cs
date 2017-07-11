@@ -27,10 +27,11 @@ namespace netWorkTest
             InitializeComponent();
             this.Disposed += new EventHandler(OnClose);
             Packet.IsServer = false;
-            InitialClientNetWork();
+            //InitialClientNetWork();
 
             //InitialServerNetwork();
 
+            //Map read
 
             //packet test
             /*string str = "#=L>>><v!$";

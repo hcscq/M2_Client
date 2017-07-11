@@ -1685,15 +1685,28 @@ namespace Client.MirScenes
                 case ServerMsgIds.SM_ABILITY:
                     Ability((SEX.Ablity)p);
                     break;
+                case ServerMsgIds.SM_SUBABILITY:
+                    break;
+                case ServerMsgIds.SM_SENDMYMAGIC:
+                    break;
                 /*EX process end*/
                 default:
                     base.ProcessPacket(p);
                     break;
             }
         }
+        public void SendMagic(SEX.SendMagic P)
+        {
+            User.LoadMagic(P);
+        }
+        public void SubAbility(SEX.Subability P)
+        {
+            User.LoadSubAbility(P);
+        }
         public void Ability(SEX.Ablity P)
         {
             User.LoadAbility(P);
+            
         }
         private void UseItems(SEX.UseItems P)
         {

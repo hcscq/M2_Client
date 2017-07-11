@@ -317,7 +317,7 @@ namespace ServerPacketsEx
             }
         }
         public short Count{get{ return wSeries; }}
-        List<ClientMagic> Magics = new List<ClientMagic>();
+        public List<ClientMagic> Magics = new List<ClientMagic>();
         protected override void ReadPacket(BinaryReader reader)
         {
             for (int i = 0; i < Count; i++)

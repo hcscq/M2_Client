@@ -73,6 +73,21 @@ namespace Client.MirObjects
         public UserObject(Guid objectID) : base(objectID)
         {
         }
+        public void LoadMagic(SEX.SendMagic clientMagics)
+        {
+            Magics = clientMagics.Magics;
+            for (int i = 0; i < Magics.Count; i++)
+            {
+                if (Magics[i].CastTime > 0)
+                    Magics[i].CastTime = CMain.Time - Magics[i].CastTime;
+            }
+        }
+        public void LoadSubAbility(SEX.Subability subability)
+        {
+            SpellRecovery = subability.m_btSpellRecover;
+            HealthRecovery = subability.m_btHealthRecover;
+            PoisonRecovery = subability.m_btPoisonRecover;       
+        }
         public void LoadAbility(SEX.Ablity ability)
         {
             Level = ability.Level;

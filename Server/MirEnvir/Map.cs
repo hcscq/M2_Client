@@ -132,7 +132,7 @@ namespace Server.MirEnvir
                         Cells[x, y] = Cell.HighWall; //No Floor Tile.
 
                     if (Cells[x, y] == null) Cells[x, y] = new Cell { Attribute = CellAttribute.Walk };
-
+                    //17.07.13 may wrong. skip 2bytes first, then read DoorIndex.
                     offSet += 4;
 
                     if (fileBytes[offSet] > 0)

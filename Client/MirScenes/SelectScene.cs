@@ -297,6 +297,7 @@ namespace Client.MirScenes
                 case (short)ServerPacketIds.DeleteCharacterSuccess:
                     DeleteCharacter((S.DeleteCharacterSuccess)p);
                     break;
+                case ServerMsgIds.SM_STARTPLAY:
                 case (short)ServerPacketIds.StartGame:
                     StartGame((S.StartGame)p);
                     break;

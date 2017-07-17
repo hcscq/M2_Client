@@ -55,6 +55,9 @@
     <Compile Include="..\ServerPackets.cs">
       <Link>MirNetwork\ServerPackets.cs</Link>
     </Compile>
+    <Compile Include="..\ServerPacketsEx.cs">
+      <Link>ServerPacketsEx.cs</Link>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

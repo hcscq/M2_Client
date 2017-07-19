@@ -478,7 +478,7 @@ namespace Client.MirScenes
                     //else if (Settings.Resolution == 1366)
                     //    CMain.SetResolution(1366, 768);
                     string []ipInfo = System.Text.Encoding.Default.GetString(p.ServerIP).Replace('\0',' ').Trim().Split('/');
-                    if (ipInfo.Length < 3)
+                    if (ipInfo.Length < 2)
                     {
                         MirMessageBox.Show("Get server error.");
                         return;
@@ -506,6 +506,8 @@ namespace Client.MirScenes
             {
                 if (CharacterControls[i] == null) continue;
                 CharacterControls[i].Selected = CharacterControls[i].CharIndex == _selected;
+                if (CharacterControls[i].Selected)
+                    StartGameButton.Enabled = true;
                 CharacterControls[i].Update((Characters.Exists(it => it.Index == CharacterControls[i].CharIndex)) ? Characters.Find(it => it.Index == CharacterControls[i].CharIndex) : null);
             }
             #region shared stage

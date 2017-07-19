@@ -19,6 +19,8 @@ namespace Client.MirNetwork
         private static ConcurrentQueue<Packet> _receiveList;
         private static ConcurrentQueue<Packet> _sendList;
 
+        private static ConcurrentQueue<Packet> _tempList=new ConcurrentQueue<Packet>();
+
         static byte[] _rawData = new byte[0];
 
 
@@ -35,7 +37,20 @@ namespace Client.MirNetwork
             
 
         }
-
+        public static void EnqueueTempList(Packet p)
+        {
+            if (_tempList != null && p != null)
+                _tempList.Enqueue(p);
+        }
+        public static void ConnectionChangeTo(string ip,string port,Packet p=null)
+        {
+            if (p != null)
+                _tempList.Enqueue(p);
+            Disconnect();
+            Settings.IPAddress = ip;
+            Settings.Port =int.Parse(port);
+            Connect();
+        }
         private static void Connection(IAsyncResult result)
         {
             try
@@ -49,12 +64,17 @@ namespace Client.MirNetwork
                 }
 
                 _receiveList = new ConcurrentQueue<Packet>();
-                _sendList = new ConcurrentQueue<Packet>();
+                if (_tempList.Count > 0)
+                {
+                    _sendList = _tempList;
+                    _tempList = new ConcurrentQueue<Packet>();
+                }
+                else
+                    _sendList = new ConcurrentQueue<Packet>();
                 _rawData = new byte[0];
 
                 TimeOutTime = CMain.Time + Settings.TimeOut;
                 TimeConnected = CMain.Time;
-
 
                 BeginReceive();
             }

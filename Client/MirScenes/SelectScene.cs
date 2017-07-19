@@ -483,18 +483,15 @@ namespace Client.MirScenes
                         MirMessageBox.Show("Get server error.");
                         return;
                     }
-                    Network.Disconnect();
-                    Settings.IPAddress = ipInfo[0];
-                    Settings.Port = int.Parse(ipInfo[1]);
-                    Network.Connect();
-                    Network.Enqueue(new C.Certification
-                    {
-                        Account = g_Account,
-                        CharIndex = Characters[_selected].Index,
-                        nCertification = g_nCertifacation,
-                        StarNew=1
-                    }
-                    );
+                    Network.ConnectionChangeTo(ipInfo[0],ipInfo[1],
+                        new C.Certification
+                        {
+                            Account = g_Account,
+                            CharIndex = Characters[_selected].Index,
+                            nCertification = g_nCertifacation,
+                            StarNew = 1
+                        }
+                        );
                     ActiveScene = new GameScene();
                     Dispose();
                     break;

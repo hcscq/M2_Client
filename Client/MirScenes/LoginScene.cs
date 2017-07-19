@@ -368,21 +368,13 @@ namespace Client.MirScenes
         {
             //MirMessageBox.Show("Unfinished.");
             Enabled = false;
-            Network.Disconnect();
             _serverSel.Dispose();
             string[] ipInfo = p.IpInfo.Split('/');
-            if (ipInfo.Length >= 2) 
-            {
-                Settings.IPAddress = ipInfo[0];
-                Settings.Port = int.Parse(ipInfo[1]);
-                Network.Connect();
-                Network.Enqueue(new C.QueryChr { nRecog = g_nCertifacation, Account = g_Account });
-            }
-            else MirMessageBox.Show("Get server info failed.",true);
+            if (ipInfo.Length >= 2)
+                Network.ConnectionChangeTo(ipInfo[0], ipInfo[1],
+                    new C.QueryChr { nRecog = g_nCertifacation, Account = g_Account });
+            else MirMessageBox.Show("Get server info failed.", true);
             //Network.Enqueue(new C.s);
-
-
-
             //_serverSel.Show(p.Servers.ToString());
         }
         private void Login(S.LoginSuccess p)

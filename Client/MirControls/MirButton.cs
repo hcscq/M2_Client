@@ -114,12 +114,39 @@ namespace Client.MirControls
         #endregion
 
         #region Size
+        public UsedSize TakeSizeMode = UsedSize.Index;
         protected override void OnSizeChanged()
         {
             base.OnSizeChanged();
 
             if (_label != null && !_label.IsDisposed)
                 _label.Size = Size;
+        }
+
+        public override Size Size
+        {
+            set { base.Size = value; }
+            get
+            {
+                switch (TakeSizeMode)
+                {
+                    case UsedSize.Index:
+                        if (Library != null && Index >= 0)
+                            return Library.GetTrueSize(Index);
+                        break;
+                    case UsedSize.HoverIndex:
+                        if (Library != null && Index >= 0)
+                            return Library.GetTrueSize(HoverIndex);
+                        break;
+                    case UsedSize.PressedIndex:
+                        if (Library != null && Index >= 0)
+                            return Library.GetTrueSize(PressedIndex);
+                        break;
+                    case UsedSize.Specify:
+                    default:break;
+                }
+                return base.Size;
+            }
         }
         #endregion
 
@@ -144,13 +171,13 @@ namespace Client.MirControls
             Sound = SoundList.ButtonB;
 
             _label = new MirLabel
-                {
-                    NotControl = true,
-                    Parent = this,
-                    //Font = new Font("Constantia", 8, FontStyle.Italic),
-                    //OutLine = true,
-                    //OutLineColour = Color.FromArgb(255, 70, 50, 30),
-                };
+            {
+                NotControl = true,
+                Parent = this,
+                //Font = new Font("Constantia", 8, FontStyle.Italic),
+                //OutLine = true,
+                //OutLineColour = Color.FromArgb(255, 70, 50, 30),
+            };
         }
 
         protected override void Highlight()

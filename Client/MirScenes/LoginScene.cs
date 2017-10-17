@@ -100,7 +100,7 @@ namespace Client.MirScenes
                 Location = new Point(Settings.ScreenWidth - 116, 10),
                 Visible = Settings.UseTestConfig
             };
-
+            #region other img info
             //ViolenceLabel = new MirImageControl
             //{
             //    Index = 89,
@@ -124,7 +124,7 @@ namespace Client.MirScenes
             //    Parent = this,
             //    Location = new Point(684, 10)
             //};
-
+            #endregion
             _connectBox = new MirMessageBox("Attempting to connect to the server.", MirMessageBoxButtons.Cancel);
             _connectBox.CancelButton.Click += (o, e) => Program.Form.Close();
             Shown += (sender, args) =>

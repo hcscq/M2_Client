@@ -27,7 +27,20 @@ namespace netWorkTest
             InitializeComponent();
             this.Disposed += new EventHandler(OnClose);
             Packet.IsServer = false;
-            InitialClientNetWork();
+            Button btn = new Button() { Text="OK"};
+            btn.Size = new Size(50, 40);
+            btn.Location = new Point(100,100);
+            Graphics g = Graphics.FromImage(this.BackgroundImage);
+            btn.MouseHover += new EventHandler((object obj, EventArgs arg) => {
+                ((Button)obj).Text = "ON";
+                Bitmap img=new Bitmap(((Button)obj).Width, ((Button)obj).Height);//=new Image() { Size= ((Button)obj) .Size};
+                g.DrawImage(img, new RectangleF(((Button)obj).Location, ((Button)obj).Size));
+                ((Button)obj).BackgroundImage = img;
+            });
+            btn.MouseLeave += new EventHandler((object obj, EventArgs arg) => { ((Button)obj).Text = "OK"; });
+            this.Controls.Add(btn);
+            //btn.Image=Image.FromFile("").
+            //InitialClientNetWork();
 
             //InitialServerNetwork();
 

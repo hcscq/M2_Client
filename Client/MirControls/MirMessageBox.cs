@@ -6,7 +6,6 @@ using Client.MirGraphics;
 namespace Client.MirControls
 {
     public enum MirMessageBoxButtons { OK, OKCancel, YesNo, YesNoCancel, Cancel }
-    public enum UsedSize { Index, HoverIndex, PressedIndex, Specify }
 
     public sealed class MirMessageBox : MirImageControl
     {

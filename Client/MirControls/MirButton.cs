@@ -5,6 +5,7 @@ using Client.MirSounds;
 
 namespace Client.MirControls
 {
+    public enum UsedSize { Index, HoverIndex, PressedIndex, Specify }
     public class MirButton : MirImageControl
     {
         #region Font Colour

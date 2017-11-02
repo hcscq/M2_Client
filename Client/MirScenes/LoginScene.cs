@@ -40,7 +40,7 @@ namespace Client.MirScenes
             Disposing += (o, e) => SoundManager.StopSound(SoundList.IntroMusic);
             AnimateBackImg = new MirImageControl
             {
-                Index = 0,
+                Index = 22,
                 Library = Libraries.ChrSel,
                 Parent = this,
                 Visible = true
@@ -718,15 +718,16 @@ namespace Client.MirScenes
                                 {
                                     Enabled = true,
                                     Size = new Size(200, 42),
-                                    HoverIndex = 257,//321,
-                                    Index = 257,//320,
-                                    Library = Libraries.Prguse,
+                                    HoverIndex = 3,//321,
+                                    Index = 2,//320,
+                                    Library = Libraries.Prguse3,
                                     Location = new Point(60, POS_TOP_SERVER_BTN_Y + (j - i * COUNT_BUTTON_PER_COLUME) * (SERVER_BTN_HEIGHT + SERVER_BTN_GAP)),//new Point(227, 81),
                                     Parent = this,
-                                    PressedIndex = 258,//322
+                                    PressedIndex = 3,//322
                                     ServerIndex = short.Parse(serArr[2*(i+j)]),
                                     Text = serArr[2*(i+j) + 1].Trim(),
-                                    CenterText=true
+                                    CenterText=true,
+                                    //TakeSizeMode=UsedSize.Specify
                                    
                                 };
                                 sb.Click += (o, e) =>

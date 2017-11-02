@@ -65,12 +65,13 @@ namespace Client.MirScenes
             {
                 Enabled = false,
                 HoverIndex = 68,//341,
-                Index = 68,//340,
+                //Index = 68,//340,
                 Library = Libraries.Prguse,//Libraries.Title,
                 Location = new Point(385,455),//new Point(110, 568),
                 Parent = Background,
                 PressedIndex = 68,//342,
                 GrayScale = true,
+                TakeSizeMode=UsedSize.HoverIndex
 
             };
             StartGameButton.Click += (o, e) => StartGame();
@@ -80,12 +81,12 @@ namespace Client.MirScenes
             DeleteCharacterButton = new MirButton
             {
                 HoverIndex = 70,// 347,
-                Index = 70,//346,
+                //Index = 70,//346,
                 Library = Libraries.Prguse,//Libraries.Title,
                 Location = new Point(350, 505),
                 Parent = Background,
                 PressedIndex = 70,//348
-
+                TakeSizeMode = UsedSize.HoverIndex
             };
             DeleteCharacterButton.Click += (o, e) => DeleteCharacter();
 
@@ -93,23 +94,23 @@ namespace Client.MirScenes
             CreditsButton = new MirButton
             {
                 HoverIndex = 71,//350,
-                Index = 71,//349,
+                //Index = 71,//349,
                 Library = Libraries.Prguse,//Libraries.Title,
                 Location = new Point(363, 526),
                 Parent = Background,
                 PressedIndex = 71,//351
-
+                TakeSizeMode = UsedSize.HoverIndex
             };
 
             ExitGame = new MirButton
             {
                 HoverIndex = 72,//353,
-                Index = 72,//352,
+                //Index = 72,//352,
                 Library = Libraries.Prguse,//Libraries.Title,
                 Location = new Point(380, 546),
                 Parent = Background,
                 PressedIndex = 72,//354
-
+                TakeSizeMode = UsedSize.HoverIndex
             };
             ExitGame.Click += (o, e) => Program.Form.Close();
 
@@ -188,12 +189,12 @@ namespace Client.MirScenes
             NewCharacterButton = new MirButton
             {
                 HoverIndex = 69,//344,
-                Index = 69,//343,
+                //Index = 69,//343,
                 Library = Libraries.Prguse,//Libraries.Title,
                 Location = new Point(350, 484),//new Point(230, 568),
                 Parent = Background,
                 PressedIndex = 69,//345,
-
+                TakeSizeMode = UsedSize.HoverIndex
             };
             NewCharacterButton.Click += (o, e) =>
             {

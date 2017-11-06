@@ -136,11 +136,11 @@ namespace Client.MirControls
                             return Library.GetTrueSize(Index);
                         break;
                     case UsedSize.HoverIndex:
-                        if (Library != null && Index >= 0)
+                        if (Library != null && HoverIndex >= 0)
                             return Library.GetTrueSize(HoverIndex);
                         break;
                     case UsedSize.PressedIndex:
-                        if (Library != null && Index >= 0)
+                        if (Library != null && PressedIndex >= 0)
                             return Library.GetTrueSize(PressedIndex);
                         break;
                     case UsedSize.Specify:

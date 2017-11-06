@@ -63,6 +63,7 @@ namespace Client.MirScenes
 
             StartGameButton = new MirButton
             {
+                TakeSizeMode = UsedSize.HoverIndex,
                 Enabled = false,
                 HoverIndex = 68,//341,
                 //Index = 68,//340,
@@ -70,8 +71,7 @@ namespace Client.MirScenes
                 Location = new Point(385,455),//new Point(110, 568),
                 Parent = Background,
                 PressedIndex = 68,//342,
-                GrayScale = true,
-                TakeSizeMode=UsedSize.HoverIndex
+                GrayScale = true
 
             };
             StartGameButton.Click += (o, e) => StartGame();
@@ -80,37 +80,39 @@ namespace Client.MirScenes
 
             DeleteCharacterButton = new MirButton
             {
+                TakeSizeMode = UsedSize.HoverIndex,
                 HoverIndex = 70,// 347,
                 //Index = 70,//346,
                 Library = Libraries.Prguse,//Libraries.Title,
                 Location = new Point(350, 505),
                 Parent = Background,
                 PressedIndex = 70,//348
-                TakeSizeMode = UsedSize.HoverIndex
             };
             DeleteCharacterButton.Click += (o, e) => DeleteCharacter();
 
 
             CreditsButton = new MirButton
             {
+                TakeSizeMode = UsedSize.HoverIndex,
                 HoverIndex = 71,//350,
                 //Index = 71,//349,
                 Library = Libraries.Prguse,//Libraries.Title,
                 Location = new Point(363, 526),
                 Parent = Background,
                 PressedIndex = 71,//351
-                TakeSizeMode = UsedSize.HoverIndex
+
             };
 
             ExitGame = new MirButton
             {
+                TakeSizeMode = UsedSize.HoverIndex,
                 HoverIndex = 72,//353,
                 //Index = 72,//352,
                 Library = Libraries.Prguse,//Libraries.Title,
                 Location = new Point(380, 546),
                 Parent = Background,
                 PressedIndex = 72,//354
-                TakeSizeMode = UsedSize.HoverIndex
+
             };
             ExitGame.Click += (o, e) => Program.Form.Close();
 

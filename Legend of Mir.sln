@@ -27,6 +27,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utils", "Utils", "{7A90DE40
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "netWorkTest", "netWorkTest\netWorkTest.csproj", "{BB44F35E-7FFF-432E-B950-9E8BA3352CE4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateName", "MirDataTools\MirDataTools\UpdateName.csproj", "{2D882DB8-451A-48F2-88CD-D28986A5F998}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -124,6 +126,22 @@ Global
 		{BB44F35E-7FFF-432E-B950-9E8BA3352CE4}.Release|x64.Build.0 = Release|Any CPU
 		{BB44F35E-7FFF-432E-B950-9E8BA3352CE4}.Release|x86.ActiveCfg = Release|Any CPU
 		{BB44F35E-7FFF-432E-B950-9E8BA3352CE4}.Release|x86.Build.0 = Release|Any CPU
+		{2D882DB8-451A-48F2-88CD-D28986A5F998}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D882DB8-451A-48F2-88CD-D28986A5F998}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D882DB8-451A-48F2-88CD-D28986A5F998}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{2D882DB8-451A-48F2-88CD-D28986A5F998}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{2D882DB8-451A-48F2-88CD-D28986A5F998}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2D882DB8-451A-48F2-88CD-D28986A5F998}.Debug|x64.Build.0 = Debug|Any CPU
+		{2D882DB8-451A-48F2-88CD-D28986A5F998}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2D882DB8-451A-48F2-88CD-D28986A5F998}.Debug|x86.Build.0 = Debug|Any CPU
+		{2D882DB8-451A-48F2-88CD-D28986A5F998}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D882DB8-451A-48F2-88CD-D28986A5F998}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D882DB8-451A-48F2-88CD-D28986A5F998}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2D882DB8-451A-48F2-88CD-D28986A5F998}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{2D882DB8-451A-48F2-88CD-D28986A5F998}.Release|x64.ActiveCfg = Release|Any CPU
+		{2D882DB8-451A-48F2-88CD-D28986A5F998}.Release|x64.Build.0 = Release|Any CPU
+		{2D882DB8-451A-48F2-88CD-D28986A5F998}.Release|x86.ActiveCfg = Release|Any CPU
+		{2D882DB8-451A-48F2-88CD-D28986A5F998}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1670,7 +1670,7 @@ namespace Client.MirScenes
                 //    break;
                 #endregion
                 /*EX process begin*/
-                case ServerMsgIds.SM_NEWMAP:
+                case ServerMsgIds.SM_NEWMAP: 
                     NewMap((SEX.NewMap)p);
                     break;
                 case ServerMsgIds.SM_USERNAME:

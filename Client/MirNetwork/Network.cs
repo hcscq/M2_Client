@@ -74,7 +74,7 @@ namespace Client.MirNetwork
                 _rawData = new byte[0];
 
                 TimeOutTime = CMain.Time + Settings.TimeOut;
-                TimeConnected = CMain.Time;
+                TimeConnected = CMain.Time; 
 
                 BeginReceive();
             }

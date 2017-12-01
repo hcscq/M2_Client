@@ -50,7 +50,7 @@ namespace Server
         public static string RobotNPCFilename = "00Robot";
 
         //Network
-        public static string IPAddress = "127.0.0.1";
+        public static string IPAddress = "39.106.143.114";
 
         public static ushort Port = 7000,
                              TimeOut = 10000,

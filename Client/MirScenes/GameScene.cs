@@ -1715,13 +1715,16 @@ namespace Client.MirScenes
         private void Logon(SEX.MapLogon P)
         {
             User = new UserObject(Guid.Empty);
-            User.Direction= P.btDirection;
+            User.Direction = P.btDirection;
             User.Light = P.btLight;
             User.Gender = (MirGender)P.btGender;
             User.Weapon = P.btWeapon;
             User.Hair = P.btHair;
             User.ObjectID = P.CharID;
+            User.CurrentLocation = new Point(P.nCurrX,P.nCUrrY);
+            User.MapLocation = new Point(P.nCurrX, P.nCUrrY);
             MapControl.AddObject(User);
+            MapControl.FloorValid = false;
         }
         private void UserName(SEX.UserName P)
         {
@@ -1734,7 +1737,7 @@ namespace Client.MirScenes
                 MapControl.Dispose();
             MapControl = new MapControl
             {
-                FileName = Path.Combine(Settings.MapPath, Packet.GetString(p.MapName) + ".map"),
+                FileName = Path.Combine(Settings.MapPath, Packet.GetString(p.MapFileName) + ".map"),
                 Title = Packet.GetString(p.MapName),
                 MiniMap = p.MiniMap,
                 BigMap = p.BigMap,

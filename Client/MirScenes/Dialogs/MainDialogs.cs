@@ -82,12 +82,13 @@ namespace Client.MirScenes.Dialogs
 
             InventoryButton = new MirButton
             {
-                HoverIndex = 1904,
-                Index = 1903,
+                HoverIndex = 9,//1904,
+                //Index = 1903,
                 Library = Libraries.Prguse,
                 Location = new Point(this.Size.Width - 96, 76),
                 Parent = this,
-                PressedIndex = 1905,
+                PressedIndex = 9,//1905,
+                TakeSizeMode=UsedSize.HoverIndex,
                 Sound = SoundList.ButtonA,
                 Hint = "Inventory (" + CMain.InputKeys.GetKey(KeybindOptions.Inventory) + ")"
             };
@@ -216,7 +217,7 @@ namespace Client.MirScenes.Dialogs
             HealthOrb = new MirControl
             {
                 Parent = this,
-                Location = new Point(0, 30),
+                Location = new Point(39, 90),
                 NotControl = true,
             };
 
@@ -225,18 +226,18 @@ namespace Client.MirScenes.Dialogs
             HealthLabel = new MirLabel
             {
                 AutoSize = true,
-                Location = new Point(0, 27),
+                Location = new Point(22, 118),
                 Parent = HealthOrb
             };
-            HealthLabel.SizeChanged += Label_SizeChanged;
+            //HealthLabel.SizeChanged += Label_SizeChanged;
 
             ManaLabel = new MirLabel
             {
                 AutoSize = true,
-                Location = new Point(0, 42),
+                Location = new Point(0, 118),
                 Parent = HealthOrb
             };
-            ManaLabel.SizeChanged += Label_SizeChanged;
+            //ManaLabel.SizeChanged += Label_SizeChanged;
 
             TopLabel = new MirLabel
             {
@@ -258,23 +259,24 @@ namespace Client.MirScenes.Dialogs
             {
                 AutoSize = true,
                 Parent = this,
-                Location = new Point(5, 108)
+                Location = new Point(665, 145)
             };
 
             CharacterName = new MirLabel
             {
                 DrawFormat = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter,
                 Parent = this,
-                Location = new Point(6, 120),
-                Size = new Size(90, 16)
+                Location = new Point(0, -350),
+                Size = new Size(90, 16),
+                AutoSize=true
             };
 
 
             ExperienceBar = new MirImageControl
             {
-                Index = Settings.Resolution != 800 ? 8 : 7,
+                Index = 7,//Settings.Resolution != 800 ? 8 : 7,
                 Library = Libraries.Prguse,
-                Location = new Point(9, 143),
+                Location = new Point(665, 178),
                 Parent = this,
                 DrawImage = false,
                 NotControl = true,
@@ -286,14 +288,16 @@ namespace Client.MirScenes.Dialogs
                 AutoSize = true,
                 Parent = ExperienceBar,
                 NotControl = true,
+                Location = new Point(75,0)
             };
 
             GoldLabel = new MirLabel
             {
                 DrawFormat = TextFormatFlags.VerticalCenter,
                 Font = new Font(Settings.FontName, 8F),
-                Location = new Point(this.Size.Width - 105, 119),
+                Location = new Point(0,-334),//new Point(this.Size.Width - 105, 119),
                 Parent = this,
+                AutoSize=true,
                 Size = new Size(99, 13),
                 Sound = SoundList.Gold,
             };
@@ -307,9 +311,9 @@ namespace Client.MirScenes.Dialogs
 
             WeightBar = new MirImageControl
             {
-                Index = 76,
+                Index = 7,//76,
                 Library = Libraries.Prguse,
-                Location = new Point(this.Size.Width - 105, 103),
+                Location = new Point(665,211),//new Point(this.Size.Width - 105, 103),
                 Parent = this,
                 DrawImage = false,
                 NotControl = true,
@@ -318,8 +322,8 @@ namespace Client.MirScenes.Dialogs
 
             WeightLabel = new MirLabel
             {
-                Parent = this,
-                Location = new Point(this.Size.Width - 105, 101),
+                Parent = WeightBar,//this,
+                Location = new Point(75,0),//new Point(this.Size.Width - 105, 101),
                 Size = new Size(26, 14),
             };
 
@@ -337,7 +341,7 @@ namespace Client.MirScenes.Dialogs
                 ForeColour = Color.Yellow,
                 OutLineColour = Color.Black,
                 Parent = this,
-                Location = new Point(Settings.Resolution != 800 ? 899 : 675, Settings.Resolution != 800 ? -448 : -280),
+                Location = new Point(665,221)//new Point(Settings.Resolution != 800 ? 899 : 675, Settings.Resolution != 800 ? -448 : -280),
             };
 
             PModeLabel = new MirLabel
@@ -456,9 +460,9 @@ namespace Client.MirScenes.Dialogs
 
             LevelLabel.Text = User.Level.ToString();
             ExperienceLabel.Text = string.Format("{0:#0.##%}", User.Experience / (double)User.MaxExperience);
-            ExperienceLabel.Location = new Point((ExperienceBar.Size.Width / 2) - 20, -10);
-            GoldLabel.Text = GameScene.Gold.ToString("###,###,##0");
-            CharacterName.Text = User.Name;
+            //ExperienceLabel.Location = new Point((ExperienceBar.Size.Width / 2) - 20, -10);
+            GoldLabel.Text = string.Format("GoldAmount:{0}",GameScene.Gold.ToString("###,###,##0"));
+            CharacterName.Text = string.Format( "CharName:{0}",User.Name);
             SpaceLabel.Text = User.Inventory.Count(t => t == null).ToString();
             WeightLabel.Text = (MapObject.User.MaxBagWeight - MapObject.User.CurrentBagWeight).ToString();
         }
@@ -478,12 +482,12 @@ namespace Client.MirScenes.Dialogs
 
             int height;
             if (User != null && User.HP != User.MaxHP)
-                height = (int)(80 * User.HP / (float)User.MaxHP);
+                height = (int)(92 * User.HP / (float)User.MaxHP);
             else
-                height = 80;
+                height = 92;
 
             if (height < 0) height = 0;
-            if (height > 80) height = 80;
+            if (height > 92) height = 92;
 
             int orbImage = 4;
 
@@ -495,8 +499,8 @@ namespace Client.MirScenes.Dialogs
                 orbImage = 6;
             }
 
-            Rectangle r = new Rectangle(0, 80 - height, hpOnly ? 100 : 50, height);
-            Libraries.Prguse.Draw(orbImage, r, new Point(((Settings.ScreenWidth / 2) - (Size.Width / 2)), HealthOrb.DisplayLocation.Y + 80 - height), Color.White, false);
+            Rectangle r = new Rectangle(0, 92 - height, hpOnly ? 100 : 50, height);
+            Libraries.Prguse.Draw(orbImage, r, new Point(HealthOrb.Location.X, HealthOrb.DisplayLocation.Y + 92 - height), Color.White, false);
 
             if (hpOnly) return;
 
@@ -518,7 +522,9 @@ namespace Client.MirScenes.Dialogs
 
             double percent = MapObject.User.Experience / (double)MapObject.User.MaxExperience;
             if (percent > 1) percent = 1;
+            percent = 0.6;
             if (percent <= 0) return;
+
 
             Rectangle section = new Rectangle
             {
@@ -533,6 +539,7 @@ namespace Client.MirScenes.Dialogs
             if (WeightBar.Library == null) return;
             double percent = MapObject.User.CurrentBagWeight / (double)MapObject.User.MaxBagWeight;
             if (percent > 1) percent = 1;
+            percent = 0.65;
             if (percent <= 0) return;
 
             Rectangle section = new Rectangle
@@ -562,11 +569,12 @@ namespace Client.MirScenes.Dialogs
 
         public ChatDialog()
         {
-            Index = Settings.Resolution != 800 ? 2221 : 2201;
-            Library = Libraries.Prguse;
-            Location = new Point(GameScene.Scene.MainDialog.Location.X + 230, Settings.ScreenHeight - 97);
+            //Index = Settings.Resolution != 800 ? 2221 : 2201;
+            //Library = Libraries.Prguse;
+            Location = new Point(GameScene.Scene.MainDialog.Location.X + 200, Settings.ScreenHeight - 117);
             PixelDetect = true;
 
+            this.BorderColour = Color.Red;
             KeyPress += ChatPanel_KeyPress;
             KeyDown += ChatPanel_KeyDown;
             MouseWheel += ChatPanel_MouseWheel;

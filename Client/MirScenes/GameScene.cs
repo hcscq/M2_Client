@@ -1724,6 +1724,7 @@ namespace Client.MirScenes
             User.CurrentLocation = new Point(P.nCurrX,P.nCUrrY);
             User.MapLocation = new Point(P.nCurrX, P.nCUrrY);
             MapControl.AddObject(User);
+            User.SetLibraries();
             MapControl.FloorValid = false;
         }
         private void UserName(SEX.UserName P)

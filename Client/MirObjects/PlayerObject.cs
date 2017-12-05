@@ -1335,7 +1335,7 @@ namespace Client.MirObjects
                             break;
                         case MirAction.Standing:
                         case MirAction.MountStanding:
-                            Network.Enqueue(new C.Turn { Direction = Direction });
+                            Network.Enqueue(new C.Turn { Direction = Direction,X=(short)CurrentLocation.X,Y=(short)CurrentLocation.Y });
                             MapControl.NextAction = CMain.Time + 2500;
                             GameScene.CanRun = false;
                             break;

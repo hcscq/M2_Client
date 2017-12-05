@@ -218,37 +218,37 @@ namespace Server.MirNetwork
                 case (short)ClientPacketIds.KeepAlive: // Keep Alive
                     ClientKeepAlive((C.KeepAlive)p);
                     break;
-                case (short)ClientPacketIds.NewAccount:
+                case (short)ClientPacketIds.CM_ADDNEWUSER:
                     NewAccount((C.NewAccount) p);
                     break;
-                case (short)ClientPacketIds.ChangePassword:
+                case (short)ClientPacketIds.CM_CHANGEPASSWORD:
                     ChangePassword((C.ChangePassword) p);
                     break;
-                case (short)ClientPacketIds.Login:
+                case (short)ClientPacketIds.CM_IDPASSWORD:
                     Login((C.Login) p);
                     break;
-                case (short)ClientPacketIds.NewCharacter:
+                case (short)ClientPacketIds.CM_NEWCHR:
                     NewCharacter((C.NewCharacter) p);
                     break;
-                case (short)ClientPacketIds.DeleteCharacter:
+                case (short)ClientPacketIds.CM_DELCHR:
                     DeleteCharacter((C.DeleteCharacter) p);
                     break;
-                case (short)ClientPacketIds.StartGame:
+                case (short)ClientPacketIds.CM_SELCHR:
                     StartGame((C.StartGame) p);
                     break;
                 case (short)ClientPacketIds.LogOut:
                     LogOut();
                     break;
-                case (short)ClientPacketIds.Turn:
+                case (short)ClientPacketIds.CM_TURN:
                     Turn((C.Turn) p);
                     break;
-                case (short)ClientPacketIds.Walk:
+                case (short)ClientPacketIds.CM_WALK:
                     Walk((C.Walk) p);
                     break;
-                case (short)ClientPacketIds.Run:
+                case (short)ClientPacketIds.CM_RUN:
                     Run((C.Run) p);
                     break;
-                case (short)ClientPacketIds.Chat:
+                case (short)ClientPacketIds.CM_CHAT:
                     Chat((C.Chat) p);
                     break;
                 case (short)ClientPacketIds.MoveItem:

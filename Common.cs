@@ -1249,7 +1249,7 @@ public class ServerMsgIds
     public const short SM_SUBABILITY = 752 + OFFEST;
     public const short SM_DAYCHANGING = 46 + OFFEST;
     public const short SM_SENDMYMAGIC = 211;
-    public const short SM_TURN = 10 + OFFEST;
+    
     /*server text msg begin*/
     public const short SM_HEAR = 40+OFFEST;
     public const short SM_SYSMESSAGE = 100+OFFEST;
@@ -1258,16 +1258,49 @@ public class ServerMsgIds
     public const short SM_WHISPER = 103+OFFEST;
     public const short SM_GUILDMESSAGE = 104+OFFEST;
 
+    //Game process
+    public const short SM_RUSH = 6;
+    public const short SM_FIREHIT = 8;
+    public const short SM_BACKSTEP = 9;
+    public const short SM_TURN = 10;
+    public const short SM_WALK = 11;
+    public const short SM_SITDOWN = 12;
+    public const short SM_RUN = 13;
+
 }
 public class ClientMsgIds
 {
-    public const short CM_SELECTSERVER = 104;
-
     public const short CM_QUERYCHR = 100;
+
+    public const short CM_NEWCHR = 101;
+
+    public const short CM_DELCHR = 101;
 
     public const short CM_SELCHR = 103;
 
+    // For Login Process
+    public const short CM_PROTOCOL = 2000;
+
+    public const short CM_IDPASSWORD = 2001;
+
+    public const short CM_ADDNEWUSER = 2002;
+
+    public const short CM_CHANGEPASSWORD = 2003;
+
+    public const short CM_UPDATEUSER = 2004;
+
+    public const short CM_SELECTSERVER = 2005;
+
     public const short CM_CERTIFACATION = 0;
+
+    // For game process
+    public const short CM_TURN = 3010;
+
+    public const short CM_WALK = 3011;
+
+    public const short CM_RUN = 3013;
+
+    public const short CM_CHAT = 3030;
 }
 public enum ServerPacketIds : short
 {
@@ -1517,17 +1550,21 @@ public enum ClientPacketIds : short
     ClientVersion,
     Disconnect,
     KeepAlive,
-    NewAccount,
-    ChangePassword,
-    Login,
-    NewCharacter,
-    DeleteCharacter,
-    StartGame,
+    CM_ADDNEWUSER      =   2002,
+    CM_CHANGEPASSWORD  =   2003,
+    CM_IDPASSWORD      =   2001,
+
+    // For Select Character Process
+    CM_NEWCHR          =   101,
+    CM_DELCHR          =   102,
+    CM_SELCHR          =   103,
     LogOut,
-    Turn,
-    Walk,
-    Run,
-    Chat,
+
+    // For game process
+    CM_TURN            =   3010,
+    CM_WALK            =   3011,
+    CM_RUN             =   3013,
+    CM_CHAT            =   3030,
     MoveItem,
     StoreItem,
     TakeBackItem,
@@ -4761,27 +4798,27 @@ public abstract class Packet
                 return new C.Disconnect();
             case (short)ClientPacketIds.KeepAlive:
                 return new C.KeepAlive();
-            case (short)ClientPacketIds.NewAccount:
+            case (short)ClientPacketIds.CM_ADDNEWUSER:
                 return new C.NewAccount();
-            case (short)ClientPacketIds.ChangePassword:
+            case (short)ClientPacketIds.CM_CHANGEPASSWORD:
                 return new C.ChangePassword();
-            case (short)ClientPacketIds.Login:
+            case (short)ClientPacketIds.CM_IDPASSWORD:
                 return new C.Login();
-            case (short)ClientPacketIds.NewCharacter:
+            case (short)ClientPacketIds.CM_NEWCHR:
                 return new C.NewCharacter();
-            case (short)ClientPacketIds.DeleteCharacter:
+            case (short)ClientPacketIds.CM_DELCHR:
                 return new C.DeleteCharacter();
-            case (short)ClientPacketIds.StartGame:
+            case (short)ClientPacketIds.CM_SELCHR:
                 return new C.StartGame();
             case (short)ClientPacketIds.LogOut:
                 return new C.LogOut();
-            case (short)ClientPacketIds.Turn:
+            case (short)ClientPacketIds.CM_TURN:
                 return new C.Turn();
-            case (short)ClientPacketIds.Walk:
+            case (short)ClientPacketIds.CM_WALK:
                 return new C.Walk();
-            case (short)ClientPacketIds.Run:
+            case (short)ClientPacketIds.CM_RUN:
                 return new C.Run();
-            case (short)ClientPacketIds.Chat:
+            case (short)ClientPacketIds.CM_CHAT:
                 return new C.Chat();
             case (short)ClientPacketIds.MoveItem:
                 return new C.MoveItem();

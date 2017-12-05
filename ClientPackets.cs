@@ -57,7 +57,7 @@ namespace ClientPackets
     {
         public override short Index
         {
-            get { return (short)ClientPacketIds.NewAccount; }
+            get { return (short)ClientPacketIds.CM_ADDNEWUSER; }
         }
 
         public string AccountID = string.Empty;
@@ -93,7 +93,7 @@ namespace ClientPackets
     {
         public override short Index
         {
-            get { return (short)ClientPacketIds.ChangePassword; }
+            get { return (short)ClientPacketIds.CM_CHANGEPASSWORD; }
         }
 
         public string AccountID = string.Empty;
@@ -117,7 +117,7 @@ namespace ClientPackets
     {
         public override short Index
         {
-            get { return (short)ClientPacketIds.Login; }
+            get { return (short)ClientPacketIds.CM_IDPASSWORD; }
         }
 
         public string AccountID = string.Empty;
@@ -171,7 +171,7 @@ namespace ClientPackets
     }
     public sealed class NewCharacter : Packet
     {
-        public override short Index { get { return (short)ClientPacketIds.NewCharacter; } }
+        public override short Index { get { return (short)ClientPacketIds.CM_NEWCHR; } }
         private byte[] _Name = new byte[20];
         public byte []Name;
         public MirGender Gender;
@@ -197,7 +197,7 @@ namespace ClientPackets
     }
     public sealed class DeleteCharacter : Packet
     {
-        public override short Index { get { return (short)ClientPacketIds.DeleteCharacter; } }
+        public override short Index { get { return (short)ClientPacketIds.CM_DELCHR; } }
 
         public byte CharacterIndex;
         public byte[] Account;
@@ -213,7 +213,7 @@ namespace ClientPackets
     }
     public sealed class StartGame : Packet
     {
-        public override short Index { get { return (short)ClientPacketIds.StartGame; } }
+        public override short Index { get { return (short)ClientPacketIds.CM_SELCHR; } }
 
         public byte[] Account;
         public byte CharacterIndex;
@@ -272,50 +272,51 @@ namespace ClientPackets
     }
     public sealed class Turn : Packet
     {
-        public override short Index { get { return (short)ClientPacketIds.Turn; } }
+        public override short Index { get { return (short)ClientPacketIds.CM_TURN; } }
 
-        public MirDirection Direction;
-
+        public MirDirection Direction { get { return (MirDirection)wParam; } set { wParam = (short)value; } }
+        public short X { get { return wTag; }set { wTag = value; } }
+        public short Y { get { return (short)nRecog; } set { nRecog = (nRecog &0xff00) | value; } }
         protected override void ReadPacket(BinaryReader reader)
         {
             Direction = (MirDirection)reader.ReadByte();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write((byte)Direction);
+            //writer.Write((byte)Direction);
         }
     }
     public sealed class Walk : Packet
     {
-        public override short Index { get { return (short)ClientPacketIds.Walk; } }
+        public override short Index { get { return (short)ClientPacketIds.CM_WALK; } }
 
-        public MirDirection Direction;
+        public MirDirection Direction { get { return (MirDirection)wParam; } set { wParam = (short)value; } }
         protected override void ReadPacket(BinaryReader reader)
         {
-            Direction = (MirDirection)reader.ReadByte();
+            //Direction = (MirDirection)reader.ReadByte();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write((byte)Direction);
+            //writer.Write((byte)Direction);
         }
     }
     public sealed class Run : Packet
     {
-        public override short Index { get { return (short)ClientPacketIds.Run; } }
+        public override short Index { get { return (short)ClientPacketIds.CM_RUN; } }
 
-        public MirDirection Direction;
+        public MirDirection Direction { get { return (MirDirection)wParam; } set { wParam = (short)value; } }
         protected override void ReadPacket(BinaryReader reader)
         {
-            Direction = (MirDirection)reader.ReadByte();
+            //Direction = (MirDirection)reader.ReadByte();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write((byte)Direction);
+            //writer.Write((byte)Direction);
         }
     }
     public sealed class Chat : Packet
     {
-        public override short Index { get { return (short)ClientPacketIds.Chat; } }
+        public override short Index { get { return (short)ClientPacketIds.CM_CHAT; } }
 
         public string Message = string.Empty;
         protected override void ReadPacket(BinaryReader reader)

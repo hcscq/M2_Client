@@ -91,7 +91,7 @@ namespace ServerPackets
     {
         public override short Index
         {
-            get { return (short)ServerPacketIds.NewAccount; }
+            get { return (short)ServerPacketIds.CM_ADDNEWUSER; }
         }
 
         public byte Result;
@@ -122,7 +122,7 @@ namespace ServerPackets
     {
         public override short Index
         {
-            get { return (short)ServerPacketIds.ChangePassword; }
+            get { return (short)ServerPacketIds.CM_CHANGEPASSWORD; }
         }
 
         public byte Result;
@@ -172,7 +172,7 @@ namespace ServerPackets
     {
         public override short Index
         {
-            get { return (short)ServerPacketIds.Login; }
+            get { return (short)ServerPacketIds.CM_IDPASSWORD; }
         }
 
         public byte Result;
@@ -369,7 +369,7 @@ namespace ServerPackets
     {
         public override short Index
         {
-            get { return (short)ServerPacketIds.StartGame; }
+            get { return (short)ServerPacketIds.CM_SELCHR; }
         }
 
         //public byte Result;

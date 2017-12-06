@@ -1274,7 +1274,7 @@ public class ClientMsgIds
 
     public const short CM_NEWCHR = 101;
 
-    public const short CM_DELCHR = 101;
+    public const short CM_DELCHR = 102;
 
     public const short CM_SELCHR = 103;
 
@@ -1308,17 +1308,33 @@ public enum ServerPacketIds : short
     ClientVersion,
     Disconnect,
     KeepAlive,
-    NewAccount,
-    ChangePassword,
+    CM_IDPASSWORD = 2001,
+    CM_ADDNEWUSER =2002,
+    CM_CHANGEPASSWORD=2003,
     ChangePasswordBanned,
-    Login,
     LoginBanned,
     LoginSuccess,
     NewCharacter,
     NewCharacterSuccess,
     DeleteCharacter,
     DeleteCharacterSuccess,
-    StartGame,
+    // For Select Character Process
+    CM_NEWCHR = 101,
+    CM_DELCHR = 102,
+    CM_SELCHR =103,
+
+    //CM_ADDNEWUSER = 2002,
+    //CM_CHANGEPASSWORD = 2003,
+    //CM_IDPASSWORD = 2001,
+
+
+
+    // For game process
+    CM_TURN = 3010,
+    CM_WALK = 3011,
+    CM_RUN = 3013,
+    CM_CHAT = 3030,
+
     StartGameBanned,
     StartGameDelay,
     MapInformation,
@@ -5127,13 +5143,13 @@ public abstract class Packet
                 return new S.Disconnect();
             case (short)ServerPacketIds.KeepAlive:
                 return new S.KeepAlive();
-            case (short)ServerPacketIds.NewAccount:
+            case (short)ServerPacketIds.CM_ADDNEWUSER:
                 return new S.NewAccount();
-            case (short)ServerPacketIds.ChangePassword:
+            case (short)ServerPacketIds.CM_CHANGEPASSWORD:
                 return new S.ChangePassword();
             case (short)ServerPacketIds.ChangePasswordBanned:
                 return new S.ChangePasswordBanned();
-            case (short)ServerPacketIds.Login:
+            case (short)ServerPacketIds.CM_IDPASSWORD:
                 return new S.Login();
             case (short)ServerPacketIds.LoginBanned:
                 return new S.LoginBanned();
@@ -5149,8 +5165,8 @@ public abstract class Packet
                 return new S.DeleteCharacter();
             case (short)ServerPacketIds.DeleteCharacterSuccess:
                 return new S.DeleteCharacterSuccess();
-            case (short)ServerPacketIds.StartGame:
-                return new S.StartGame();
+            //case (short)ServerPacketIds.CM_SELCHR:
+            //    return new S.StartGame();
             case (short)ServerPacketIds.StartGameBanned:
                 return new S.StartGameBanned();
             case (short)ServerPacketIds.StartGameDelay:

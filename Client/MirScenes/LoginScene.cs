@@ -150,16 +150,16 @@ namespace Client.MirScenes
                 case (short)ServerPacketIds.ClientVersion:
                     ClientVersion((S.ClientVersion)p);
                     break;
-                case (short)ServerPacketIds.NewAccount:
+                case (short)ServerPacketIds.CM_ADDNEWUSER:
                     NewAccount((S.NewAccount)p);
                     break;
-                case (short)ServerPacketIds.ChangePassword:
+                case (short)ServerPacketIds.CM_CHANGEPASSWORD:
                     ChangePassword((S.ChangePassword)p);
                     break;
                 case (short)ServerPacketIds.ChangePasswordBanned:
                     ChangePassword((S.ChangePasswordBanned)p);
                     break;
-                case (short)ServerPacketIds.Login:
+                case (short)ServerPacketIds.CM_IDPASSWORD:
                     Login((S.Login)p);
                     break;
                 //case (short)LoginSceneMsgId.SM_ID_NOTFOUND:

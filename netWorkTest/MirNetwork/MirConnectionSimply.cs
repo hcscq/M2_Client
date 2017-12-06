@@ -226,13 +226,13 @@ namespace netWorkTest.MirNetwork
                 case (short)ServerPacketIds.KeepAlive: // Keep Alive
                     ClientKeepAlive((C.KeepAlive)p);
                     break;
-                case (short)ServerPacketIds.NewAccount:
+                case (short)ServerPacketIds.CM_ADDNEWUSER:
                     //NewAccount((C.NewAccount)p);
                     break;
-                case (short)ServerPacketIds.ChangePassword:
+                case (short)ServerPacketIds.CM_CHANGEPASSWORD:
                     //ChangePassword((C.ChangePassword)p);
                     break;
-                case (short)ServerPacketIds.Login:
+                case (short)ServerPacketIds.CM_IDPASSWORD:
                     //Login((C.Login)p);
                     break;
                 case (short)ServerPacketIds.NewCharacter:
@@ -241,7 +241,7 @@ namespace netWorkTest.MirNetwork
                 case (short)ServerPacketIds.DeleteCharacter:
                     //DeleteCharacter((C.DeleteCharacter)p);
                     break;
-                case (short)ServerPacketIds.StartGame:
+                case (short)ServerPacketIds.CM_SELCHR:
                     //StartGame((C.StartGame)p);
                     break;
                 case (short)ClientPacketIds.LogOut:

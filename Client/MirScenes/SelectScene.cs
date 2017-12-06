@@ -301,7 +301,7 @@ namespace Client.MirScenes
                     DeleteCharacter((S.DeleteCharacterSuccess)p);
                     break;
                 case ServerMsgIds.SM_STARTPLAY:
-                case (short)ServerPacketIds.StartGame:
+                case (short)ServerPacketIds.CM_SELCHR:
                     StartGame((S.StartGame)p);
                     break;
                 case (short)ServerPacketIds.StartGameBanned:

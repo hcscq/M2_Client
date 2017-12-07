@@ -504,7 +504,7 @@ namespace Client.MirScenes.Dialogs
 
             if (hpOnly) return;
 
-            if (User.MP != User.MaxMP)
+            if (User!=null&&User.MP != User.MaxMP)
                 height = (int)(80 * User.MP / (float)User.MaxMP);
             else
                 height = 80;
@@ -518,7 +518,7 @@ namespace Client.MirScenes.Dialogs
 
         private void ExperienceBar_BeforeDraw(object sender, EventArgs e)
         {
-            if (ExperienceBar.Library == null) return;
+            if (ExperienceBar.Library == null||MapObject.User==null) return;
 
             double percent = MapObject.User.Experience / (double)MapObject.User.MaxExperience;
             if (percent > 1) percent = 1;
@@ -536,7 +536,7 @@ namespace Client.MirScenes.Dialogs
 
         private void WeightBar_BeforeDraw(object sender, EventArgs e)
         {
-            if (WeightBar.Library == null) return;
+            if (WeightBar.Library == null||MapObject.User==null) return;
             double percent = MapObject.User.CurrentBagWeight / (double)MapObject.User.MaxBagWeight;
             if (percent > 1) percent = 1;
             percent = 0.65;

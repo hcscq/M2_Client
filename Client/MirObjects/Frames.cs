@@ -37,9 +37,9 @@ namespace Client.MirObjects
 
             #region Player Frames
             //Common
-            Players.Frames.Add(MirAction.Standing, new Frame(0, 4, 0, 500, 0, 8, 0, 250));
-            Players.Frames.Add(MirAction.Walking, new Frame(32, 6, 0, 100, 64, 6, 0, 100));
-            Players.Frames.Add(MirAction.Running, new Frame(80, 6, 0, 100, 112, 6, 0, 100));
+            Players.Frames.Add(MirAction.Standing, new Frame(0, 4, 4, 500, 0, 8, 0, 250));
+            Players.Frames.Add(MirAction.Walking, new Frame(64, 6, 2, 100, 64, 6, 0, 100));
+            Players.Frames.Add(MirAction.Running, new Frame(128, 6, 2, 100, 112, 6, 0, 100));
             Players.Frames.Add(MirAction.Stance, new Frame(128, 1, 0, 1000, 160, 1, 0, 1000));
             Players.Frames.Add(MirAction.Stance2, new Frame(300, 1, 5, 1000, 332, 1, 5, 1000));
             Players.Frames.Add(MirAction.Attack1, new Frame(136, 6, 0, 100, 168, 6, 0, 100));
@@ -49,7 +49,7 @@ namespace Client.MirObjects
             Players.Frames.Add(MirAction.Spell, new Frame(296, 6, 0, 100, 328, 6, 0, 100));
             Players.Frames.Add(MirAction.Harvest, new Frame(344, 2, 0, 300, 376, 2, 0, 300));
             Players.Frames.Add(MirAction.Struck, new Frame(360, 3, 0, 100, 392, 3, 0, 100));
-            Players.Frames.Add(MirAction.Die, new Frame(384, 4, 0, 100, 416, 4, 0, 100));
+            Players.Frames.Add(MirAction.Die, new Frame(536, 4, 4, 100, 416, 4, 0, 100));
             Players.Frames.Add(MirAction.Dead, new Frame(387, 1, 3, 1000, 419, 1, 3, 1000));
             Players.Frames.Add(MirAction.Revive, new Frame(384, 4, 0, 100, 416, 4, 0, 100) { Reverse = true });
             Players.Frames.Add(MirAction.Mine, new Frame(184, 6, 0, 100, 216, 6, 0, 100));

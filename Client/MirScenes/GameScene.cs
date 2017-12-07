@@ -881,6 +881,7 @@ namespace Client.MirScenes
                 CanMove = false;
 
 
+
             if (CMain.Time >= NextPing)
             {
                 NextPing = CMain.Time + 60000;
@@ -1725,6 +1726,7 @@ namespace Client.MirScenes
             User.MapLocation = new Point(P.nCurrX, P.nCUrrY);
             MapControl.AddObject(User);
             User.SetLibraries();
+            User.SetAction();
             MapControl.FloorValid = false;
         }
         private void UserName(SEX.UserName P)

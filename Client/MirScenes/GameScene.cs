@@ -872,6 +872,8 @@ namespace Client.MirScenes
 
             if (CMain.Time >= MoveTime)
             {
+                if (CMain.Time - MoveTime > 800)
+                    GameScene.Scene.OutputMessage("Time  lager than 1000.");// OutPutMessage("Time  lager than 1000.");
                 MoveTime += 100; //Move Speed
                 CanMove = true;
                 MapControl.AnimationCount++;

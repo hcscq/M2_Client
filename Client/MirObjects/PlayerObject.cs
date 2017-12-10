@@ -1336,7 +1336,7 @@ namespace Client.MirObjects
                         case MirAction.Standing:
                         case MirAction.MountStanding:
                             Network.Enqueue(new C.Turn { Direction = Direction,X=(short)CurrentLocation.X,Y=(short)CurrentLocation.Y });
-                            MapControl.NextAction = CMain.Time + 2500;
+                            //MapControl.NextAction = CMain.Time + 2500;
                             GameScene.CanRun = false;
                             break;
                         case MirAction.Walking:
@@ -1346,14 +1346,14 @@ namespace Client.MirObjects
                             Network.Enqueue(new C.Walk { Direction = Direction });
                             GameScene.Scene.MapControl.FloorValid = false;
                             GameScene.CanRun = true;
-                            MapControl.NextAction = CMain.Time + 2500;
+                            //MapControl.NextAction = CMain.Time + 2500;
                             break;
                         case MirAction.Running:
                         case MirAction.MountRunning:
                             GameScene.LastRunTime = CMain.Time;
                             Network.Enqueue(new C.Run { Direction = Direction });
                             GameScene.Scene.MapControl.FloorValid = false;
-                            MapControl.NextAction = CMain.Time + (Sprint ? 1000 : 2500);
+                            //MapControl.NextAction = CMain.Time + (Sprint ? 1000 : 2500);
                             break;
                         case MirAction.Pushed:
                             GameScene.LastRunTime = CMain.Time;

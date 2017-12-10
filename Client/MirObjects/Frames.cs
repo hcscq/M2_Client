@@ -40,18 +40,18 @@ namespace Client.MirObjects
             Players.Frames.Add(MirAction.Standing, new Frame(0, 4, 4, 500, 0, 8, 0, 250));
             Players.Frames.Add(MirAction.Walking, new Frame(64, 6, 2, 100, 64, 6, 0, 100));
             Players.Frames.Add(MirAction.Running, new Frame(128, 6, 2, 100, 112, 6, 0, 100));
-            Players.Frames.Add(MirAction.Stance, new Frame(128, 1, 0, 1000, 160, 1, 0, 1000));
+            Players.Frames.Add(MirAction.Stance, new Frame(192, 1, 0, 1000, 160, 1, 0, 1000));
             Players.Frames.Add(MirAction.Stance2, new Frame(300, 1, 5, 1000, 332, 1, 5, 1000));
-            Players.Frames.Add(MirAction.Attack1, new Frame(136, 6, 0, 100, 168, 6, 0, 100));
-            Players.Frames.Add(MirAction.Attack2, new Frame(184, 6, 0, 100, 216, 6, 0, 100));
-            Players.Frames.Add(MirAction.Attack3, new Frame(232, 8, 0, 100, 264, 8, 0, 100));
+            Players.Frames.Add(MirAction.Attack1, new Frame(200, 6, 2, 100, 168, 6, 0, 100));
+            Players.Frames.Add(MirAction.Attack2, new Frame(264, 6, 2, 100, 216, 6, 0, 100));
+            Players.Frames.Add(MirAction.Attack3, new Frame(328, 8, 0, 100, 264, 8, 0, 100));
             Players.Frames.Add(MirAction.Attack4, new Frame(416, 6, 0, 100, 448, 6, 0, 100));
-            Players.Frames.Add(MirAction.Spell, new Frame(296, 6, 0, 100, 328, 6, 0, 100));
-            Players.Frames.Add(MirAction.Harvest, new Frame(344, 2, 0, 300, 376, 2, 0, 300));
-            Players.Frames.Add(MirAction.Struck, new Frame(360, 3, 0, 100, 392, 3, 0, 100));
+            Players.Frames.Add(MirAction.Spell, new Frame(392, 6, 2, 100, 328, 6, 0, 100));
+            Players.Frames.Add(MirAction.Harvest, new Frame(456, 2, 0, 300, 376, 2, 0, 300));
+            Players.Frames.Add(MirAction.Struck, new Frame(480, 3, 5, 100, 392, 3, 0, 100));
             Players.Frames.Add(MirAction.Die, new Frame(536, 4, 4, 100, 416, 4, 0, 100));
-            Players.Frames.Add(MirAction.Dead, new Frame(387, 1, 3, 1000, 419, 1, 3, 1000));
-            Players.Frames.Add(MirAction.Revive, new Frame(384, 4, 0, 100, 416, 4, 0, 100) { Reverse = true });
+            Players.Frames.Add(MirAction.Dead, new Frame(539, 1, 7, 1000, 419, 1, 3, 1000));
+            Players.Frames.Add(MirAction.Revive, new Frame(536, 4, 4, 100, 416, 4, 0, 100) { Reverse = true });
             Players.Frames.Add(MirAction.Mine, new Frame(184, 6, 0, 100, 216, 6, 0, 100));
             Players.Frames.Add(MirAction.Lunge, new Frame(139, 1, 5, 1000, 300, 1, 5, 1000)); //slashingburst test
 

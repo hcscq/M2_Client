@@ -7,6 +7,9 @@ namespace Client
 {
     class Settings
     {
+        public enum InterfaceVersion {CLASSIC,NEWUI }
+
+        public const InterfaceVersion InterfaceV = InterfaceVersion.CLASSIC;
         public const long CleanDelay = 600000;
         public static int ScreenWidth = 800, ScreenHeight = 600;
         private static InIReader Reader = new InIReader(@".\Mir2Config.ini");

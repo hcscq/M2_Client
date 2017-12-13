@@ -2190,7 +2190,7 @@ namespace Client.MirScenes.Dialogs
         public MirLabel CritRLabel, CritDLabel, LuckLabel, AttkSpdLabel, AccLabel, AgilLabel;
         public MirLabel ExpPLabel, BagWLabel, WearWLabel, HandWLabel, MagicRLabel, PoisonRecLabel, HealthRLabel, ManaRLabel, PoisonResLabel, HolyTLabel, FreezeLabel, PoisonAtkLabel;
         public MirLabel HeadingLabel, StatLabel;
-        public MirButton NextButton, BackButton;
+        public MirButton NextButton, BackButton,PageUpButton,PageDownButton;
 
         public MirItemCell[] Grid;
         public MagicButton[] Magics;
@@ -2756,6 +2756,44 @@ namespace Client.MirScenes.Dialogs
                 if (StartIndex - 7 < 0) return;
 
                 StartIndex -= 7;
+                RefreshInterface();
+
+                ClearCoolDowns();
+            };
+
+            PageUpButton = new MirButton
+            {
+                Index = 373,
+                Location = new Point(175, 65),
+                Library = Libraries.Prguse,
+                Parent = this,
+                PressedIndex = 373,
+                Sound = SoundList.ButtonA,
+            };
+            PageUpButton.Click += (o, e) =>
+            {
+                if (StartIndex - 7 < 0) return;
+
+                StartIndex -= 7;
+                RefreshInterface();
+
+                ClearCoolDowns();
+            };
+
+            PageDownButton = new MirButton
+            {
+                Index = 372,
+                Location = new Point(175, 95),
+                Library = Libraries.Prguse,
+                Parent = this,
+                PressedIndex = 372,
+                Sound = SoundList.ButtonA,
+            };
+            PageDownButton.Click += (o, e) =>
+            {
+                if (StartIndex + 7 >= MapObject.User.Magics.Count) return;
+
+                StartIndex += 7;
                 RefreshInterface();
 
                 ClearCoolDowns();

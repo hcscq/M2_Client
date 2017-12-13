@@ -2322,6 +2322,7 @@ namespace Client.MirScenes.Dialogs
                 PressedIndex = 500,
                 Size = new Size(64, 20),
                 Sound = SoundList.ButtonA,
+                Visible=false
             };
             CharacterButton.Click += (o, e) => ShowCharacterPage();
             StatusButton = new MirButton
@@ -2331,7 +2332,8 @@ namespace Client.MirScenes.Dialogs
                 Parent = this,
                 PressedIndex = 501,
                 Size = new Size(64, 20),
-                Sound = SoundList.ButtonA
+                Sound = SoundList.ButtonA,
+                Visible=false
             };
             StatusButton.Click += (o, e) => ShowStatusPage();
 
@@ -2342,7 +2344,8 @@ namespace Client.MirScenes.Dialogs
                 Parent = this,
                 PressedIndex = 502,
                 Size = new Size(64, 20),
-                Sound = SoundList.ButtonA
+                Sound = SoundList.ButtonA,
+                Visible=false
             };
             StateButton.Click += (o, e) => ShowStatePage();
 
@@ -2353,7 +2356,8 @@ namespace Client.MirScenes.Dialogs
                 Parent = this,
                 PressedIndex = 503,
                 Size = new Size(64, 20),
-                Sound = SoundList.ButtonA
+                Sound = SoundList.ButtonA,
+                Visible=false
             };
             SkillButton.Click += (o, e) => ShowSkillPage();
 
@@ -2374,7 +2378,7 @@ namespace Client.MirScenes.Dialogs
             {
                 DrawFormat = TextFormatFlags.VerticalCenter | TextFormatFlags.HorizontalCenter,
                 Parent = this,
-                Location = new Point(-3, 14),
+                Location = new Point(-7, 15),
                 Size = new Size(264, 20),
                 NotControl = true,
             };
@@ -2584,7 +2588,7 @@ namespace Client.MirScenes.Dialogs
                 AutoSize = true,
                 Parent = StatusPage,
                 Location = new Point(126, 146),
-                NotControl = true
+                NotControl = true,
             };
             CritDLabel = new MirLabel
             {

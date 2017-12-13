@@ -174,6 +174,8 @@ namespace Client.MirScenes
 
         public GameScene()
         {
+            Settings.ShowMouseLocation = true;
+
             MapControl.AutoRun = false;
             MapControl.AutoHit = false;
             Slaying = false;

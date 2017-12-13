@@ -11,7 +11,7 @@ namespace Client.MirControls
 {
     public class MirControl : IDisposable
     {
-        public static MirControl ActiveControl, MouseControl;
+        public static MirControl ActiveControl, MouseControl,AjustControl;
         
         public virtual Point DisplayLocation { get { return Parent == null ? Location : Parent.DisplayLocation.Add(Location); } }
         public Rectangle DisplayRectangle { get { return new Rectangle(DisplayLocation, Size); } }
@@ -382,7 +382,7 @@ namespace Client.MirControls
             {
                 if (_notControl == value)
                     return;
-                _notControl = value;
+                _notControl = Settings.ShowMouseLocation?false: value;
                 OnNotControlChanged();
             }
         }
@@ -685,6 +685,41 @@ namespace Client.MirControls
             _foreColour = Color.White;
             _visible = true;
             _sound = SoundList.None;
+            if (Settings.ShowMouseLocation)
+            {
+                Movable = true;
+                MouseUp += MirImageControl_MouseClick;
+                KeyUp += MirImageControl_KeyUp;
+            }
+        }
+        private void MirImageControl_KeyUp(object sender, System.Windows.Forms.KeyEventArgs e)
+        {
+            if (AjustControl != null && AjustControl.Equals((MirControl)sender)&& !AjustControl.IsDisposed)
+            {
+                switch (e.KeyCode)
+                {
+                    case System.Windows.Forms.Keys.Up:
+                        AjustControl.Location = new Point(AjustControl.Location.X, AjustControl.Location.Y - 1);
+                        break;
+                    case System.Windows.Forms.Keys.Down:
+                        AjustControl.Location = new Point(AjustControl.Location.X, AjustControl.Location.Y + 1);
+                        break;
+                    case System.Windows.Forms.Keys.Left:
+                        AjustControl.Location = new Point(AjustControl.Location.X - 1, AjustControl.Location.Y);
+                        break;
+                    case System.Windows.Forms.Keys.Right:
+                        AjustControl.Location = new Point(AjustControl.Location.X + 1, AjustControl.Location.Y);
+                        break;
+                    default: break;
+                }
+                Hint = string.Format("Location:{0}", AjustControl.Location.ToString());
+            }
+        }
+
+        private void MirImageControl_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            AjustControl = (MirControl)sender;
+            Hint = string.Format("Location:{0}", AjustControl.Location.ToString());
         }
 
         public virtual void Draw()

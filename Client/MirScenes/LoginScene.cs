@@ -150,40 +150,23 @@ namespace Client.MirScenes
                 case (short)ServerPacketIds.ClientVersion:
                     ClientVersion((S.ClientVersion)p);
                     break;
-                case (short)ServerPacketIds.CM_ADDNEWUSER:
+                case (short)ServerPacketIds.SM_NEWID_SUCCESS:
                     NewAccount((S.NewAccount)p);
                     break;
-                case (short)ServerPacketIds.CM_CHANGEPASSWORD:
+                case (short)ServerPacketIds.SM_CHANGEPASSWORD:
                     ChangePassword((S.ChangePassword)p);
                     break;
-                case (short)ServerPacketIds.ChangePasswordBanned:
-                    ChangePassword((S.ChangePasswordBanned)p);
-                    break;
-                case (short)ServerPacketIds.CM_IDPASSWORD:
+                case (short)ServerPacketIds.SM_PASSWD_FAIL:
                     Login((S.Login)p);
                     break;
-                //case (short)LoginSceneMsgId.SM_ID_NOTFOUND:
-                //    MirMessageBox.Show("账号不存在.");
-                //    _login.AccountIDTextBox.Text = string.Empty;
-                //    _login.AccountIDTextBox.SetFocus();
-                //    break;
-                //case (short)LoginSceneMsgId.SM_PASSWD_FAIL:
-                //    MirMessageBox.Show("密码错误.");
-                //    _login.PasswordTextBox.Text = string.Empty;
-                //    _login.PasswordTextBox.SetFocus();
-                //    break;
-                case (short)ServerPacketIds.LoginBanned:
-                    Login((S.LoginBanned)p);
-                    break;
-                case ServerMsgIds.SM_PASSOK_SELECTSERVER:
+                case (short)ServerPacketIds.SM_PASSOK_SELECTSERVER:
                     SelServer((S.SelServer)p);
                     break;
-                case ServerMsgIds.SM_SELECTSERVER_OK:
+                case (short)ServerPacketIds.SM_SELECTSERVER_OK:
                     SelServer((S.SelServerOk)p);
                     break;
-                case (short)ServerPacketIds.LoginSuccess:
-                case ServerMsgIds.SM_QUERYCHR:
-                case ServerMsgIds.SM_QUERYCHR_FAIL:
+                case (short)ServerPacketIds.SM_QUERYCHR:
+                case (short)ServerPacketIds.SM_QUERYCHR_FAIL:
                     Login((S.LoginSuccess)p);
                     break;
                 default:
@@ -230,7 +213,7 @@ namespace Client.MirScenes
         private void NewAccount(S.NewAccount p)
         {
             _account.OKButton.Enabled = true;
-            switch (p.Result)
+            switch (p.wParam)
             {
                 case 0:
                     MirMessageBox.Show("Account creation is currently disabled.");
@@ -241,8 +224,8 @@ namespace Client.MirScenes
                     _account.AccountIDTextBox.SetFocus();
                     break;
                 case 2:
-                    MirMessageBox.Show("Your Password is not acceptable.");
-                    _account.Password1TextBox.SetFocus();
+                    MirMessageBox.Show("Wrong account info.");
+                    _account.AccountIDTextBox.SetFocus();
                     break;
                 case 3:
                     MirMessageBox.Show("Your E-Mail Address is not acceptable.");
@@ -366,7 +349,6 @@ namespace Client.MirScenes
         }
         private void SelServer(S.SelServerOk p)
         {
-            //MirMessageBox.Show("Unfinished.");
             Enabled = false;
             _serverSel.Dispose();
             string[] ipInfo = p.IpInfo.Split('/');
@@ -374,8 +356,7 @@ namespace Client.MirScenes
                 Network.ConnectionChangeTo(ipInfo[0], ipInfo[1],
                     new C.QueryChr { nRecog = g_nCertifacation, Account = g_Account });
             else MirMessageBox.Show("Get server info failed.", true);
-            //Network.Enqueue(new C.s);
-            //_serverSel.Show(p.Servers.ToString());
+
         }
         private void Login(S.LoginSuccess p)
         {

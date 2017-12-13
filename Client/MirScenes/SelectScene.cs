@@ -287,21 +287,19 @@ namespace Client.MirScenes
         {
             switch (p.Index)
             {
-                case (short)ServerPacketIds.NewCharacter:
+                case (short)ServerPacketIds.SM_NEWCHR_FAIL:
                     NewCharacter((S.NewCharacter)p);
                     break;
-                case (short)ServerPacketIds.NewCharacterSuccess:
+                case (short)ServerPacketIds.SM_NEWCHR_SUCCESS:
                     NewCharacter((S.NewCharacterSuccess)p);
                     break;
-                case (short)ServerPacketIds.DeleteCharacter:
-                case ServerMsgIds.SM_DELCHR_SUCCESS:
+                case (short)ServerPacketIds.SM_DELCHR_FAIL:
                     DeleteCharacter((S.DeleteCharacter)p);
                     break;
-                case (short)ServerPacketIds.DeleteCharacterSuccess:
+                case (short)ServerPacketIds.SM_DELCHR_SUCCESS:
                     DeleteCharacter((S.DeleteCharacterSuccess)p);
                     break;
-                case ServerMsgIds.SM_STARTPLAY:
-                case (short)ServerPacketIds.CM_SELCHR:
+                case (short)ServerPacketIds.SM_STARTPLAY:
                     StartGame((S.StartGame)p);
                     break;
                 case (short)ServerPacketIds.StartGameBanned:
@@ -415,7 +413,8 @@ namespace Client.MirScenes
                     Characters.RemoveAt(i);
                     break;
                 }
-
+            if (Characters.Count > 0)
+                _selected = Characters[0].Index;
             UpdateInterface();
         }
 

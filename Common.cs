@@ -1308,24 +1308,22 @@ public enum ServerPacketIds : short
     ClientVersion,
     Disconnect,
     KeepAlive,
-    CM_IDPASSWORD = 2001,
-    CM_ADDNEWUSER =2002,
-    CM_CHANGEPASSWORD=2003,
+    SM_PASSWD_FAIL = 503,
+    SM_NEWID_SUCCESS =504,
+    SM_LOGIN_BANNED=507,
+    SM_QUERYCHR=520,
+    SM_QUERYCHR_FAIL=527,
+    SM_SELECTSERVER_OK = 530,
+    SM_PASSOK_SELECTSERVER =529,
+    SM_CHANGEPASSWORD =2003,
     ChangePasswordBanned,
-    LoginBanned,
-    LoginSuccess,
-    NewCharacter,
-    NewCharacterSuccess,
-    DeleteCharacter,
-    DeleteCharacterSuccess,
-    // For Select Character Process
-    CM_NEWCHR = 101,
-    CM_DELCHR = 102,
-    CM_SELCHR =103,
 
-    //CM_ADDNEWUSER = 2002,
-    //CM_CHANGEPASSWORD = 2003,
-    //CM_IDPASSWORD = 2001,
+
+    SM_NEWCHR_FAIL=522,
+    SM_NEWCHR_SUCCESS=521,
+    SM_DELCHR_FAIL=524,
+    SM_DELCHR_SUCCESS=523,
+    SM_STARTPLAY=525,
 
 
 
@@ -1569,8 +1567,9 @@ public enum ClientPacketIds : short
     CM_ADDNEWUSER      =   2002,
     CM_CHANGEPASSWORD  =   2003,
     CM_IDPASSWORD      =   2001,
-
+    CM_SELECTSERVER    =   2005,
     // For Select Character Process
+    CM_QUERYCHR        =   100,
     CM_NEWCHR          =   101,
     CM_DELCHR          =   102,
     CM_SELCHR          =   103,
@@ -5086,15 +5085,9 @@ public abstract class Packet
 
             case ServerMsgIds.SM_SELECTSERVER_OK:
                 return new S.SelServerOk();
-            case ServerMsgIds.SM_QUERYCHR:
+
             case ServerMsgIds.SM_QUERYCHR_FAIL:
                 return new S.LoginSuccess();
-
-            case ServerMsgIds.SM_NEWCHR_SUCCESS:
-                return new S.NewCharacterSuccess();
-
-            case ServerMsgIds.SM_DELCHR_SUCCESS:
-                return new S.DeleteCharacter();
 
             case ServerMsgIds.SM_STARTPLAY:
                 return new S.StartGame();
@@ -5143,27 +5136,27 @@ public abstract class Packet
                 return new S.Disconnect();
             case (short)ServerPacketIds.KeepAlive:
                 return new S.KeepAlive();
-            case (short)ServerPacketIds.CM_ADDNEWUSER:
+            case (short)ServerPacketIds.SM_NEWID_SUCCESS:
                 return new S.NewAccount();
-            case (short)ServerPacketIds.CM_CHANGEPASSWORD:
+            case (short)ServerPacketIds.SM_CHANGEPASSWORD:
                 return new S.ChangePassword();
             case (short)ServerPacketIds.ChangePasswordBanned:
                 return new S.ChangePasswordBanned();
-            case (short)ServerPacketIds.CM_IDPASSWORD:
+            case (short)ServerPacketIds.SM_PASSWD_FAIL:
                 return new S.Login();
-            case (short)ServerPacketIds.LoginBanned:
-                return new S.LoginBanned();
+            //case (short)ServerPacketIds.LoginBanned:
+            //    return new S.LoginBanned();
 
-            case (short)ServerPacketIds.LoginSuccess:
+            case (short)ServerPacketIds.SM_QUERYCHR:
 
                 return new S.LoginSuccess();
             //case (short)ServerPacketIds.NewCharacter:
             //    return new S.NewCharacter();
-            case (short)ServerPacketIds.NewCharacterSuccess:
+            case (short)ServerPacketIds.SM_NEWCHR_SUCCESS:
                 return new S.NewCharacterSuccess();
-            case (short)ServerPacketIds.DeleteCharacter:
+            case (short)ServerPacketIds.SM_DELCHR_FAIL:
                 return new S.DeleteCharacter();
-            case (short)ServerPacketIds.DeleteCharacterSuccess:
+            case (short)ServerPacketIds.SM_DELCHR_SUCCESS:
                 return new S.DeleteCharacterSuccess();
             //case (short)ServerPacketIds.CM_SELCHR:
             //    return new S.StartGame();

@@ -139,7 +139,7 @@ namespace ClientPackets
     {
         public override short Index
         {
-            get { return (short)ClientMsgIds.CM_SELECTSERVER; }
+            get { return (short)ClientPacketIds.CM_SELECTSERVER; }
         }
 
 
@@ -155,7 +155,7 @@ namespace ClientPackets
     {
         public override short Index
         {
-            get { return (short)ClientMsgIds.CM_QUERYCHR; }
+            get { return (short)ClientPacketIds.CM_QUERYCHR; }
         }
         public byte[] Account;
         

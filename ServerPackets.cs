@@ -91,10 +91,10 @@ namespace ServerPackets
     {
         public override short Index
         {
-            get { return (short)ServerPacketIds.CM_ADDNEWUSER; }
+            get { return (short)ServerPacketIds.SM_NEWID_SUCCESS; }
         }
 
-        public byte Result;
+        public byte Result { get { return (byte) wParam; }set { wParam = value; } }
         /*
          * 0: Disabled
          * 1: Bad AccountID
@@ -109,12 +109,12 @@ namespace ServerPackets
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            Result = reader.ReadByte();
+            //Result = reader.ReadByte();
         }
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(Result);
+            //writer.Write(Result);
         }
 
     }
@@ -122,7 +122,7 @@ namespace ServerPackets
     {
         public override short Index
         {
-            get { return (short)ServerPacketIds.CM_CHANGEPASSWORD; }
+            get { return (short)ServerPacketIds.SM_CHANGEPASSWORD; }
         }
 
         public byte Result;
@@ -172,7 +172,7 @@ namespace ServerPackets
     {
         public override short Index
         {
-            get { return (short)ServerPacketIds.CM_IDPASSWORD; }
+            get { return (short)ServerPacketIds.SM_PASSWD_FAIL; }
         }
 
         public byte Result;
@@ -198,7 +198,7 @@ namespace ServerPackets
     {
         public override short Index
         {
-            get { return (short)ServerPacketIds.LoginBanned; }
+            get { return (short)ServerPacketIds.SM_LOGIN_BANNED; }
         }
 
         public string Reason = string.Empty;
@@ -220,7 +220,7 @@ namespace ServerPackets
     {
         public override short Index
         {
-            get { return (short)ServerPacketIds.LoginSuccess; }
+            get { return (short)ServerPacketIds.SM_QUERYCHR; }
         }
 
         public List<SelectInfo> Characters = new List<SelectInfo>();
@@ -245,7 +245,7 @@ namespace ServerPackets
     {
         public override short Index
         {
-            get { return ServerMsgIds.SM_PASSOK_SELECTSERVER; }
+            get { return (short)ServerPacketIds.SM_PASSOK_SELECTSERVER; }
         }
 
         public string Servers; 
@@ -263,7 +263,7 @@ namespace ServerPackets
     {
         public override short Index
         {
-            get { return ServerMsgIds.SM_SELECTSERVER_OK; }
+            get { return (short)ServerPacketIds.SM_SELECTSERVER_OK; }
         }
 
         public string IpInfo;
@@ -281,7 +281,7 @@ namespace ServerPackets
     {
         public override short Index
         {
-            get { return (short)ServerPacketIds.NewCharacter; }
+            get { return (short)ServerPacketIds.SM_NEWCHR_FAIL; }
         }
 
         /*
@@ -308,7 +308,7 @@ namespace ServerPackets
     {
         public override short Index
         {
-            get { return (short)ServerPacketIds.NewCharacterSuccess; }
+            get { return (short)ServerPacketIds.SM_NEWCHR_SUCCESS; }
         }
 
         public SelectInfo CharInfo;
@@ -327,7 +327,7 @@ namespace ServerPackets
     {
         public override short Index
         {
-            get { return (short)ServerPacketIds.DeleteCharacter; }
+            get { return (short)ServerPacketIds.SM_DELCHR_FAIL; }
         }
 
 
@@ -350,7 +350,7 @@ namespace ServerPackets
     {
         public override short Index
         {
-            get { return (short)ServerPacketIds.DeleteCharacterSuccess; }
+            get { return (short)ServerPacketIds.SM_DELCHR_SUCCESS; }
         }
 
         public int CharacterIndex;
@@ -369,7 +369,7 @@ namespace ServerPackets
     {
         public override short Index
         {
-            get { return (short)ServerPacketIds.CM_SELCHR; }
+            get { return (short)ServerPacketIds.SM_STARTPLAY; }
         }
 
         //public byte Result;

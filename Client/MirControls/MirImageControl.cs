@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using Client.MirGraphics;
-
 namespace Client.MirControls
 {
     public class MirImageControl : MirControl
@@ -147,6 +146,38 @@ namespace Client.MirControls
             _drawImage = true;
             _index = -1;
             ForeColour = Color.White;
+            if (Settings.ShowMouseLocation)
+            {
+                Movable = true;
+                MouseUp += MirImageControl_MouseMove;
+                KeyUp += MirImageControl_KeyUp;
+            }
+        }
+
+        private void MirImageControl_KeyUp(object sender, System.Windows.Forms.KeyEventArgs e)
+        {
+            
+            switch (e.KeyCode)
+            {
+                case System.Windows.Forms.Keys.Up:
+                    MouseControl.Location = new Point(Location.X,Location.Y-1);
+                    break;
+                case System.Windows.Forms.Keys.Down:
+                    MouseControl.Location = new Point(Location.X,Location.Y + 1);
+                    break;
+                case System.Windows.Forms.Keys.Left:
+                    MouseControl.Location = new Point(Location.X - 1, Location.Y);
+                    break;
+                case System.Windows.Forms.Keys.Right:
+                    MouseControl.Location = new Point(Location.X + 1, Location.Y);
+                    break;
+                default:break;
+            }
+        }
+
+        private void MirImageControl_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            Hint = "Location:" + Location.ToString();
         }
 
         protected internal override void DrawControl()

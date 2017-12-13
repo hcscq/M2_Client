@@ -1785,7 +1785,7 @@ namespace Client.MirScenes.Dialogs
             Movable = true;
             Sort = true;
             Visible = true;
-            Location = new Point(GameScene.Scene.MainDialog.Location.X + 230, Settings.ScreenHeight - 150);
+            Location = new Point(GameScene.Scene.MainDialog.Location.X + 250, Settings.ScreenHeight - 100);
 
             BeforeDraw += BeltPanel_BeforeDraw;
 
@@ -2763,40 +2763,48 @@ namespace Client.MirScenes.Dialogs
 
             PageUpButton = new MirButton
             {
-                Index = 373,
-                Location = new Point(175, 65),
+                //Index = 373,
+                Location = new Point(7, 128),
                 Library = Libraries.Prguse,
                 Parent = this,
                 PressedIndex = 373,
+                HoverIndex=373,
                 Sound = SoundList.ButtonA,
+                TakeSizeMode=UsedSize.HoverIndex
             };
             PageUpButton.Click += (o, e) =>
-            {
-                if (StartIndex - 7 < 0) return;
-
-                StartIndex -= 7;
-                RefreshInterface();
-
-                ClearCoolDowns();
+            {//CharacterPage, StatusPage, StatePage, SkillPage, ClassImage
+                if (CharacterPage.Visible)
+                    ShowSkillPage();
+                else if (StatusPage.Visible)
+                    ShowCharacterPage();
+                else if (StatePage.Visible)
+                    ShowStatusPage();
+                else if (SkillPage.Visible)
+                    ShowStatePage();
             };
 
             PageDownButton = new MirButton
             {
-                Index = 372,
-                Location = new Point(175, 95),
+                //Index = 372,
+                Location = new Point(7, 187),
                 Library = Libraries.Prguse,
                 Parent = this,
                 PressedIndex = 372,
+                HoverIndex=372,
                 Sound = SoundList.ButtonA,
+                TakeSizeMode = UsedSize.HoverIndex
             };
             PageDownButton.Click += (o, e) =>
             {
-                if (StartIndex + 7 >= MapObject.User.Magics.Count) return;
-
-                StartIndex += 7;
-                RefreshInterface();
-
-                ClearCoolDowns();
+                if (CharacterPage.Visible)
+                    ShowStatusPage();
+                else if (StatusPage.Visible)
+                    ShowStatePage();
+                else if (StatePage.Visible)
+                    ShowSkillPage();
+                else if (SkillPage.Visible)
+                    ShowCharacterPage();
             };
         }
 
@@ -4127,29 +4135,30 @@ namespace Client.MirScenes.Dialogs
             Library = Libraries.Title;
             Location = new Point(Settings.ScreenWidth - Size.Width, GameScene.Scene.MainDialog.Location.Y - this.Size.Height + 15);
             Sort = true;
-            Visible = false;
+            Visible = true;
             Movable = true;
+            
 
             ExitButton = new MirButton
-            {
-                HoverIndex = 634,
-                Index = 633,
+            {//out 136 quit 138
+                HoverIndex = 138,
+                Index = 138,
                 Parent = this,
-                Library = Libraries.Title,
+                Library = Libraries.Prguse,
                 Location = new Point(3, 12),
-                PressedIndex = 635,
+                PressedIndex = 139,
                 Hint = "Exit (" + CMain.InputKeys.GetKey(KeybindOptions.Exit) + ")"
             };
             ExitButton.Click += (o, e) => GameScene.Scene.QuitGame();
 
             LogOutButton = new MirButton
             {
-                HoverIndex = 637,
-                Index = 636,
+                HoverIndex = 136,
+                Index = 136,
                 Parent = this,
-                Library = Libraries.Title,
+                Library = Libraries.Prguse,
                 Location = new Point(3, 31),
-                PressedIndex = 638,
+                PressedIndex = 137,
                 Hint = "Log Out (" + CMain.InputKeys.GetKey(KeybindOptions.Logout) + ")"
             };
             LogOutButton.Click += (o, e) => GameScene.Scene.LogOut();
@@ -4330,9 +4339,9 @@ namespace Client.MirScenes.Dialogs
 
             GroupButton = new MirButton
             {
-                Index = 1991,
-                HoverIndex = 1992,
-                PressedIndex = 1993,
+                Index = 128,
+                HoverIndex = 128,
+                PressedIndex = 129,
                 Parent = this,
                 Library = Libraries.Prguse,
                 Location = new Point(3, 240),
@@ -4347,9 +4356,9 @@ namespace Client.MirScenes.Dialogs
 
             GuildButton = new MirButton
             {
-                Index = 1994,
-                HoverIndex = 1995,
-                PressedIndex = 1996,
+                Index = 134,
+                HoverIndex = 134,
+                PressedIndex = 135,
                 Parent = this,
                 Library = Libraries.Prguse,
                 Location = new Point(3, 259),

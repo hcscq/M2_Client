@@ -226,19 +226,19 @@ namespace netWorkTest.MirNetwork
                 case (short)ServerPacketIds.KeepAlive: // Keep Alive
                     ClientKeepAlive((C.KeepAlive)p);
                     break;
-                case (short)ServerPacketIds.CM_ADDNEWUSER:
+                case (short)ServerPacketIds.SM_NEWID_SUCCESS:
                     //NewAccount((C.NewAccount)p);
                     break;
                 case (short)ServerPacketIds.CM_CHANGEPASSWORD:
                     //ChangePassword((C.ChangePassword)p);
                     break;
-                case (short)ServerPacketIds.CM_IDPASSWORD:
+                case (short)ServerPacketIds.SM_PASSWD_FAIL:
                     //Login((C.Login)p);
                     break;
-                case (short)ServerPacketIds.NewCharacter:
+                case (short)ServerPacketIds.SM_NEWCHR_FAIL:
                     //NewCharacter((C.NewCharacter)p);
                     break;
-                case (short)ServerPacketIds.DeleteCharacter:
+                case (short)ServerPacketIds.SM_DELCHR_FAIL:
                     //DeleteCharacter((C.DeleteCharacter)p);
                     break;
                 case (short)ServerPacketIds.CM_SELCHR:

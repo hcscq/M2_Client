@@ -202,7 +202,7 @@ namespace Client.MirScenes
             MiniMapDialog = new MiniMapDialog { Parent = this };
             InspectDialog = new InspectDialog { Parent = this, Visible = false };
             OptionDialog = new OptionDialog { Parent = this, Visible = false };
-            MenuDialog = new MenuDialog { Parent = this, Visible = false };
+            MenuDialog = new MenuDialog { Parent = this };
             NPCDialog = new NPCDialog { Parent = this, Visible = false };
             NPCGoodsDialog = new NPCGoodsDialog { Parent = this, Visible = false };
             NPCDropDialog = new NPCDropDialog { Parent = this, Visible = false };
@@ -453,7 +453,7 @@ namespace Client.MirScenes
                         InventoryDialog.Hide();
                         CharacterDialog.Hide();
                         OptionDialog.Hide();
-                        MenuDialog.Hide();
+                        //MenuDialog.Hide();
                         if (NPCDialog.Visible) NPCDialog.Hide();
                         HelpDialog.Hide();
                         KeyboardLayoutDialog.Hide();
@@ -644,6 +644,7 @@ namespace Client.MirScenes
                             MainDialog.Show();
                             ChatDialog.Show();
                             BeltDialog.Show();
+                            MenuDialog.Show();
                             ChatControl.Show();
                             MiniMapDialog.Show();
                             CharacterDuraPanel.Show();
@@ -654,6 +655,7 @@ namespace Client.MirScenes
                             MainDialog.Hide();
                             ChatDialog.Hide();
                             BeltDialog.Hide();
+                            MenuDialog.Hide();
                             ChatControl.Hide();
                             MiniMapDialog.Hide();
                             CharacterDuraPanel.Hide();

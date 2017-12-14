@@ -1780,14 +1780,17 @@ namespace Client.MirScenes.Dialogs
 
         public BeltDialog()
         {
-            Index = 1932;
-            Library = Libraries.Prguse;
-            Movable = true;
+            //Index = 1932;
+            TakeSizeMode = UsedSize.Specify;
+            Size = new Size(400,50);
+            //Library = Libraries.Prguse;
+            Movable = false;
             Sort = true;
             Visible = true;
-            Location = new Point(GameScene.Scene.MainDialog.Location.X + 250, Settings.ScreenHeight - 100);
+            Location = new Point(GameScene.Scene.MainDialog.Location.X + 270, Settings.ScreenHeight - 198);
 
-            BeforeDraw += BeltPanel_BeforeDraw;
+            
+            ///BeforeDraw += BeltPanel_BeforeDraw;
 
             for (int i = 0; i < Key.Length; i++)
             {
@@ -1795,7 +1798,7 @@ namespace Client.MirScenes.Dialogs
                 {
                     Parent = this,
                     Size = new Size(26, 14),
-                    Location = new Point(8 + i * 35, 2),
+                    Location = new Point(10 + i * 44, 0),
                     Text = (i + 1).ToString()
                 };
             }
@@ -1809,7 +1812,8 @@ namespace Client.MirScenes.Dialogs
                 Parent = this,
                 PressedIndex = 1928,
                 Sound = SoundList.ButtonA,
-                Hint = "Rotate"
+                Hint = "Rotate",
+                Visible=false
             };
             RotateButton.Click += (o, e) => Flip();
 
@@ -1822,7 +1826,8 @@ namespace Client.MirScenes.Dialogs
                 Parent = this,
                 PressedIndex = 1925,
                 Sound = SoundList.ButtonA,
-                Hint = "Close (" + CMain.InputKeys.GetKey(KeybindOptions.Belt) + ")"
+                Hint = "Close (" + CMain.InputKeys.GetKey(KeybindOptions.Belt) + ")",
+                Visible=false
             };
             CloseButton.Click += (o, e) => Hide();
 
@@ -1837,7 +1842,7 @@ namespace Client.MirScenes.Dialogs
                     GridType = MirGridType.Inventory,
                     Library = Libraries.Items,
                     Parent = this,
-                    Location = new Point(x * 35 + 12, 3),
+                    Location = new Point(x * 43 + 15, 3),
                 };
             }
 
@@ -2527,29 +2532,11 @@ namespace Client.MirScenes.Dialogs
             #endregion
 
             #region STATS I
-            HealthLabel = new MirLabel
-            {
-                AutoSize = true,
-                Parent = StatusPage,
-                Location = new Point(126, 20),
-                NotControl = !Settings.DevMode,
-                Text = "0-0",
-            };
-
-            ManaLabel = new MirLabel
-            {
-                AutoSize = true,
-                Parent = StatusPage,
-                Location = new Point(126, 38),
-                NotControl = !Settings.DevMode,
-                Text = "0-0",
-            };
-
             ACLabel = new MirLabel
             {
                 AutoSize = true,
                 Parent = StatusPage,
-                Location = new Point(126, 56),
+                Location = new Point(66, 45),
                 NotControl = !Settings.DevMode,
                 Text = "0-0",
             };
@@ -2558,33 +2545,54 @@ namespace Client.MirScenes.Dialogs
             {
                 AutoSize = true,
                 Parent = StatusPage,
-                Location = new Point(126, 74),
+                Location = new Point(66, 65),
                 NotControl = !Settings.DevMode,
                 Text = "0-0",
             };
+
             DCLabel = new MirLabel
             {
                 AutoSize = true,
                 Parent = StatusPage,
-                Location = new Point(126, 92),
+                Location = new Point(66, 85),
                 NotControl = !Settings.DevMode,
                 Text = "0-0"
             };
+
             MCLabel = new MirLabel
             {
                 AutoSize = true,
                 Parent = StatusPage,
-                Location = new Point(126, 110),
+                Location = new Point(66, 105),
                 NotControl = !Settings.DevMode,
                 Text = "0/0"
             };
+
             SCLabel = new MirLabel
             {
                 AutoSize = true,
                 Parent = StatusPage,
-                Location = new Point(126, 128),
+                Location = new Point(66, 125),
                 NotControl = !Settings.DevMode,
                 Text = "0/0"
+            };
+
+            HealthLabel = new MirLabel
+            {
+                AutoSize = true,
+                Parent = StatusPage,
+                Location = new Point(66, 145),
+                NotControl = !Settings.DevMode,
+                Text = "0-0",
+            };
+
+            ManaLabel = new MirLabel
+            {
+                AutoSize = true,
+                Parent = StatusPage,
+                Location = new Point(66, 165),
+                NotControl = !Settings.DevMode,
+                Text = "0-0",
             };
 
             #region Breezer - New Labels
@@ -2592,42 +2600,42 @@ namespace Client.MirScenes.Dialogs
             {
                 AutoSize = true,
                 Parent = StatusPage,
-                Location = new Point(126, 146),
+                Location = new Point(66, 185),
                 NotControl = !Settings.DevMode,
             };
             CritDLabel = new MirLabel
             {
                 AutoSize = true,
                 Parent = StatusPage,
-                Location = new Point(126, 164),
+                Location = new Point(66, 205),
                 NotControl = !Settings.DevMode
             };
             AttkSpdLabel = new MirLabel
             {
                 AutoSize = true,
                 Parent = StatusPage,
-                Location = new Point(126, 182),
+                Location = new Point(66, 225),
                 NotControl = !Settings.DevMode
             };
             AccLabel = new MirLabel
             {
                 AutoSize = true,
                 Parent = StatusPage,
-                Location = new Point(126, 200),
+                Location = new Point(66, 245),
                 NotControl = !Settings.DevMode
             };
             AgilLabel = new MirLabel
             {
                 AutoSize = true,
                 Parent = StatusPage,
-                Location = new Point(126, 218),
+                Location = new Point(66, 265),
                 NotControl = !Settings.DevMode
             };
             LuckLabel = new MirLabel
             {
                 AutoSize = true,
                 Parent = StatusPage,
-                Location = new Point(126, 236),
+                Location = new Point(66, 285),
                 NotControl = !Settings.DevMode
             };
             #endregion
@@ -2637,7 +2645,7 @@ namespace Client.MirScenes.Dialogs
             {
                 AutoSize = true,
                 Parent = StatePage,
-                Location = new Point(126, 20),
+                Location = new Point(35, 10),
                 NotControl = !Settings.DevMode,
                 Text = "0-0",
             };
@@ -2646,7 +2654,7 @@ namespace Client.MirScenes.Dialogs
             {
                 AutoSize = true,
                 Parent = StatePage,
-                Location = new Point(126, 38),
+                Location = new Point(35, 25),
                 NotControl = !Settings.DevMode,
                 Text = "0-0",
             };
@@ -2655,7 +2663,7 @@ namespace Client.MirScenes.Dialogs
             {
                 AutoSize = true,
                 Parent = StatePage,
-                Location = new Point(126, 56),
+                Location = new Point(35, 40),
                 NotControl = !Settings.DevMode,
                 Text = "0-0",
             };
@@ -2664,7 +2672,7 @@ namespace Client.MirScenes.Dialogs
             {
                 AutoSize = true,
                 Parent = StatePage,
-                Location = new Point(126, 74),
+                Location = new Point(35, 55),
                 NotControl = !Settings.DevMode,
                 Text = "0-0",
             };
@@ -2672,7 +2680,7 @@ namespace Client.MirScenes.Dialogs
             {
                 AutoSize = true,
                 Parent = StatePage,
-                Location = new Point(126, 92),
+                Location = new Point(35, 70),
                 NotControl = !Settings.DevMode,
                 Text = "0-0"
             };
@@ -2680,7 +2688,7 @@ namespace Client.MirScenes.Dialogs
             {
                 AutoSize = true,
                 Parent = StatePage,
-                Location = new Point(126, 110),
+                Location = new Point(35, 85),
                 NotControl = !Settings.DevMode,
                 Text = "0/0"
             };
@@ -2688,7 +2696,7 @@ namespace Client.MirScenes.Dialogs
             {
                 AutoSize = true,
                 Parent = StatePage,
-                Location = new Point(126, 128),
+                Location = new Point(35, 100),
                 NotControl = !Settings.DevMode,
                 Text = "0/0"
             };
@@ -2697,35 +2705,35 @@ namespace Client.MirScenes.Dialogs
             {
                 AutoSize = true,
                 Parent = StatePage,
-                Location = new Point(126, 146),
+                Location = new Point(35, 115),
                 NotControl = !Settings.DevMode
             };
             PoisonRecLabel = new MirLabel
             {
                 AutoSize = true,
                 Parent = StatePage,
-                Location = new Point(126, 164),
+                Location = new Point(35, 130),
                 NotControl = !Settings.DevMode
             };
             HolyTLabel = new MirLabel
             {
                 AutoSize = true,
                 Parent = StatePage,
-                Location = new Point(126, 182),
+                Location = new Point(35, 145),
                 NotControl = !Settings.DevMode
             };
             FreezeLabel = new MirLabel
             {
                 AutoSize = true,
                 Parent = StatePage,
-                Location = new Point(126, 200),
+                Location = new Point(35, 160),
                 NotControl = !Settings.DevMode
             };
             PoisonAtkLabel = new MirLabel
             {
                 AutoSize = true,
                 Parent = StatePage,
-                Location = new Point(126, 218),
+                Location = new Point(35, 175),//190,205,220
                 NotControl = !Settings.DevMode
             };
             #endregion
@@ -4143,10 +4151,12 @@ namespace Client.MirScenes.Dialogs
 
         public MenuDialog()
         {
-            Index = 567;
+            //Index = 567;
+            TakeSizeMode = UsedSize.Specify;
+            Size = new Size(400,20);
             Parent = GameScene.Scene;
-            Library = Libraries.Title;
-            Location = new Point(Settings.ScreenWidth - Size.Width, GameScene.Scene.MainDialog.Location.Y - this.Size.Height + 15);
+            //Library = Libraries.Title;
+            Location = new Point((Settings.ScreenWidth - Size.Width)/2, GameScene.Scene.MainDialog.Location.Y + this.Size.Height + 73);
             Sort = true;
             Visible = true;
             Movable = true;
@@ -4158,7 +4168,7 @@ namespace Client.MirScenes.Dialogs
                 Index = 138,
                 Parent = this,
                 Library = Libraries.Prguse,
-                Location = new Point(3, 12),
+                Location = new Point(370, 12),
                 PressedIndex = 139,
                 Hint = "Exit (" + CMain.InputKeys.GetKey(KeybindOptions.Exit) + ")"
             };
@@ -4170,7 +4180,7 @@ namespace Client.MirScenes.Dialogs
                 Index = 136,
                 Parent = this,
                 Library = Libraries.Prguse,
-                Location = new Point(3, 31),
+                Location = new Point(335, 12),
                 PressedIndex = 137,
                 Hint = "Log Out (" + CMain.InputKeys.GetKey(KeybindOptions.Logout) + ")"
             };
@@ -4184,8 +4194,9 @@ namespace Client.MirScenes.Dialogs
                 PressedIndex = 1972,
                 Parent = this,
                 Library = Libraries.Prguse,
-                Location = new Point(3, 50),
-                Hint = "Help (" + CMain.InputKeys.GetKey(KeybindOptions.Help) + ")"
+                Location = new Point(3, 12),
+                Hint = "Help (" + CMain.InputKeys.GetKey(KeybindOptions.Help) + ")",
+                Visible=false
             };
             HelpButton.Click += (o, e) =>
             {
@@ -4201,7 +4212,7 @@ namespace Client.MirScenes.Dialogs
                 PressedIndex = 1975,
                 Parent = this,
                 Library = Libraries.Prguse,
-                Location = new Point(3, 69),
+                Location = new Point(3, 12),
                 Visible = false,
                 Hint = "Keybinds"
             };
@@ -4219,7 +4230,7 @@ namespace Client.MirScenes.Dialogs
                 PressedIndex = 2002,
                 Parent = this,
                 Library = Libraries.Prguse,
-                Location = new Point(3, 88),
+                Location = new Point(3, 12),
                 Hint = "Ranking (" + CMain.InputKeys.GetKey(KeybindOptions.Ranking) + ")"
                 //Visible = false
             };
@@ -4237,7 +4248,7 @@ namespace Client.MirScenes.Dialogs
                 PressedIndex = 2002,
                 Parent = this,
                 Library = Libraries.Prguse,
-                Location = new Point(3, 107),
+                Location = new Point(3, 12),
                 Visible = false
             };
             CraftingButton.Click += (o, e) =>
@@ -4252,7 +4263,7 @@ namespace Client.MirScenes.Dialogs
                 PressedIndex = 433,
                 Parent = this,
                 Library = Libraries.Prguse2,
-                Location = new Point(3, 126),
+                Location = new Point(3, 12),
                 Hint = "Creatures (" + CMain.InputKeys.GetKey(KeybindOptions.Creature) + ")"
             };
             IntelligentCreatureButton.Click += (o, e) =>
@@ -4268,7 +4279,7 @@ namespace Client.MirScenes.Dialogs
                 PressedIndex = 1978,
                 Parent = this,
                 Library = Libraries.Prguse,
-                Location = new Point(3, 145),
+                Location = new Point(3, 12),
                 Hint = "Mount (" + CMain.InputKeys.GetKey(KeybindOptions.MountWindow) + ")"
             };
             RideButton.Click += (o, e) =>
@@ -4285,7 +4296,7 @@ namespace Client.MirScenes.Dialogs
                 PressedIndex = 1981,
                 Parent = this,
                 Library = Libraries.Prguse,
-                Location = new Point(3, 164),
+                Location = new Point(3, 12),
                 Hint = "Fishing (" + CMain.InputKeys.GetKey(KeybindOptions.Fishing) + ")"
             };
             FishingButton.Click += (o, e) =>
@@ -4302,7 +4313,7 @@ namespace Client.MirScenes.Dialogs
                 PressedIndex = 1984,
                 Parent = this,
                 Library = Libraries.Prguse,
-                Location = new Point(3, 183),
+                Location = new Point(3, 12),
                 Visible = true,
                 Hint = "Friends (" + CMain.InputKeys.GetKey(KeybindOptions.Friends) + ")"
             };
@@ -4320,7 +4331,7 @@ namespace Client.MirScenes.Dialogs
                 PressedIndex = 1987,
                 Parent = this,
                 Library = Libraries.Prguse,
-                Location = new Point(3, 202),
+                Location = new Point(3, 12),
                 Visible = true,
                 Hint = "Mentor (" + CMain.InputKeys.GetKey(KeybindOptions.Mentor) + ")"
             };
@@ -4339,7 +4350,7 @@ namespace Client.MirScenes.Dialogs
                 PressedIndex = 1990,
                 Parent = this,
                 Library = Libraries.Prguse,
-                Location = new Point(3, 221),
+                Location = new Point(3, 12),
                 Visible = true,
                 Hint = "Relationship (" + CMain.InputKeys.GetKey(KeybindOptions.Relationship) + ")"
             };
@@ -4357,7 +4368,7 @@ namespace Client.MirScenes.Dialogs
                 PressedIndex = 129,
                 Parent = this,
                 Library = Libraries.Prguse,
-                Location = new Point(3, 240),
+                Location = new Point(140, 12),
                 Hint = "Groups (" + CMain.InputKeys.GetKey(KeybindOptions.Group) + ")"
             };
             GroupButton.Click += (o, e) =>
@@ -4374,7 +4385,7 @@ namespace Client.MirScenes.Dialogs
                 PressedIndex = 135,
                 Parent = this,
                 Library = Libraries.Prguse,
-                Location = new Point(3, 259),
+                Location = new Point(108, 12),
                 Hint = "Guild (" + CMain.InputKeys.GetKey(KeybindOptions.Guilds) + ")"
             };
             GuildButton.Click += (o, e) =>

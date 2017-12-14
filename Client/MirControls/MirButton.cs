@@ -5,7 +5,7 @@ using Client.MirSounds;
 
 namespace Client.MirControls
 {
-    public enum UsedSize { Index, HoverIndex, PressedIndex, Specify }
+
     public class MirButton : MirImageControl
     {
         #region Font Colour
@@ -115,7 +115,6 @@ namespace Client.MirControls
         #endregion
 
         #region Size
-        public UsedSize TakeSizeMode = UsedSize.Index;
         protected override void OnSizeChanged()
         {
             base.OnSizeChanged();

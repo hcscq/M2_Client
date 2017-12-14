@@ -8,6 +8,8 @@ namespace Client.MirControls
         public override Point DisplayLocation { get { return UseOffSet ? base.DisplayLocation.Add(Library.GetOffSet(Index)) : base.DisplayLocation; } }
         public Point DisplayLocationWithoutOffSet { get { return base.DisplayLocation; } }
 
+        public UsedSize TakeSizeMode = UsedSize.Index;
+
         #region DrawImage
         private bool _drawImage;
         public bool DrawImage
@@ -123,8 +125,15 @@ namespace Client.MirControls
             set { base.Size = value; }
             get
             {
-                if (Library != null && Index >= 0)
-                    return Library.GetTrueSize(Index);
+                switch (TakeSizeMode)
+                {
+                    case UsedSize.Index:
+                        if (Library != null && Index >= 0)
+                            return Library.GetTrueSize(Index);
+                        break;
+                    case UsedSize.Specify:
+                    default: break;
+                }
                 return base.Size;
             }
         }

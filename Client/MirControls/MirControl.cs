@@ -9,6 +9,7 @@ using Microsoft.DirectX.Direct3D;
 
 namespace Client.MirControls
 {
+    public enum UsedSize { Index, HoverIndex, PressedIndex, Specify }
     public class MirControl : IDisposable
     {
         public static int GDevIndex = 0;

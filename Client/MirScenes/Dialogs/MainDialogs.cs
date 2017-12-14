@@ -220,7 +220,7 @@ namespace Client.MirScenes.Dialogs
             {
                 Parent = this,
                 Location = new Point(39, 90),
-                NotControl = true,
+                NotControl = !Settings.DevMode,
             };
 
             HealthOrb.BeforeDraw += HealthOrb_BeforeDraw;
@@ -281,7 +281,7 @@ namespace Client.MirScenes.Dialogs
                 Location = new Point(665, 178),
                 Parent = this,
                 DrawImage = false,
-                NotControl = true,
+                NotControl = !Settings.DevMode,
             };
             ExperienceBar.BeforeDraw += ExperienceBar_BeforeDraw;
 
@@ -289,7 +289,7 @@ namespace Client.MirScenes.Dialogs
             {
                 AutoSize = true,
                 Parent = ExperienceBar,
-                NotControl = true,
+                NotControl = !Settings.DevMode,
                 Location = new Point(75,0)
             };
 
@@ -318,7 +318,7 @@ namespace Client.MirScenes.Dialogs
                 Location = new Point(665,211),//new Point(this.Size.Width - 105, 103),
                 Parent = this,
                 DrawImage = false,
-                NotControl = true,
+                NotControl = !Settings.DevMode,
             };
             WeightBar.BeforeDraw += WeightBar_BeforeDraw;
 
@@ -1414,7 +1414,7 @@ namespace Client.MirScenes.Dialogs
                 Location = new Point(182, 217),
                 Parent = this,
                 DrawImage = false,
-                NotControl = true,
+                NotControl = !Settings.DevMode,
                 Visible=false
             };
 
@@ -1569,7 +1569,7 @@ namespace Client.MirScenes.Dialogs
                     Location = new Point(9 + i % 2 * 148, 37 + i / 2 * 33),
                     Parent = this,
                     DrawImage = true,
-                    NotControl = true,
+                    NotControl = !Settings.DevMode,
                     Visible = false,
                 };
             }
@@ -1761,7 +1761,7 @@ namespace Client.MirScenes.Dialogs
                         Location = cell.Location,
                         Parent = this,
                         Loop = false,
-                        NotControl = true,
+                        NotControl = !Settings.DevMode,
                         UseOffSet = true,
                         Blending = true,
                     };
@@ -1981,7 +1981,7 @@ namespace Client.MirScenes.Dialogs
                     Library = Libraries.Prguse2,
                     Parent = this,
                     Location = new Point(i * 25 + 15, 3),
-                    NotControl = true,
+                    NotControl = !Settings.DevMode,
                     UseOffSet = true,
                     Loop = false,
                     Animated = false,
@@ -1997,7 +1997,7 @@ namespace Client.MirScenes.Dialogs
                 Parent = this,
                 Location = new Point(0, 1),
                 Size = new Size(10, 25),
-                NotControl = true
+                NotControl = !Settings.DevMode
             };
 
             for (var i = 0; i < KeyNameLabels.Length; i++)
@@ -2010,7 +2010,7 @@ namespace Client.MirScenes.Dialogs
                     Parent = this,
                     Location = new Point(i * 25 + 13, 0),
                     Size = new Size(25, 25),
-                    NotControl = true
+                    NotControl = !Settings.DevMode
                 };
             }
             OnMoving += SkillBar_OnMoving;
@@ -2153,7 +2153,7 @@ namespace Client.MirScenes.Dialogs
                             Library = Libraries.Prguse2,
                             Parent = this,
                             Location = new Point(i * 25 + 15, 3),
-                            NotControl = true,
+                            NotControl = !Settings.DevMode,
                             UseOffSet = true,
                             Loop = false,
                             Animated = true,
@@ -2263,19 +2263,21 @@ namespace Client.MirScenes.Dialogs
             };
             StatusPage.BeforeDraw += (o, e) =>
             {
-                ACLabel.Text = string.Format("{0}-{1}",56,112 );//MapObject.User.MinAC, MapObject.User.MaxAC);
-                MACLabel.Text = string.Format("{0}-{1}", MapObject.User.MinMAC, MapObject.User.MaxMAC);
-                DCLabel.Text = string.Format("{0}-{1}", MapObject.User.MinDC, MapObject.User.MaxDC);
-                MCLabel.Text = string.Format("{0}-{1}", MapObject.User.MinMC, MapObject.User.MaxMC);
-                SCLabel.Text = string.Format("{0}-{1}", MapObject.User.MinSC, MapObject.User.MaxSC);
-                HealthLabel.Text = string.Format("{0}/{1}", MapObject.User.HP, MapObject.User.MaxHP);
-                ManaLabel.Text = string.Format("{0}/{1}", MapObject.User.MP, MapObject.User.MaxMP);
-                CritRLabel.Text = string.Format("{0}%", MapObject.User.CriticalRate);
-                CritDLabel.Text = string.Format("{0}", MapObject.User.CriticalDamage);
-                AttkSpdLabel.Text = string.Format("{0}", MapObject.User.ASpeed);
-                AccLabel.Text = string.Format("+{0}", MapObject.User.Accuracy);
-                AgilLabel.Text = string.Format("+{0}", MapObject.User.Agility);
-                LuckLabel.Text = string.Format("{0}", MapObject.User.Luck);
+                ACLabel.Text = string.Format("AC:{0}-{1}", MapObject.User.MinAC, MapObject.User.MaxAC);
+                MACLabel.Text = string.Format("MAC:{0}-{1}", MapObject.User.MinMAC, MapObject.User.MaxMAC);
+                DCLabel.Text = string.Format("DC:{0}-{1}", MapObject.User.MinDC, MapObject.User.MaxDC);
+                MCLabel.Text = string.Format("MC:{0}-{1}", MapObject.User.MinMC, MapObject.User.MaxMC);
+                SCLabel.Text = string.Format("SC:{0}-{1}", MapObject.User.MinSC, MapObject.User.MaxSC);
+                HealthLabel.Text = string.Format("HP:{0}/{1}", MapObject.User.HP, MapObject.User.MaxHP);
+                ManaLabel.Text = string.Format("MP:{0}/{1}", MapObject.User.MP, MapObject.User.MaxMP);
+                //new UI label
+                CritRLabel.Text = string.Format("CritR:{0}%", MapObject.User.CriticalRate);
+                CritDLabel.Text = string.Format("CritD:{0}", MapObject.User.CriticalDamage);
+                AttkSpdLabel.Text = string.Format("AttkSpd:{0}", MapObject.User.ASpeed);
+                AccLabel.Text = string.Format("Acc:+{0}", MapObject.User.Accuracy);
+                AgilLabel.Text = string.Format("Agility:+{0}", MapObject.User.Agility);
+                LuckLabel.Text = string.Format("Luck:{0}", MapObject.User.Luck);
+
             };
 
             StatePage = new MirImageControl
@@ -2288,21 +2290,21 @@ namespace Client.MirScenes.Dialogs
             };
             StatePage.BeforeDraw += (o, e) =>
             {
-                ExpPLabel.Text = string.Format("{0:0.##%}", MapObject.User.Experience / (double)MapObject.User.MaxExperience);
-                BagWLabel.Text = string.Format("{0}/{1}", MapObject.User.CurrentBagWeight, MapObject.User.MaxBagWeight);
-                WearWLabel.Text = string.Format("{0}/{1}", MapObject.User.CurrentWearWeight, MapObject.User.MaxWearWeight);
-                HandWLabel.Text = string.Format("{0}/{1}", MapObject.User.CurrentHandWeight, MapObject.User.MaxHandWeight);
-                MagicRLabel.Text = string.Format("+{0}", MapObject.User.MagicResist);
-                PoisonResLabel.Text = string.Format("+{0}", MapObject.User.PoisonResist);
-                HealthRLabel.Text = string.Format("+{0}", MapObject.User.HealthRecovery);
-                ManaRLabel.Text = string.Format("+{0}", MapObject.User.SpellRecovery);
-                PoisonRecLabel.Text = string.Format("+{0}", MapObject.User.PoisonRecovery);
-                HolyTLabel.Text = string.Format("+{0}", MapObject.User.Holy);
-                FreezeLabel.Text = string.Format("+{0}", MapObject.User.Freezing);
-                PoisonAtkLabel.Text = string.Format("+{0}", MapObject.User.PoisonAttack);
+                ExpPLabel.Text = string.Format("ExpP:{0:0.##%}", MapObject.User.Experience / (double)MapObject.User.MaxExperience);
+                BagWLabel.Text = string.Format("BagW:{0}/{1}", MapObject.User.CurrentBagWeight, MapObject.User.MaxBagWeight);
+                WearWLabel.Text = string.Format("WearW:{0}/{1}", MapObject.User.CurrentWearWeight, MapObject.User.MaxWearWeight);
+                HandWLabel.Text = string.Format("HandW:{0}/{1}", MapObject.User.CurrentHandWeight, MapObject.User.MaxHandWeight);
+                MagicRLabel.Text = string.Format("MagicR:+{0}", MapObject.User.MagicResist);
+                PoisonResLabel.Text = string.Format("PoisonRes:+{0}", MapObject.User.PoisonResist);
+                HealthRLabel.Text = string.Format("HealthR:+{0}", MapObject.User.HealthRecovery);
+                ManaRLabel.Text = string.Format("ManaR:+{0}", MapObject.User.SpellRecovery);
+                PoisonRecLabel.Text = string.Format("PoisonRec:+{0}", MapObject.User.PoisonRecovery);
+                HolyTLabel.Text = string.Format("HolyT:+{0}", MapObject.User.Holy);
+                FreezeLabel.Text = string.Format("Freeze:+{0}", MapObject.User.Freezing);
+                PoisonAtkLabel.Text = string.Format("PoisonAt:+{0}", MapObject.User.PoisonAttack);
             };
 
-
+            #region Page setting
             SkillPage = new MirImageControl
             {
                 Index = 33,
@@ -2380,7 +2382,7 @@ namespace Client.MirScenes.Dialogs
                 Parent = this,
                 Location = new Point(-7, 15),
                 Size = new Size(264, 20),
-                NotControl = true,
+                NotControl = !Settings.DevMode,
             };
             GuildLabel = new MirLabel
             {
@@ -2388,7 +2390,7 @@ namespace Client.MirScenes.Dialogs
                 Parent = this,
                 Location = new Point(0, 33),
                 Size = new Size(264, 30),
-                NotControl = true,
+                NotControl = !Settings.DevMode,
             };
             ClassImage = new MirImageControl
             {
@@ -2396,9 +2398,10 @@ namespace Client.MirScenes.Dialogs
                 Library = Libraries.Prguse,
                 Location = new Point(15, 33),
                 Parent = this,
-                NotControl = true,
+                NotControl = !Settings.DevMode,
             };
-
+            #endregion
+            #region equip Grid
             Grid = new MirItemCell[Enum.GetNames(typeof(EquipmentSlot)).Length];
 
             Grid[(int)EquipmentSlot.Weapon] = new MirItemCell
@@ -2521,14 +2524,15 @@ namespace Client.MirScenes.Dialogs
                 Parent = CharacterPage,
                 Location = new Point(169, 202),
             };
+            #endregion
 
-            // STATS I
+            #region STATS I
             HealthLabel = new MirLabel
             {
                 AutoSize = true,
                 Parent = StatusPage,
                 Location = new Point(126, 20),
-                NotControl = true,
+                NotControl = !Settings.DevMode,
                 Text = "0-0",
             };
 
@@ -2537,7 +2541,7 @@ namespace Client.MirScenes.Dialogs
                 AutoSize = true,
                 Parent = StatusPage,
                 Location = new Point(126, 38),
-                NotControl = true,
+                NotControl = !Settings.DevMode,
                 Text = "0-0",
             };
 
@@ -2546,7 +2550,7 @@ namespace Client.MirScenes.Dialogs
                 AutoSize = true,
                 Parent = StatusPage,
                 Location = new Point(126, 56),
-                NotControl = true,
+                NotControl = !Settings.DevMode,
                 Text = "0-0",
             };
 
@@ -2555,7 +2559,7 @@ namespace Client.MirScenes.Dialogs
                 AutoSize = true,
                 Parent = StatusPage,
                 Location = new Point(126, 74),
-                NotControl = true,
+                NotControl = !Settings.DevMode,
                 Text = "0-0",
             };
             DCLabel = new MirLabel
@@ -2563,7 +2567,7 @@ namespace Client.MirScenes.Dialogs
                 AutoSize = true,
                 Parent = StatusPage,
                 Location = new Point(126, 92),
-                NotControl = true,
+                NotControl = !Settings.DevMode,
                 Text = "0-0"
             };
             MCLabel = new MirLabel
@@ -2571,7 +2575,7 @@ namespace Client.MirScenes.Dialogs
                 AutoSize = true,
                 Parent = StatusPage,
                 Location = new Point(126, 110),
-                NotControl = true,
+                NotControl = !Settings.DevMode,
                 Text = "0/0"
             };
             SCLabel = new MirLabel
@@ -2579,59 +2583,62 @@ namespace Client.MirScenes.Dialogs
                 AutoSize = true,
                 Parent = StatusPage,
                 Location = new Point(126, 128),
-                NotControl = true,
+                NotControl = !Settings.DevMode,
                 Text = "0/0"
             };
-            //Breezer - New Labels
+
+            #region Breezer - New Labels
             CritRLabel = new MirLabel
             {
                 AutoSize = true,
                 Parent = StatusPage,
                 Location = new Point(126, 146),
-                NotControl = true,
+                NotControl = !Settings.DevMode,
             };
             CritDLabel = new MirLabel
             {
                 AutoSize = true,
                 Parent = StatusPage,
                 Location = new Point(126, 164),
-                NotControl = true
+                NotControl = !Settings.DevMode
             };
             AttkSpdLabel = new MirLabel
             {
                 AutoSize = true,
                 Parent = StatusPage,
                 Location = new Point(126, 182),
-                NotControl = true
+                NotControl = !Settings.DevMode
             };
             AccLabel = new MirLabel
             {
                 AutoSize = true,
                 Parent = StatusPage,
                 Location = new Point(126, 200),
-                NotControl = true
+                NotControl = !Settings.DevMode
             };
             AgilLabel = new MirLabel
             {
                 AutoSize = true,
                 Parent = StatusPage,
                 Location = new Point(126, 218),
-                NotControl = true
+                NotControl = !Settings.DevMode
             };
             LuckLabel = new MirLabel
             {
                 AutoSize = true,
                 Parent = StatusPage,
                 Location = new Point(126, 236),
-                NotControl = true
+                NotControl = !Settings.DevMode
             };
-            // STATS II 
+            #endregion
+            #endregion
+            #region STATS II 
             ExpPLabel = new MirLabel
             {
                 AutoSize = true,
                 Parent = StatePage,
                 Location = new Point(126, 20),
-                NotControl = true,
+                NotControl = !Settings.DevMode,
                 Text = "0-0",
             };
 
@@ -2640,7 +2647,7 @@ namespace Client.MirScenes.Dialogs
                 AutoSize = true,
                 Parent = StatePage,
                 Location = new Point(126, 38),
-                NotControl = true,
+                NotControl = !Settings.DevMode,
                 Text = "0-0",
             };
 
@@ -2649,7 +2656,7 @@ namespace Client.MirScenes.Dialogs
                 AutoSize = true,
                 Parent = StatePage,
                 Location = new Point(126, 56),
-                NotControl = true,
+                NotControl = !Settings.DevMode,
                 Text = "0-0",
             };
 
@@ -2658,7 +2665,7 @@ namespace Client.MirScenes.Dialogs
                 AutoSize = true,
                 Parent = StatePage,
                 Location = new Point(126, 74),
-                NotControl = true,
+                NotControl = !Settings.DevMode,
                 Text = "0-0",
             };
             MagicRLabel = new MirLabel
@@ -2666,7 +2673,7 @@ namespace Client.MirScenes.Dialogs
                 AutoSize = true,
                 Parent = StatePage,
                 Location = new Point(126, 92),
-                NotControl = true,
+                NotControl = !Settings.DevMode,
                 Text = "0-0"
             };
             PoisonResLabel = new MirLabel
@@ -2674,7 +2681,7 @@ namespace Client.MirScenes.Dialogs
                 AutoSize = true,
                 Parent = StatePage,
                 Location = new Point(126, 110),
-                NotControl = true,
+                NotControl = !Settings.DevMode,
                 Text = "0/0"
             };
             HealthRLabel = new MirLabel
@@ -2682,46 +2689,48 @@ namespace Client.MirScenes.Dialogs
                 AutoSize = true,
                 Parent = StatePage,
                 Location = new Point(126, 128),
-                NotControl = true,
+                NotControl = !Settings.DevMode,
                 Text = "0/0"
             };
-            //Breezer
+            #region Breezer
             ManaRLabel = new MirLabel
             {
                 AutoSize = true,
                 Parent = StatePage,
                 Location = new Point(126, 146),
-                NotControl = true
+                NotControl = !Settings.DevMode
             };
             PoisonRecLabel = new MirLabel
             {
                 AutoSize = true,
                 Parent = StatePage,
                 Location = new Point(126, 164),
-                NotControl = true
+                NotControl = !Settings.DevMode
             };
             HolyTLabel = new MirLabel
             {
                 AutoSize = true,
                 Parent = StatePage,
                 Location = new Point(126, 182),
-                NotControl = true
+                NotControl = !Settings.DevMode
             };
             FreezeLabel = new MirLabel
             {
                 AutoSize = true,
                 Parent = StatePage,
                 Location = new Point(126, 200),
-                NotControl = true
+                NotControl = !Settings.DevMode
             };
             PoisonAtkLabel = new MirLabel
             {
                 AutoSize = true,
                 Parent = StatePage,
                 Location = new Point(126, 218),
-                NotControl = true
+                NotControl = !Settings.DevMode
             };
-
+            #endregion
+            #endregion
+            #region magic
             Magics = new MagicButton[7];
 
             for (int i = 0; i < Magics.Length; i++)
@@ -2764,7 +2773,7 @@ namespace Client.MirScenes.Dialogs
 
                 ClearCoolDowns();
             };
-
+            #endregion
             PageUpButton = new MirButton
             {
                 //Index = 373,
@@ -2967,7 +2976,7 @@ namespace Client.MirScenes.Dialogs
                 Parent = this,
                 Size = new Size(120, 18),
                 Location = new Point(2, 2),
-                NotControl = true,
+                NotControl = !Settings.DevMode,
             };
 
             LocationLabel = new MirLabel
@@ -2976,7 +2985,7 @@ namespace Client.MirScenes.Dialogs
                 Parent = this,
                 Size = new Size(56, 18),
                 Location = new Point(46, 131),
-                NotControl = true,
+                NotControl = !Settings.DevMode,
             };
 
             MailButton = new MirButton
@@ -2999,7 +3008,7 @@ namespace Client.MirScenes.Dialogs
                 Parent = this,
                 Library = Libraries.Prguse,
                 Visible = false,
-                NotControl = true
+                NotControl = !Settings.DevMode
             };
 
             BigMapButton = new MirButton
@@ -3189,7 +3198,7 @@ namespace Client.MirScenes.Dialogs
                         Text = text,
                         ForeColour = color,
                         Location = new Point((int)(x - Settings.ScreenWidth + GameScene.Scene.MiniMapDialog.Size.Width) - 6, (int)(y) - 10),
-                        NotControl = true,
+                        NotControl = !Settings.DevMode,
                         Visible = true,
                         Modal = true
                     });
@@ -3489,7 +3498,7 @@ namespace Client.MirScenes.Dialogs
                 Parent = this,
                 Location = new Point(50, 12),
                 Size = new Size(190, 20),
-                NotControl = true
+                NotControl = !Settings.DevMode
             };
             NameLabel.Click += (o, e) =>
             {
@@ -3515,7 +3524,7 @@ namespace Client.MirScenes.Dialogs
                 Parent = this,
                 Location = new Point(50, 33),
                 Size = new Size(190, 30),
-                NotControl = true,
+                NotControl = !Settings.DevMode,
             };
 
             ClassImage = new MirImageControl
@@ -3524,7 +3533,7 @@ namespace Client.MirScenes.Dialogs
                 Library = Libraries.Prguse,
                 Location = new Point(15, 33),
                 Parent = this,
-                NotControl = true,
+                NotControl = !Settings.DevMode,
             };
 
 
@@ -3901,7 +3910,7 @@ namespace Client.MirScenes.Dialogs
                 Library = Libraries.Prguse,
                 Location = new Point(155, 218),
                 Parent = this,
-                NotControl = true,
+                NotControl = !Settings.DevMode,
             };
 
             MusicSoundBar = new MirImageControl
@@ -3923,7 +3932,7 @@ namespace Client.MirScenes.Dialogs
                 Library = Libraries.Prguse,
                 Location = new Point(155, 244),
                 Parent = this,
-                NotControl = true,
+                NotControl = !Settings.DevMode,
             };
 
         }
@@ -4417,7 +4426,7 @@ namespace Client.MirScenes.Dialogs
                 Library = Libraries.Title,
                 Location = new Point(73, 7),
                 Parent = this,
-                NotControl = true,
+                NotControl = !Settings.DevMode,
             };
 
             ExpImage = new MirImageControl
@@ -4426,7 +4435,7 @@ namespace Client.MirScenes.Dialogs
                 Library = Libraries.Title,
                 Location = new Point(73, 19),
                 Parent = this,
-                NotControl = true,
+                NotControl = !Settings.DevMode,
             };
 
             LevelLabel = new MirLabel
@@ -4434,7 +4443,7 @@ namespace Client.MirScenes.Dialogs
                 AutoSize = true,
                 Parent = this,
                 Location = new Point(88, 2),
-                NotControl = true,
+                NotControl = !Settings.DevMode,
             };
 
             NameLabel = new MirLabel
@@ -4442,7 +4451,7 @@ namespace Client.MirScenes.Dialogs
                 AutoSize = true,
                 Parent = this,
                 Location = new Point(109, 2),
-                NotControl = true,
+                NotControl = !Settings.DevMode,
             };
 
             ExpLabel = new MirLabel
@@ -4450,7 +4459,7 @@ namespace Client.MirScenes.Dialogs
                 AutoSize = true,
                 Parent = this,
                 Location = new Point(109, 15),
-                NotControl = true,
+                NotControl = !Settings.DevMode,
             };
 
             KeyLabel = new MirLabel
@@ -4458,7 +4467,7 @@ namespace Client.MirScenes.Dialogs
                 AutoSize = true,
                 Parent = this,
                 Location = new Point(2, 2),
-                NotControl = true,
+                NotControl = !Settings.DevMode,
             };
 
             CoolDown = new MirAnimatedControl
@@ -4466,7 +4475,7 @@ namespace Client.MirScenes.Dialogs
                 Library = Libraries.Prguse2,
                 Parent = this,
                 Location = new Point(36, 0),
-                NotControl = true,
+                NotControl = !Settings.DevMode,
                 UseOffSet = true,
                 Loop = false,
                 Animated = false,
@@ -4540,7 +4549,7 @@ namespace Client.MirScenes.Dialogs
                     Library = Libraries.Prguse2,
                     Parent = this,
                     Location = new Point(36, 0),
-                    NotControl = true,
+                    NotControl = !Settings.DevMode,
                     UseOffSet = true,
                     Loop = false,
                     Animated = true,
@@ -4845,7 +4854,7 @@ namespace Client.MirScenes.Dialogs
     {
         public BigMapDialog()
         {
-            NotControl = true;
+            NotControl = !Settings.DevMode;
             Location = new Point(130, 100);
             //Border = true;
             //BorderColour = Color.Lime;

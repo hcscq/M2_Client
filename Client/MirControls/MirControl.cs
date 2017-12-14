@@ -11,6 +11,8 @@ namespace Client.MirControls
 {
     public class MirControl : IDisposable
     {
+        public static int GDevIndex = 0;
+        public int DevIndex;
         public static MirControl ActiveControl, MouseControl,AjustControl;
         
         public virtual Point DisplayLocation { get { return Parent == null ? Location : Parent.DisplayLocation.Add(Location); } }
@@ -382,7 +384,7 @@ namespace Client.MirControls
             {
                 if (_notControl == value)
                     return;
-                _notControl = Settings.ShowMouseLocation?false: value;
+                _notControl = value;
                 OnNotControlChanged();
             }
         }
@@ -685,11 +687,12 @@ namespace Client.MirControls
             _foreColour = Color.White;
             _visible = true;
             _sound = SoundList.None;
-            if (Settings.ShowMouseLocation)
+            if (Settings.DevMode)
             {
                 Movable = true;
                 MouseUp += MirImageControl_MouseClick;
                 KeyUp += MirImageControl_KeyUp;
+                DevIndex=GDevIndex++;
             }
         }
         private void MirImageControl_KeyUp(object sender, System.Windows.Forms.KeyEventArgs e)

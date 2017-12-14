@@ -8,7 +8,7 @@ namespace Client
     class Settings
     {
         public enum InterfaceVersion {CLASSIC,NEWUI }
-        public static bool ShowMouseLocation = false;
+        public static bool DevMode = false;
 
         public const InterfaceVersion InterfaceV = InterfaceVersion.CLASSIC;
         public const long CleanDelay = 600000;

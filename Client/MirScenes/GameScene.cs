@@ -174,7 +174,7 @@ namespace Client.MirScenes
 
         public GameScene()
         {
-            Settings.ShowMouseLocation = true;
+            Settings.DevMode = true;
 
             MapControl.AutoRun = false;
             MapControl.AutoHit = false;
@@ -279,6 +279,8 @@ namespace Client.MirScenes
                     Location = new Point(20, 25 + i * 13),
                     OutLine = true,
                 };
+            //LocationNode location=ControlsLocation.GetLocationList(this);
+            //string re="";
         }
 
         public void OutputMessage(string message, OutputMessageType type = OutputMessageType.Normal)

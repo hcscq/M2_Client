@@ -2268,13 +2268,13 @@ namespace Client.MirScenes.Dialogs
             };
             StatusPage.BeforeDraw += (o, e) =>
             {
-                ACLabel.Text = string.Format("AC:{0}-{1}", MapObject.User.MinAC, MapObject.User.MaxAC);
-                MACLabel.Text = string.Format("MAC:{0}-{1}", MapObject.User.MinMAC, MapObject.User.MaxMAC);
-                DCLabel.Text = string.Format("DC:{0}-{1}", MapObject.User.MinDC, MapObject.User.MaxDC);
-                MCLabel.Text = string.Format("MC:{0}-{1}", MapObject.User.MinMC, MapObject.User.MaxMC);
-                SCLabel.Text = string.Format("SC:{0}-{1}", MapObject.User.MinSC, MapObject.User.MaxSC);
-                HealthLabel.Text = string.Format("HP:{0}/{1}", MapObject.User.HP, MapObject.User.MaxHP);
-                ManaLabel.Text = string.Format("MP:{0}/{1}", MapObject.User.MP, MapObject.User.MaxMP);
+                ACLabel.Text = string.Format("{0}-{1}", MapObject.User.MinAC, MapObject.User.MaxAC);
+                MACLabel.Text = string.Format("{0}-{1}", MapObject.User.MinMAC, MapObject.User.MaxMAC);
+                DCLabel.Text = string.Format("{0}-{1}", MapObject.User.MinDC, MapObject.User.MaxDC);
+                MCLabel.Text = string.Format("{0}-{1}", MapObject.User.MinMC, MapObject.User.MaxMC);
+                SCLabel.Text = string.Format("{0}-{1}", MapObject.User.MinSC, MapObject.User.MaxSC);
+                HealthLabel.Text = string.Format("{0}/{1}", MapObject.User.HP, MapObject.User.MaxHP);
+                ManaLabel.Text = string.Format("{0}/{1}", MapObject.User.MP, MapObject.User.MaxMP);
                 //new UI label
                 CritRLabel.Text = string.Format("CritR:{0}%", MapObject.User.CriticalRate);
                 CritDLabel.Text = string.Format("CritD:{0}", MapObject.User.CriticalDamage);
@@ -2396,6 +2396,7 @@ namespace Client.MirScenes.Dialogs
                 Location = new Point(0, 33),
                 Size = new Size(264, 30),
                 NotControl = !Settings.DevMode,
+                Visible=false
             };
             ClassImage = new MirImageControl
             {

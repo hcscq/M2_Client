@@ -236,7 +236,7 @@ namespace Server.MirNetwork
                 case (short)ClientPacketIds.CM_SELCHR:
                     StartGame((C.StartGame) p);
                     break;
-                case (short)ClientPacketIds.LogOut:
+                case (short)ClientPacketIds.CM_LOGOUT:
                     LogOut();
                     break;
                 case (short)ClientPacketIds.CM_TURN:
@@ -248,7 +248,7 @@ namespace Server.MirNetwork
                 case (short)ClientPacketIds.CM_RUN:
                     Run((C.Run) p);
                     break;
-                case (short)ClientPacketIds.CM_CHAT:
+                case (short)ClientPacketIds.CM_SAY:
                     Chat((C.Chat) p);
                     break;
                 case (short)ClientPacketIds.MoveItem:

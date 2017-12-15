@@ -1579,7 +1579,7 @@ public enum ClientPacketIds : short
     CM_TURN            =   3010,
     CM_WALK            =   3011,
     CM_RUN             =   3013,
-    CM_SAY             =   3030,
+    CM_SAY            =   3030,
     MoveItem,
     StoreItem,
     TakeBackItem,

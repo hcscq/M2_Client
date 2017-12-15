@@ -261,7 +261,7 @@ namespace ClientPackets
     }
     public sealed class LogOut : Packet
     {
-        public override short Index { get { return (short)ClientPacketIds.LogOut; } }
+        public override short Index { get { return (short)ClientPacketIds.CM_LOGOUT; } }
 
         protected override void ReadPacket(BinaryReader reader)
         {
@@ -316,7 +316,7 @@ namespace ClientPackets
     }
     public sealed class Chat : Packet
     {
-        public override short Index { get { return (short)ClientPacketIds.CM_CHAT; } }
+        public override short Index { get { return (short)ClientPacketIds.CM_SAY; } }
 
         public string Message = string.Empty;
         protected override void ReadPacket(BinaryReader reader)
@@ -744,9 +744,12 @@ namespace ClientPackets
     }
     public sealed class Attack : Packet
     {
+                            //									wIdent				nX					nY						nDir					nHitStyle
+		//case CM_FIREHIT://									wIdent				wParam			lParam1						lParam2					lParam3
+		//	m_pxPlayerObject->AddProcess(m_pxPlayerObject, lpDefMsg->wIdent, lpDefMsg->wTag, LOWORD(lpDefMsg->nRecog), HIWORD(lpDefMsg->nRecog), lpDefMsg->wParam, NULL);
         public override short Index { get { return (short)ClientPacketIds.Attack; } }
 
-        public MirDirection Direction;
+        public MirDirection Direction { get { return (MirDirection)wParam; } set { wParam = (short)value; } }
         public Spell Spell;
 
         protected override void ReadPacket(BinaryReader reader)

@@ -244,7 +244,7 @@ namespace netWorkTest.MirNetwork
                 case (short)ServerPacketIds.CM_SELCHR:
                     //StartGame((C.StartGame)p);
                     break;
-                case (short)ClientPacketIds.LogOut:
+                case (short)ClientPacketIds.CM_LOGOUT:
                     //LogOut();
                     break;
                 //case (short)ServerPacketIds.Turn:

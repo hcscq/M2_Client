@@ -229,7 +229,7 @@ namespace netWorkTest.MirNetwork
                 case (short)ServerPacketIds.SM_NEWID_SUCCESS:
                     //NewAccount((C.NewAccount)p);
                     break;
-                case (short)ServerPacketIds.CM_CHANGEPASSWORD:
+                case (short)ServerPacketIds.SM_CHANGEPASSWORD:
                     //ChangePassword((C.ChangePassword)p);
                     break;
                 case (short)ServerPacketIds.SM_PASSWD_FAIL:
@@ -241,9 +241,9 @@ namespace netWorkTest.MirNetwork
                 case (short)ServerPacketIds.SM_DELCHR_FAIL:
                     //DeleteCharacter((C.DeleteCharacter)p);
                     break;
-                case (short)ServerPacketIds.CM_SELCHR:
-                    //StartGame((C.StartGame)p);
-                    break;
+                //case (short)ServerPacketIds.SM_SELCHR:
+                //    //StartGame((C.StartGame)p);
+                //    break;
                 case (short)ClientPacketIds.CM_LOGOUT:
                     //LogOut();
                     break;
@@ -265,9 +265,9 @@ namespace netWorkTest.MirNetwork
                 case (short)ServerPacketIds.StoreItem:
                     //StoreItem((C.StoreItem)p);
                     break;
-                case (short)ClientPacketIds.DepositRefineItem:
-                    //DepositRefineItem((C.DepositRefineItem)p);
-                    break;
+                //case (short)ClientPacketIds.DepositRefineItem:
+                //    //DepositRefineItem((C.DepositRefineItem)p);
+                //    break;
                 case (short)ServerPacketIds.RetrieveRefineItem:
                     //RetrieveRefineItem((C.RetrieveRefineItem)p);
                     break;

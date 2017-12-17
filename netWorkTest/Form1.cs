@@ -26,7 +26,14 @@ namespace netWorkTest
         {
             InitializeComponent();
             this.Disposed += new EventHandler(OnClose);
-            Packet.IsServer = false;
+
+            int i = 2;
+            var s=System.BitConverter.GetBytes(i);
+            var b = System.BitConverter.GetBytes(-2);
+
+            int m = (b[3] << 24) | (b[2] << 16) | (b[1] << 8) | b[0];
+
+                Packet.IsServer = false;
             Button btn = new Button() { Text="OK"};
             btn.Size = new Size(50, 40);
             btn.Location = new Point(100,100);

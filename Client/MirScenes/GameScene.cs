@@ -1694,6 +1694,9 @@ namespace Client.MirScenes
                 case ServerMsgIds.SM_ABILITY:
                     Ability((SEX.Ablity)p);
                     break;
+                case (short)ServerPacketIds.SM_ACTIONRESULT:
+                    ActionResult((SEX.ActionResult)p);
+                    break;
                 case ServerMsgIds.SM_SUBABILITY:
                     break;
                 case ServerMsgIds.SM_SENDMYMAGIC:
@@ -1703,6 +1706,10 @@ namespace Client.MirScenes
                     base.ProcessPacket(p);
                     break;
             }
+        }
+        public void ActionResult(SEX.ActionResult P)
+        {
+            int m = P.ResultMsg[2];
         }
         public void SendMagic(SEX.SendMagic P)
         {

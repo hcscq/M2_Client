@@ -1318,6 +1318,7 @@ namespace Client.MirObjects
                 Spell = Spell.None;
                 SpellLevel = 0;
                 //NextMagic = null;
+                HitStyle hitStyle = HitStyle.HIT_NONE;
 
                 ClientMagic magic;
 
@@ -1372,7 +1373,7 @@ namespace Client.MirObjects
                             //CanSetAction = false;
                             break;
                         case MirAction.Mine:
-                            Network.Enqueue(new C.Attack { Direction = Direction, Spell = Spell.None });
+                            Network.Enqueue(new C.Attack { Direction = Direction ,X=(short)CurrentLocation.X,Y=(short)CurrentLocation.Y ,HitStyle = HitStyle.HIT_NONE });
                             GameScene.AttackTime = CMain.Time + (1400 - Math.Min(370, (User.Level * 14)));
                             MapControl.NextAction = CMain.Time + 2500;
                             break;
@@ -1385,7 +1386,10 @@ namespace Client.MirObjects
                                     Spell = Spell.Slaying;
 
                                 if (GameScene.Thrusting && GameScene.Scene.MapControl.HasTarget(Functions.PointMove(CurrentLocation, Direction, 2)))
+                                {
                                     Spell = Spell.Thrusting;
+                                    hitStyle = HitStyle.HIT_LONGHIT;
+                                }
 
                                 if (GameScene.HalfMoon)
                                 {
@@ -1393,7 +1397,10 @@ namespace Client.MirObjects
                                     {
                                         magic = User.GetMagic(Spell.HalfMoon);
                                         if (magic != null && magic.BaseCost + magic.LevelCost * magic.Level <= User.MP)
+                                        {
                                             Spell = Spell.HalfMoon;
+                                            hitStyle = HitStyle.HIT_WIDEHIT;
+                                        }
                                     }
                                 }
 
@@ -1403,7 +1410,10 @@ namespace Client.MirObjects
                                     {
                                         magic = User.GetMagic(Spell.CrossHalfMoon);
                                         if (magic != null && magic.BaseCost + magic.LevelCost * magic.Level <= User.MP)
+                                        {
                                             Spell = Spell.CrossHalfMoon;
+                                            hitStyle = HitStyle.HIT_CORSSWIDEHIT;
+                                        }
                                     }
                                 }
 
@@ -1411,7 +1421,9 @@ namespace Client.MirObjects
                                 {
                                     magic = User.GetMagic(Spell.DoubleSlash);
                                     if (magic != null && magic.BaseCost + magic.LevelCost * magic.Level <= User.MP)
+                                    {
                                         Spell = Spell.DoubleSlash;
+                                    }
                                 }
 
 
@@ -1419,7 +1431,9 @@ namespace Client.MirObjects
                                 {
                                     magic = User.GetMagic(Spell.TwinDrakeBlade);
                                     if (magic != null && magic.BaseCost + magic.LevelCost * magic.Level <= User.MP)
+                                    {
                                         Spell = Spell.TwinDrakeBlade;
+                                    }
                                 }
 
                                 if (GameScene.FlamingSword)
@@ -1428,12 +1442,15 @@ namespace Client.MirObjects
                                     {
                                         magic = User.GetMagic(Spell.FlamingSword);
                                         if (magic != null)
+                                        {
                                             Spell = Spell.FlamingSword;
+                                            hitStyle = HitStyle.HIT_FIREHIT;
+                                        }
                                     }
                                 }
                             }
 
-                            Network.Enqueue(new C.Attack { Direction = Direction, Spell = Spell });
+                            Network.Enqueue(new C.Attack { Direction = Direction, X = (short)CurrentLocation.X, Y = (short)CurrentLocation.Y, HitStyle = hitStyle });
 
                             if (Spell == Spell.Slaying)
                                 GameScene.Slaying = false;

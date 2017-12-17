@@ -990,7 +990,18 @@ public enum ItemSet : byte
     Paeok = 29,
     Sulgwan = 30
 }
-
+[Obfuscation(Feature = "renaming", Exclude = true)]
+public enum HitStyle : byte
+{
+    HIT_NONE = 10,
+    HIT_HEAVYHIT = 11,
+    HIT_BIGHIT = 12,
+    HIT_POWERHIT = 13,
+    HIT_LONGHIT = 14,
+    HIT_WIDEHIT = 15,
+    HIT_FIREHIT = 16,
+    HIT_CORSSWIDEHIT=17
+}
 [Obfuscation(Feature = "renaming", Exclude = true)]
 public enum Spell : byte
 {
@@ -1328,10 +1339,7 @@ public enum ServerPacketIds : short
 
 
     // For game process
-    CM_TURN = 3010,
-    CM_WALK = 3011,
-    CM_RUN = 3013,
-    CM_CHAT = 3030,
+    SM_ACTIONRESULT=3000,
 
     StartGameBanned,
     StartGameDelay,
@@ -1579,7 +1587,8 @@ public enum ClientPacketIds : short
     CM_TURN            =   3010,
     CM_WALK            =   3011,
     CM_RUN             =   3013,
-    CM_SAY             =   3030,
+    CM_HIT             =   3014,
+    CM_SAY             =   3030,  
     MoveItem,
     StoreItem,
     TakeBackItem,
@@ -1604,7 +1613,7 @@ public enum ClientPacketIds : short
     ChangeAMode,
     ChangePMode,
     ChangeTrade,
-    Attack,
+    //Attack,
     RangeAttack,
     Harvest,
     CallNPC,
@@ -4509,6 +4518,7 @@ public struct MSGSIZE
     public const short DEFENCODE = 22;
     public const short MSGHEADER = 1;
     public const short MSGHEADERENCODE = 1;
+    public const short ACTIONRESULT = 8;
 
 }
 class EnDecode
@@ -4609,7 +4619,8 @@ class EnDecode
 public abstract class Packet
 {
     public static bool IsServer;
-
+    public const string MSG_GOOD = "+GOOD/" ;
+    public const string MSG_FAIL = "+FAIL/";
     public abstract short Index { get; }
 
     public int nLen;
@@ -4681,56 +4692,75 @@ public abstract class Packet
         extra = rawBytes;
 
         Packet p;
+        int length;
 
-        
-        if (  rawBytes.Length <= MSGSIZE.DEFENCODE|| rawBytes[0] != 35) return null; //'#'| 2Bytes: Packet Size | 2Bytes: Packet ID |data|'!''$'
-        byte[] defMsg = new byte[MSGSIZE.DEFMSG];
 
-        EnDecode.fnDecode6BitBufA(rawBytes, defMsg, 0, MSGSIZE.DEFMSG, 1, MSGSIZE.DEFENCODE + 1);
 
-        int length = (defMsg[3] << 24) + (defMsg[2] << 16) + (defMsg[1] << 8) + defMsg[0];
-
-        if (length + 2 > rawBytes.Length || length < MSGSIZE.DEFENCODE) return null;
-
-        short id = (short)(defMsg[8] + (defMsg[9] << 8));//reader.ReadInt16();
-
-        p = IsServer ? GetClientPacket(id) : GetServerPacket(id);
-
-        if (p == null) return null;
-
-        using (MemoryStream stream = new MemoryStream(defMsg, 0, MSGSIZE.DEFMSG))
-        using (BinaryReader reader = new BinaryReader(stream))
+        if (rawBytes[0] != 35) return null; //'#'| 2Bytes: Packet Size | 2Bytes: Packet ID |data|'!''$'
+        if (rawBytes[1] == 43 )//&& rawBytes.Length == MSGSIZE.ACTIONRESULT)
         {
-            try
+            
+            //public const string MSG_GOOD = "+GOOD/";
+            //public const string MSG_FAIL = "+FAIL/";
+            using (MemoryStream stream = new MemoryStream(rawBytes, 1, MSGSIZE.ACTIONRESULT))
+            using (BinaryReader reader = new BinaryReader(stream))
             {
-                p.ReadBaseBytes(reader);
+                p = new ServerPacketsEx.ActionResult();
+                p.ReadPacket(reader);
+            }
+            length = MSGSIZE.ACTIONRESULT;
 
-            }
-            catch
-            {
-                return null;
-                //return new C.Disconnect();
-            }
         }
-        if (length > MSGSIZE.DEFENCODE)
+        else
         {
-            using (MemoryStream stream = new MemoryStream(rawBytes, 0,
-                EnDecode.fnDecode6BitBufA(rawBytes, rawBytes, 0, length - MSGSIZE.DEFENCODE, 1 + MSGSIZE.DEFENCODE, length + 1)))
+            if (rawBytes.Length <= MSGSIZE.DEFENCODE) return null;
+            byte[] defMsg = new byte[MSGSIZE.DEFMSG];
+
+            EnDecode.fnDecode6BitBufA(rawBytes, defMsg, 0, MSGSIZE.DEFMSG, 1, MSGSIZE.DEFENCODE + 1);
+
+            length = (defMsg[3] << 24) | (defMsg[2] << 16) | (defMsg[1] << 8) | defMsg[0];
+
+            if (length + 2 > rawBytes.Length || length < MSGSIZE.DEFENCODE) return null;
+
+            short id = (short)(defMsg[8] + (defMsg[9] << 8));//reader.ReadInt16();
+
+            p = IsServer ? GetClientPacket(id) : GetServerPacket(id);
+
+            if (p == null) return null;
+
+            using (MemoryStream stream = new MemoryStream(defMsg, 0, MSGSIZE.DEFMSG))
             using (BinaryReader reader = new BinaryReader(stream))
             {
                 try
                 {
-                    p.ReadPacket(reader);
+                    p.ReadBaseBytes(reader);
+
                 }
-                catch(Exception e1)
+                catch
                 {
-                    //int error = 1;
                     return null;
                     //return new C.Disconnect();
                 }
             }
+            if (length > MSGSIZE.DEFENCODE)
+            {
+                using (MemoryStream stream = new MemoryStream(rawBytes, 0,
+                    EnDecode.fnDecode6BitBufA(rawBytes, rawBytes, 0, length - MSGSIZE.DEFENCODE, 1 + MSGSIZE.DEFENCODE, length + 1)))
+                using (BinaryReader reader = new BinaryReader(stream))
+                {
+                    try
+                    {
+                        p.ReadPacket(reader);
+                    }
+                    catch (Exception e1)
+                    {
+                        //int error = 1;
+                        return null;
+                        //return new C.Disconnect();
+                    }
+                }
+            }
         }
-
         extra = new byte[rawBytes.Length - 2 - length];
         Buffer.BlockCopy(rawBytes, 2 + length, extra, 0, rawBytes.Length - length - 2);
 
@@ -4883,7 +4913,7 @@ public abstract class Packet
                 return new C.ChangePMode();
             case (short)ClientPacketIds.ChangeTrade:
                 return new C.ChangeTrade();
-            case (short)ClientPacketIds.Attack:
+            case (short)ClientPacketIds.CM_HIT:
                 return new C.Attack();
             case (short)ClientPacketIds.RangeAttack:
                 return new C.RangeAttack();

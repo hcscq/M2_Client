@@ -747,20 +747,21 @@ namespace ClientPackets
                             //									wIdent				nX					nY						nDir					nHitStyle
 		//case CM_FIREHIT://									wIdent				wParam			lParam1						lParam2					lParam3
 		//	m_pxPlayerObject->AddProcess(m_pxPlayerObject, lpDefMsg->wIdent, lpDefMsg->wTag, LOWORD(lpDefMsg->nRecog), HIWORD(lpDefMsg->nRecog), lpDefMsg->wParam, NULL);
-        public override short Index { get { return (short)ClientPacketIds.Attack; } }
+        public override short Index { get { return (short)ClientPacketIds.CM_HIT; } }
 
-        public MirDirection Direction { get { return (MirDirection)wParam; } set { wParam = (short)value; } }
-        public Spell Spell;
-
+        public MirDirection Direction { get { return (MirDirection)(nRecog&0xffff0000); } set { nRecog = (0x0000ffff&nRecog)| ((short)value<<8); } }
+        public HitStyle HitStyle { get { return (HitStyle)wParam; }set {  wParam=(short)value; } }
+        public short X { get { return wParam; }set { wParam = value; } }
+        public short Y { get { return  (short)(nRecog & 0x0000ffff);  }set { nRecog = (int)(nRecog&0x0000ffff)|value; } }
         protected override void ReadPacket(BinaryReader reader)
         {
             Direction = (MirDirection) reader.ReadByte();
-            Spell = (Spell) reader.ReadByte();
+            //Spell = (Spell) reader.ReadByte();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
             writer.Write((byte)Direction);
-            writer.Write((byte)Spell);
+            //writer.Write((byte)Spell);
         }
     }
     public sealed class RangeAttack : Packet //ArcherTest

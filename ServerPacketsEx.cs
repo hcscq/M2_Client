@@ -6,6 +6,25 @@ using System.IO;
 namespace ServerPacketsEx
 {
     /*G sence packet*/
+    public sealed class ActionResult : Packet
+    {
+        public override short Index
+        {
+            get
+            {
+                return (short)ServerPacketIds.SM_ACTIONRESULT;
+            }
+        }
+        public byte[] ResultMsg; 
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            ResultMsg= reader.ReadBytes(6);
+        }
+        protected override void WritePacket(BinaryWriter writer)
+        {
+        }
+    }
     public sealed class NewMap : Packet
     {
         public override short Index

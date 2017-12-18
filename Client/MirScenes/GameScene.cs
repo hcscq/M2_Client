@@ -9425,6 +9425,7 @@ namespace Client.MirScenes
             if (MouseControl == this)
             {
                 direction = MouseDirection();
+                //GameScene.Scene.OutputMessage(MouseLocation.ToString());
                 if (AutoRun)
                 {
                     if (GameScene.CanRun && CanRun(direction) && CMain.Time > GameScene.NextRunTime && User.HP >= 10 && (!User.Sneaking || (User.Sneaking && User.Sprint))) //slow remove

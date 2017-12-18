@@ -749,10 +749,10 @@ namespace ClientPackets
 		//	m_pxPlayerObject->AddProcess(m_pxPlayerObject, lpDefMsg->wIdent, lpDefMsg->wTag, LOWORD(lpDefMsg->nRecog), HIWORD(lpDefMsg->nRecog), lpDefMsg->wParam, NULL);
         public override short Index { get { return (short)ClientPacketIds.CM_HIT; } }
 
-        public MirDirection Direction { get { return (MirDirection)(nRecog&0xffff0000); } set { nRecog = (0x0000ffff&nRecog)| ((short)value<<8); } }
+        public MirDirection Direction { get { return (MirDirection)(nRecog>>16); } set { nRecog = (0x0000ffff&nRecog)| ((int)value<<16); } }
         public HitStyle HitStyle { get { return (HitStyle)wParam; }set {  wParam=(short)value; } }
-        public short X { get { return wParam; }set { wParam = value; } }
-        public short Y { get { return  (short)(nRecog & 0x0000ffff);  }set { nRecog = (int)(nRecog&0x0000ffff)|value; } }
+        public short X { get { return wTag; }set { wTag = value; } }
+        public short Y { get { return  (short)(nRecog & 0x0000ffff);  }set { nRecog = (int)(nRecog&0xffff0000)|value; } }
         protected override void ReadPacket(BinaryReader reader)
         {
             Direction = (MirDirection) reader.ReadByte();

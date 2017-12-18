@@ -4518,7 +4518,6 @@ public struct MSGSIZE
     public const short DEFENCODE = 22;
     public const short MSGHEADER = 1;
     public const short MSGHEADERENCODE = 1;
-    public const short ACTIONRESULT = 8;
 
 }
 class EnDecode
@@ -4691,25 +4690,24 @@ public abstract class Packet
     {
         extra = rawBytes;
 
+        if (rawBytes.Length==0||rawBytes[0] != '#') return null; //'#'| 2Bytes: Packet Size | 2Bytes: Packet ID |data|'!''$'
         Packet p;
-        int length;
+        int length=0;
 
-
-
-        if (rawBytes[0] != 35) return null; //'#'| 2Bytes: Packet Size | 2Bytes: Packet ID |data|'!''$'
-        if (rawBytes[1] == 43 )//&& rawBytes.Length == MSGSIZE.ACTIONRESULT)
+        if (rawBytes[1] == '+' )//&& rawBytes.Length == MSGSIZE.ACTIONRESULT)
         {
-            
+
             //public const string MSG_GOOD = "+GOOD/";
             //public const string MSG_FAIL = "+FAIL/";
-            using (MemoryStream stream = new MemoryStream(rawBytes, 1, MSGSIZE.ACTIONRESULT))
+            while (length <= rawBytes.Length && rawBytes[length++] != '!') ;
+            using (MemoryStream stream = new MemoryStream(rawBytes, 2, length-3))
             using (BinaryReader reader = new BinaryReader(stream))
             {
                 p = new ServerPacketsEx.ActionResult();
                 p.ReadPacket(reader);
             }
-            length = MSGSIZE.ACTIONRESULT;
-
+            extra = new byte[rawBytes.Length - length];
+            Buffer.BlockCopy(rawBytes,length, extra, 0, rawBytes.Length - length);
         }
         else
         {
@@ -4718,13 +4716,22 @@ public abstract class Packet
 
             EnDecode.fnDecode6BitBufA(rawBytes, defMsg, 0, MSGSIZE.DEFMSG, 1, MSGSIZE.DEFENCODE + 1);
 
-            length = (defMsg[3] << 24) | (defMsg[2] << 16) | (defMsg[1] << 8) | defMsg[0];
+            //int  length1 = (defMsg[3] << 24) | (defMsg[2] << 16) | (defMsg[1] << 8) | defMsg[0];
 
-            if (length + 2 > rawBytes.Length || length < MSGSIZE.DEFENCODE) return null;
+            unsafe
+            {
+                fixed (byte* bPtr = defMsg)
+                {
+                    length = *((int*)bPtr);
 
-            short id = (short)(defMsg[8] + (defMsg[9] << 8));//reader.ReadInt16();
+                    if (length + 2 > rawBytes.Length || length < MSGSIZE.DEFENCODE) return null;
 
-            p = IsServer ? GetClientPacket(id) : GetServerPacket(id);
+                    short id = *((short*)(bPtr+8));//(short)(defMsg[8] + (defMsg[9] << 8));//reader.ReadInt16();
+                    //short mm= (short)(defMsg[8] + (defMsg[9] << 8));
+
+                    p = IsServer ? GetClientPacket(id) : GetServerPacket(id);
+                }
+            }
 
             if (p == null) return null;
 
@@ -4760,9 +4767,10 @@ public abstract class Packet
                     }
                 }
             }
+            extra = new byte[rawBytes.Length - 2 - length];
+            Buffer.BlockCopy(rawBytes, 2 + length, extra, 0, rawBytes.Length - length - 2);
         }
-        extra = new byte[rawBytes.Length - 2 - length];
-        Buffer.BlockCopy(rawBytes, 2 + length, extra, 0, rawBytes.Length - length - 2);
+
 
         return p;
     }

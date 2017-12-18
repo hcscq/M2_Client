@@ -19,7 +19,8 @@ namespace ServerPacketsEx
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ResultMsg= reader.ReadBytes(6);
+
+            ResultMsg = reader.ReadBytes((int)reader.BaseStream.Length);
         }
         protected override void WritePacket(BinaryWriter writer)
         {

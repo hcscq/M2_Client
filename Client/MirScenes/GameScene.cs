@@ -1709,7 +1709,16 @@ namespace Client.MirScenes
         }
         public void ActionResult(SEX.ActionResult P)
         {
-            int m = P.ResultMsg[2];
+            //static char pszGood[] = "GOOD";
+            //static char pszFail[] = "FAIL";
+            //static char pszLng[] = "LNG";
+            //static char pszUlng[] = "ULNG";
+            //static char pszWid[] = "WID";
+            //static char pszUWid[] = "UWID";
+            //static char pszFir[] = "FIR";
+            //static char pszUFir[] = "UFIR";
+            //static char pszUPwr[] = "PWR";
+            MapControl.NextAction = 0;
         }
         public void SendMagic(SEX.SendMagic P)
         {

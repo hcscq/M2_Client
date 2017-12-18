@@ -123,6 +123,7 @@ namespace Client.MirNetwork
             if (dataRead == 0)
             {
                 Disconnect();
+                return;
             }
 
             byte[] rawBytes = result.AsyncState as byte[];

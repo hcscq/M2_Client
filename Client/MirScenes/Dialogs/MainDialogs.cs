@@ -1782,7 +1782,7 @@ namespace Client.MirScenes.Dialogs
         {
             //Index = 1932;
             TakeSizeMode = UsedSize.Specify;
-            Size = new Size(400,50);
+            Size = new Size(350,40);
             //Library = Libraries.Prguse;
             Movable = false;
             Sort = true;

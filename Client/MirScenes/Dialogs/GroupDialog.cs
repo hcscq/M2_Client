@@ -19,7 +19,7 @@ namespace Client.MirScenes.Dialogs
         public static bool AllowGroup;
         public static List<string> GroupList = new List<string>();
 
-        public MirImageControl TitleLabel;
+        //public MirImageControl TitleLabel;
         public MirButton SwitchButton, CloseButton, AddButton, DelButton;
         public MirLabel[] GroupMembers;
 
@@ -53,60 +53,66 @@ namespace Client.MirScenes.Dialogs
             }
 
 
-
-            TitleLabel = new MirImageControl
-            {
-                Index = 5,
-                Library = Libraries.Title,
-                Location = new Point(18, 8),
-                Parent = this
-            };
-
+            #region title
+            //TitleLabel = new MirImageControl
+            //{
+            //    Index = 5,
+            //    Library = Libraries.Title,
+            //    Location = new Point(18, 8),
+            //    Parent = this
+            //};
+            #endregion
             CloseButton = new MirButton
             {
-                HoverIndex = 361,
-                Index = 360,
-                Location = new Point(206, 3),
-                Library = Libraries.Prguse2,
+                HoverIndex = 233,//361,
+                Location = new Point(336, 59),
+                Library = Libraries.Prguse3,
                 Parent = this,
-                PressedIndex = 362,
+                TakeSizeMode = UsedSize.HoverIndex,
+                PressedIndex = 234,//362,
                 Sound = SoundList.ButtonA,
+                Movable = Settings.DevMode
             };
             CloseButton.Click += (o, e) => Hide();
 
             SwitchButton = new MirButton
             {
-                HoverIndex = 115,
-                Index = 114,
+                HoverIndex = 121,
+                Index = 121,
                 Location = new Point(25, 219),
                 Library = Libraries.Prguse,
                 Parent = this,
-                PressedIndex = 116,
+                PressedIndex = 122,
                 Sound = SoundList.ButtonA,
+                Movable = Settings.DevMode
             };
             SwitchButton.Click += (o, e) => Network.Enqueue(new C.SwitchGroup { AllowGroup = !AllowGroup });
 
             AddButton = new MirButton
             {
-                HoverIndex = 134,
-                Index = 133,
+                HoverIndex = 124,
+                //Index = 133,
                 Location = new Point(70, 219),
-                Library = Libraries.Title,
+                Library = Libraries.Prguse,
                 Parent = this,
-                PressedIndex = 135,
+                PressedIndex = 124,
                 Sound = SoundList.ButtonA,
+                TakeSizeMode=UsedSize.HoverIndex,
+                Movable = Settings.DevMode
             };
             AddButton.Click += (o, e) => AddMember();
 
             DelButton = new MirButton
             {
-                HoverIndex = 137,
-                Index = 136,
+                HoverIndex = 125,
+                //Index = 136,
                 Location = new Point(140, 219),
-                Library = Libraries.Title,
+                Library = Libraries.Prguse,
                 Parent = this,
-                PressedIndex = 138,
+                PressedIndex = 125,
                 Sound = SoundList.ButtonA,
+                TakeSizeMode=UsedSize.HoverIndex,
+                Movable = Settings.DevMode
             };
             DelButton.Click += (o, e) => DelMember();
 
@@ -117,40 +123,41 @@ namespace Client.MirScenes.Dialogs
 
         private void GroupPanel_BeforeDraw(object sender, EventArgs e)
         {
-            if (GroupList.Count == 0)
-            {
-                AddButton.Index = 130;
-                AddButton.HoverIndex = 131;
-                AddButton.PressedIndex = 132;
-            }
-            else
-            {
-                AddButton.Index = 133;
-                AddButton.HoverIndex = 134;
-                AddButton.PressedIndex = 135;
-            }
-            if (GroupList.Count > 0 && GroupList[0] != MapObject.User.Name)
-            {
-                AddButton.Visible = false;
-                DelButton.Visible = false;
-            }
-            else
-            {
-                AddButton.Visible = true;
-                DelButton.Visible = true;
-            }
-
+            #region new UI
+            //if (GroupList.Count == 0)
+            //{
+            //    //AddButton.Index = 130;
+            //    AddButton.HoverIndex = 124;
+            //    AddButton.PressedIndex = 124;
+            //}
+            //else
+            //{
+            //    //AddButton.Index = 133;
+            //    AddButton.HoverIndex = 124;//134;
+            //    AddButton.PressedIndex = 124;// 135;
+            //}
+            //if (GroupList.Count > 0 && GroupList[0] != MapObject.User.Name)
+            //{
+            //    AddButton.Visible = false;
+            //    DelButton.Visible = false;
+            //}
+            //else
+            //{
+            //    AddButton.Visible = true;
+            //    DelButton.Visible = true;
+            //}
+            #endregion
             if (AllowGroup)
             {
-                SwitchButton.Index = 117;
-                SwitchButton.HoverIndex = 118;
-                SwitchButton.PressedIndex = 119;
+                SwitchButton.Index = 122;
+                SwitchButton.HoverIndex = 122;
+                SwitchButton.PressedIndex = 121;
             }
             else
             {
-                SwitchButton.Index = 114;
-                SwitchButton.HoverIndex = 115;
-                SwitchButton.PressedIndex = 116;
+                SwitchButton.Index = 121;
+                SwitchButton.HoverIndex = 121;
+                SwitchButton.PressedIndex = 122;
             }
 
             for (int i = 0; i < GroupMembers.Length; i++)

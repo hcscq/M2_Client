@@ -17,7 +17,7 @@ namespace Client.MirControls
             Modal = true;
             Movable = false;
 
-            Index = 660;
+            Index = 360;//660;
             Library = Libraries.Prguse;
 
             Location = new Point((Settings.ScreenWidth - Size.Width) / 2, (Settings.ScreenHeight - Size.Height) / 2);
@@ -45,22 +45,22 @@ namespace Client.MirControls
 
             OKButton = new MirButton
             {
-                HoverIndex = 201,
-                Index = 200,
-                Library = Libraries.Title,
-                Location = new Point(60, 123),
+                HoverIndex = 361,//201,
+                Index = 361,//200,
+                Library = Libraries.Prguse,
+                Location = new Point(360, 135),//new Point(360, 157),
                 Parent = this,
-                PressedIndex = 202,
+                PressedIndex = 362,//202,
             };
 
             CancelButton = new MirButton
             {
-                HoverIndex = 204,
-                Index = 203,
-                Library = Libraries.Title,
-                Location = new Point(160, 123),
+                HoverIndex = 365,//204,
+                Index = 365,//203,
+                Library = Libraries.Prguse,
+                Location = new Point(360, 135),//new Point(360, 157),
                 Parent = this,
-                PressedIndex = 205,
+                PressedIndex = 366,//205,
             };
             CancelButton.Click += DisposeDialog;
         }

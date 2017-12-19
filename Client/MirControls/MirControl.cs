@@ -690,7 +690,6 @@ namespace Client.MirControls
             _sound = SoundList.None;
             if (Settings.DevMode)
             {
-                Movable = true;
                 MouseUp += MirImageControl_MouseClick;
                 KeyUp += MirImageControl_KeyUp;
                 DevIndex=GDevIndex++;

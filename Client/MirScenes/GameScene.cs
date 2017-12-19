@@ -174,7 +174,6 @@ namespace Client.MirScenes
 
         public GameScene()
         {
-            Settings.DevMode = true;
 
             MapControl.AutoRun = false;
             MapControl.AutoHit = false;
@@ -193,11 +192,14 @@ namespace Client.MirScenes
             KeyDown += GameScene_KeyDown;
 
             MainDialog = new MainDialog { Parent = this };
+
+            Settings.DevMode = true;
+
             ChatDialog = new ChatDialog { Parent = this };
             ChatControl = new ChatControlBar { Parent = this };
-            InventoryDialog = new InventoryDialog { Parent = this };
+            InventoryDialog = new InventoryDialog { Parent = this,Border=true,BorderColour=Color.Red };
             CharacterDialog = new CharacterDialog { Parent = this, Visible = false };
-            BeltDialog = new BeltDialog { Parent = this };
+            BeltDialog = new BeltDialog { Parent = this,Border=true,BorderColour=Color.Red };
             StorageDialog = new StorageDialog { Parent = this, Visible = false };
             MiniMapDialog = new MiniMapDialog { Parent = this };
             InspectDialog = new InspectDialog { Parent = this, Visible = false };
@@ -9425,7 +9427,7 @@ namespace Client.MirScenes
             if (MouseControl == this)
             {
                 direction = MouseDirection();
-                //GameScene.Scene.OutputMessage(MouseLocation.ToString());
+                //GameScene.Scene.OutputMessage(MouseControl.ToString()+":"+Moving);
                 if (AutoRun)
                 {
                     if (GameScene.CanRun && CanRun(direction) && CMain.Time > GameScene.NextRunTime && User.HP >= 10 && (!User.Sneaking || (User.Sneaking && User.Sprint))) //slow remove

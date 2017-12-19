@@ -733,6 +733,28 @@ namespace Client.MirGraphics
             DXManager.SetOpacity(oldOpacity);
             mi.CleanTime = CMain.Time + Settings.CleanDelay;
         }
+
+        public void DrawWithOutOffset(int index,  Point point, Color colour, float opacity)
+        {
+            if (!CheckImage(index))
+                return;
+
+            MImage mi = _images[index];
+
+
+            if (point.X >= Settings.ScreenWidth || point.Y >= Settings.ScreenHeight || point.X + mi.Width < 0 || point.Y + mi.Height < 0)
+                return;
+            Rectangle section = new Rectangle(mi.X, mi.Y, mi.Width, mi.Height);
+            
+            float oldOpacity = DXManager.Opacity;
+            DXManager.SetOpacity(opacity);
+
+            DXManager.Sprite.Draw2D(mi.Image, section, section.Size, point, colour);
+
+            DXManager.SetOpacity(oldOpacity);
+            mi.CleanTime = CMain.Time + Settings.CleanDelay;
+        }
+
         public void Draw(int index, Point point, Size size, Color colour)
         {
             if (!CheckImage(index))

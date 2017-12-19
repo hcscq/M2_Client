@@ -168,6 +168,7 @@ namespace Client.MirControls
                 if (Blending)
                     Library.DrawBlend(Index, DisplayLocation, ForeColour, false, BlendingRate);
                 else
+                    //Library.DrawWithOutOffset(Index, DisplayLocation, ForeColour, Opacity);
                     Library.Draw(Index, DisplayLocation, ForeColour, false, Opacity);
 
 

@@ -42,8 +42,8 @@ namespace Client.MirScenes.Dialogs
 
         public MainDialog()
         {
-            Index = 1;//Settings.Resolution == 800 ? 0 : Settings.Resolution == 1024 ? 1 : 2;
-            Library = Libraries.Prguse;
+            Index = 291;//Settings.Resolution == 800 ? 0 : Settings.Resolution == 1024 ? 1 : 2;
+            Library = Libraries.Prguse3;
             Location = new Point(((Settings.ScreenWidth / 2) - (Size.Width / 2)), Settings.ScreenHeight - Size.Height);
             PixelDetect = true;
 
@@ -228,16 +228,20 @@ namespace Client.MirScenes.Dialogs
             HealthLabel = new MirLabel
             {
                 AutoSize = true,
-                Location = new Point(22, 118),
-                Parent = HealthOrb
+                Location = new Point(23, 212),
+                Parent = this,//HealthOrb,
+                NotControl = true,//!Settings.DevMode,
+                //Movable =true
             };
             //HealthLabel.SizeChanged += Label_SizeChanged;
 
             ManaLabel = new MirLabel
             {
                 AutoSize = true,
-                Location = new Point(0, 118),
-                Parent = HealthOrb
+                Location = new Point(84, 212),
+                Parent = this,//HealthOrb,
+                NotControl = true,//!Settings.DevMode,
+                //Movable = true
             };
             //ManaLabel.SizeChanged += Label_SizeChanged;
 
@@ -439,8 +443,8 @@ namespace Client.MirScenes.Dialogs
 
             if (Settings.HPView)
             {
-                HealthLabel.Text = string.Format("HP {0}/{1}", User.HP, User.MaxHP);
-                ManaLabel.Text = HPOnly ? "" : string.Format("MP {0}/{1} ", User.MP, User.MaxMP);
+                HealthLabel.Text = string.Format("{0}/{1}", User.HP, User.MaxHP);
+                ManaLabel.Text =  HPOnly ? "" : string.Format("{0}/{1} ", User.MP, User.MaxMP);
                 TopLabel.Text = string.Empty;
                 BottomLabel.Text = string.Empty;
             }
@@ -1406,6 +1410,8 @@ namespace Client.MirScenes.Dialogs
             Movable = true;
             Sort = true;
             Visible = false;
+
+            //UseOffSet = true;
 
             WeightBar = new MirImageControl
             {
@@ -4157,7 +4163,7 @@ namespace Client.MirScenes.Dialogs
             Size = new Size(400,20);
             Parent = GameScene.Scene;
             //Library = Libraries.Title;
-            Location = new Point((Settings.ScreenWidth - Size.Width)/2, GameScene.Scene.MainDialog.Location.Y + this.Size.Height + 73);
+            Location = new Point((Settings.ScreenWidth - Size.Width)/2, GameScene.Scene.MainDialog.Location.Y + this.Size.Height + 76);
             Sort = true;
             Visible = true;
             Movable = true;
@@ -4169,7 +4175,7 @@ namespace Client.MirScenes.Dialogs
                 Index = 138,
                 Parent = this,
                 Library = Libraries.Prguse,
-                Location = new Point(370, 12),
+                Location = new Point(370, 9),
                 PressedIndex = 139,
                 Hint = "Exit (" + CMain.InputKeys.GetKey(KeybindOptions.Exit) + ")"
             };
@@ -4181,7 +4187,7 @@ namespace Client.MirScenes.Dialogs
                 Index = 136,
                 Parent = this,
                 Library = Libraries.Prguse,
-                Location = new Point(335, 12),
+                Location = new Point(335, 9),
                 PressedIndex = 137,
                 Hint = "Log Out (" + CMain.InputKeys.GetKey(KeybindOptions.Logout) + ")"
             };
@@ -4195,7 +4201,7 @@ namespace Client.MirScenes.Dialogs
                 PressedIndex = 1972,
                 Parent = this,
                 Library = Libraries.Prguse,
-                Location = new Point(3, 12),
+                Location = new Point(3, 9),
                 Hint = "Help (" + CMain.InputKeys.GetKey(KeybindOptions.Help) + ")",
                 Visible=false
             };
@@ -4213,7 +4219,7 @@ namespace Client.MirScenes.Dialogs
                 PressedIndex = 1975,
                 Parent = this,
                 Library = Libraries.Prguse,
-                Location = new Point(3, 12),
+                Location = new Point(3, 9),
                 Visible = false,
                 Hint = "Keybinds"
             };
@@ -4231,7 +4237,7 @@ namespace Client.MirScenes.Dialogs
                 PressedIndex = 2002,
                 Parent = this,
                 Library = Libraries.Prguse,
-                Location = new Point(3, 12),
+                Location = new Point(3, 9),
                 Hint = "Ranking (" + CMain.InputKeys.GetKey(KeybindOptions.Ranking) + ")"
                 //Visible = false
             };
@@ -4249,7 +4255,7 @@ namespace Client.MirScenes.Dialogs
                 PressedIndex = 2002,
                 Parent = this,
                 Library = Libraries.Prguse,
-                Location = new Point(3, 12),
+                Location = new Point(3, 9),
                 Visible = false
             };
             CraftingButton.Click += (o, e) =>
@@ -4264,7 +4270,7 @@ namespace Client.MirScenes.Dialogs
                 PressedIndex = 433,
                 Parent = this,
                 Library = Libraries.Prguse2,
-                Location = new Point(3, 12),
+                Location = new Point(3, 9),
                 Hint = "Creatures (" + CMain.InputKeys.GetKey(KeybindOptions.Creature) + ")"
             };
             IntelligentCreatureButton.Click += (o, e) =>
@@ -4280,7 +4286,7 @@ namespace Client.MirScenes.Dialogs
                 PressedIndex = 1978,
                 Parent = this,
                 Library = Libraries.Prguse,
-                Location = new Point(3, 12),
+                Location = new Point(3, 9),
                 Hint = "Mount (" + CMain.InputKeys.GetKey(KeybindOptions.MountWindow) + ")"
             };
             RideButton.Click += (o, e) =>
@@ -4297,7 +4303,7 @@ namespace Client.MirScenes.Dialogs
                 PressedIndex = 1981,
                 Parent = this,
                 Library = Libraries.Prguse,
-                Location = new Point(3, 12),
+                Location = new Point(3, 9),
                 Hint = "Fishing (" + CMain.InputKeys.GetKey(KeybindOptions.Fishing) + ")"
             };
             FishingButton.Click += (o, e) =>
@@ -4314,7 +4320,7 @@ namespace Client.MirScenes.Dialogs
                 PressedIndex = 1984,
                 Parent = this,
                 Library = Libraries.Prguse,
-                Location = new Point(3, 12),
+                Location = new Point(3, 9),
                 Visible = true,
                 Hint = "Friends (" + CMain.InputKeys.GetKey(KeybindOptions.Friends) + ")"
             };
@@ -4332,7 +4338,7 @@ namespace Client.MirScenes.Dialogs
                 PressedIndex = 1987,
                 Parent = this,
                 Library = Libraries.Prguse,
-                Location = new Point(3, 12),
+                Location = new Point(3, 9),
                 Visible = true,
                 Hint = "Mentor (" + CMain.InputKeys.GetKey(KeybindOptions.Mentor) + ")"
             };
@@ -4351,7 +4357,7 @@ namespace Client.MirScenes.Dialogs
                 PressedIndex = 1990,
                 Parent = this,
                 Library = Libraries.Prguse,
-                Location = new Point(3, 12),
+                Location = new Point(3, 9),
                 Visible = true,
                 Hint = "Relationship (" + CMain.InputKeys.GetKey(KeybindOptions.Relationship) + ")"
             };
@@ -4369,7 +4375,7 @@ namespace Client.MirScenes.Dialogs
                 PressedIndex = 129,
                 Parent = this,
                 Library = Libraries.Prguse,
-                Location = new Point(140, 12),
+                Location = new Point(140, 9),
                 Hint = "Groups (" + CMain.InputKeys.GetKey(KeybindOptions.Group) + ")"
             };
             GroupButton.Click += (o, e) =>
@@ -4386,7 +4392,7 @@ namespace Client.MirScenes.Dialogs
                 PressedIndex = 135,
                 Parent = this,
                 Library = Libraries.Prguse,
-                Location = new Point(108, 12),
+                Location = new Point(108, 9),
                 Hint = "Guild (" + CMain.InputKeys.GetKey(KeybindOptions.Guilds) + ")"
             };
             GuildButton.Click += (o, e) =>

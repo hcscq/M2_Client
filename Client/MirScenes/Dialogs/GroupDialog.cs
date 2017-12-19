@@ -65,13 +65,12 @@ namespace Client.MirScenes.Dialogs
             CloseButton = new MirButton
             {
                 HoverIndex = 233,//361,
-                Location = new Point(336, 59),
+                Location = new Point(260, 0),
                 Library = Libraries.Prguse3,
                 Parent = this,
                 TakeSizeMode = UsedSize.HoverIndex,
                 PressedIndex = 234,//362,
                 Sound = SoundList.ButtonA,
-                Movable = Settings.DevMode
             };
             CloseButton.Click += (o, e) => Hide();
 
@@ -79,40 +78,37 @@ namespace Client.MirScenes.Dialogs
             {
                 HoverIndex = 121,
                 Index = 121,
-                Location = new Point(25, 219),
+                Location = new Point(20, 18),
                 Library = Libraries.Prguse,
                 Parent = this,
                 PressedIndex = 122,
                 Sound = SoundList.ButtonA,
-                Movable = Settings.DevMode
             };
             SwitchButton.Click += (o, e) => Network.Enqueue(new C.SwitchGroup { AllowGroup = !AllowGroup });
 
             AddButton = new MirButton
             {
-                HoverIndex = 124,
-                //Index = 133,
-                Location = new Point(70, 219),
+                //HoverIndex = 124,
+                //Index = 124,//133,
+                Location = new Point(96, 202),
                 Library = Libraries.Prguse,
                 Parent = this,
                 PressedIndex = 124,
                 Sound = SoundList.ButtonA,
-                TakeSizeMode=UsedSize.HoverIndex,
-                Movable = Settings.DevMode
+                TakeSizeMode=UsedSize.PressedIndex,
             };
             AddButton.Click += (o, e) => AddMember();
 
             DelButton = new MirButton
             {
-                HoverIndex = 125,
-                //Index = 136,
-                Location = new Point(140, 219),
+                //HoverIndex = 125,
+                //Index = 125,//136,
+                Location = new Point(171, 202),
                 Library = Libraries.Prguse,
                 Parent = this,
                 PressedIndex = 125,
                 Sound = SoundList.ButtonA,
-                TakeSizeMode=UsedSize.HoverIndex,
-                Movable = Settings.DevMode
+                TakeSizeMode=UsedSize.PressedIndex,
             };
             DelButton.Click += (o, e) => DelMember();
 
@@ -211,7 +207,8 @@ namespace Client.MirScenes.Dialogs
                 GameScene.Scene.ChatDialog.ReceiveChat("You are not the leader of your group.", ChatType.System);
                 return;
             }
-
+            if (GroupList.Count <= 0)
+                return;
             MirInputBox inputBox = new MirInputBox("Please enter the name of the person you wish to group.");
 
             inputBox.OKButton.Click += (o, e) =>

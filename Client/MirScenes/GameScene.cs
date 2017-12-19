@@ -195,16 +195,16 @@ namespace Client.MirScenes
 
             Settings.DevMode = true;
 
-            ChatDialog = new ChatDialog { Parent = this };
+            ChatDialog = new ChatDialog { Parent = this,Border = true, BorderColour = Color.Red };
             ChatControl = new ChatControlBar { Parent = this };
             InventoryDialog = new InventoryDialog { Parent = this,Border=true,BorderColour=Color.Red };
-            CharacterDialog = new CharacterDialog { Parent = this, Visible = false };
+            CharacterDialog = new CharacterDialog { Parent = this, Visible = false, Border = true, BorderColour = Color.Red };
             BeltDialog = new BeltDialog { Parent = this,Border=true,BorderColour=Color.Red };
             StorageDialog = new StorageDialog { Parent = this, Visible = false };
             MiniMapDialog = new MiniMapDialog { Parent = this };
             InspectDialog = new InspectDialog { Parent = this, Visible = false };
             OptionDialog = new OptionDialog { Parent = this, Visible = false };
-            MenuDialog = new MenuDialog { Parent = this };
+            MenuDialog = new MenuDialog { Parent = this, Border = true, BorderColour = Color.Red };
             NPCDialog = new NPCDialog { Parent = this, Visible = false };
             NPCGoodsDialog = new NPCGoodsDialog { Parent = this, Visible = false };
             NPCDropDialog = new NPCDropDialog { Parent = this, Visible = false };

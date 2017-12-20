@@ -565,7 +565,7 @@ namespace Client.MirGraphics
                 _images[index] = new MImage(_reader);
             }
 
-            return new Point(_images[index].X, _images[index].Y);
+            return _images[index].Offset;//new Point(_images[index].X, _images[index].Y);
         }
         public Size GetSize(int index)
         {
@@ -634,7 +634,7 @@ namespace Client.MirGraphics
 
             MImage mi = _images[index];
 
-            if (offSet) point.Offset(mi.X, mi.Y);
+            if (offSet) point.Offset(mi.Offset);//.Offset(mi.X, mi.Y);
 
             if (point.X >= Settings.ScreenWidth || point.Y >= Settings.ScreenHeight || point.X + mi.Width < 0 || point.Y + mi.Height < 0)
                 return;
@@ -653,7 +653,7 @@ namespace Client.MirGraphics
 
             MImage mi = _images[index];
 
-            if (offSet) point.Offset(mi.X, mi.Y);
+            if (offSet) point.Offset(mi.Offset);//.Offset(mi.X, mi.Y);
 
             if (point.X >= Settings.ScreenWidth || point.Y >= Settings.ScreenHeight || point.X + mi.Width < 0 || point.Y + mi.Height < 0)
                 return;
@@ -673,7 +673,7 @@ namespace Client.MirGraphics
 
             MImage mi = _images[index];
 
-            if (offSet) point.Offset(mi.X, mi.Y);
+            if (offSet) point.Offset(mi.Offset);//.Offset(mi.X, mi.Y);
 
             if (point.X >= Settings.ScreenWidth || point.Y >= Settings.ScreenHeight || point.X + mi.Width < 0 || point.Y + mi.Height < 0)
                 return;
@@ -693,7 +693,7 @@ namespace Client.MirGraphics
 
             MImage mi = _images[index];
 
-            if (offSet) point.Offset(mi.X, mi.Y);
+            if (offSet) point.Offset(mi.Offset);//.Offset(mi.X, mi.Y);
 
 
             if (point.X >= Settings.ScreenWidth || point.Y >= Settings.ScreenHeight || point.X + mi.Width < 0 || point.Y + mi.Height < 0)
@@ -734,7 +734,7 @@ namespace Client.MirGraphics
             mi.CleanTime = CMain.Time + Settings.CleanDelay;
         }
 
-        public void DrawWithOutOffset(int index,  Point point, Color colour, float opacity)
+        public void DrawWithOutOffset(int index,Size size, Point point, Color colour, float opacity)
         {
             if (!CheckImage(index))
                 return;
@@ -744,7 +744,7 @@ namespace Client.MirGraphics
 
             if (point.X >= Settings.ScreenWidth || point.Y >= Settings.ScreenHeight || point.X + mi.Width < 0 || point.Y + mi.Height < 0)
                 return;
-            Rectangle section = new Rectangle(mi.X, mi.Y, mi.Width, mi.Height);
+            Rectangle section = new Rectangle(mi.Offset, size);
             
             float oldOpacity = DXManager.Opacity;
             DXManager.SetOpacity(opacity);
@@ -776,7 +776,7 @@ namespace Client.MirGraphics
 
             MImage mi = _images[index];
 
-            if (offSet) point.Offset(mi.X, mi.Y);
+            if (offSet) point.Offset(mi.Offset);//.Offset(mi.X, mi.Y);
 
             if (point.X >= Settings.ScreenWidth || point.Y >= Settings.ScreenHeight || point.X + mi.Width < 0 || point.Y + mi.Height < 0)
                 return;
@@ -877,9 +877,10 @@ namespace Client.MirGraphics
 
     public sealed class MImage
     {
-        public short Width, Height, X, Y, ShadowX, ShadowY;
+        public short Width, Height, ShadowX, ShadowY;// X, Y,
         public byte Shadow;
         public int Length;
+        public Point Offset; 
 
         public bool TextureValid;
         public Texture Image;
@@ -902,8 +903,9 @@ namespace Client.MirGraphics
             //read layer 1
             Width = reader.ReadInt16();
             Height = reader.ReadInt16();
-            X = reader.ReadInt16();
-            Y = reader.ReadInt16();
+            //X = reader.ReadInt16();
+            //Y = reader.ReadInt16();
+            Offset = new Point(reader.ReadInt16(),reader.ReadInt16());
             ShadowX = reader.ReadInt16();
             ShadowY = reader.ReadInt16();
             Shadow = reader.ReadByte();
@@ -973,25 +975,26 @@ namespace Client.MirGraphics
         }
         public unsafe bool VisiblePixel(Point p)
         {
-            if (p.X < 0 || p.Y < 0 || p.X >= Width || p.Y >= Height)
-                return false;
+            //if (p.X < 0 || p.Y < 0 || p.X >= Width || p.Y >= Height || Data == null)
+            //    return false;
 
-            int w = Width;
+            //int w = Width;
 
-            bool result = false;
-            if (Data != null)
-            {
-                int x = p.X;
-                int y = p.Y;
-                
-                int index = (y * (w << 2)) + (x << 2);
-                
-                byte col = Data[index];
+            //bool result = false;
+            //if (Data != null)
+            //{
+            //int x = p.X;
+            //int y = p.Y;
 
-                if (col == 0) return false;
-                else return true;
-            }
-            return result;
+            //int index = (y * (w << 2)) + (x << 2);
+
+            return (p.X >= 0 && p.Y >= 0 && p.X < Width && p.Y < Height && Data != null) && Data[(p.Y * (Width << 2)) + (p.X << 2)] != 0;
+            //byte col = Data[index];
+
+            //if (col == 0) return false;
+            //else return true;
+            //}
+            //return false;
         }
 
         public Size GetTrueSize()

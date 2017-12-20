@@ -9,7 +9,7 @@ using Microsoft.DirectX.Direct3D;
 
 namespace Client.MirControls
 {
-    public enum UsedSize { Index, HoverIndex, PressedIndex, Specify }
+    public enum UsedSize { Index, HoverIndex, PressedIndex, Specify,Primitive }
     public class MirControl : IDisposable
     {
         public static int GDevIndex = 0;
@@ -715,14 +715,14 @@ namespace Client.MirControls
                         break;
                     default: break;
                 }
-                Hint = string.Format("Location:{0}", AjustControl.Location.ToString());
+                Hint = string.Format("Location:{0},Size{1}", AjustControl.Location.ToString(),AjustControl.Size.ToString());
             }
         }
 
         private void MirImageControl_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             AjustControl = (MirControl)sender;
-            Hint = string.Format("Location:{0}", AjustControl.Location.ToString());
+            Hint = string.Format("Location:{0},Size{1}", AjustControl.Location.ToString(), AjustControl.Size.ToString());
         }
 
         public virtual void Draw()

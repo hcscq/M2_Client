@@ -20,7 +20,7 @@ namespace Client.MirScenes.Dialogs
         public static List<string> GroupList = new List<string>();
 
         //public MirImageControl TitleLabel;
-        public MirButton SwitchButton, CloseButton, AddButton, DelButton;
+        public MirButton SwitchButton, CloseButton, AddButton, DelButton,NewGroupButton;
         public MirLabel[] GroupMembers;
 
         public GroupDialog()
@@ -86,6 +86,19 @@ namespace Client.MirScenes.Dialogs
             };
             SwitchButton.Click += (o, e) => Network.Enqueue(new C.SwitchGroup { AllowGroup = !AllowGroup });
 
+            NewGroupButton = new MirButton
+            {
+                //HoverIndex = 124,
+                //Index = 124,//133,
+                Location = new Point(21, 202),
+                Library = Libraries.Prguse,
+                Parent = this,
+                PressedIndex = 123,
+                Sound = SoundList.ButtonA,
+                TakeSizeMode = UsedSize.PressedIndex,
+            };
+            NewGroupButton.Click +=(o,e)=> NewGroup();
+
             AddButton = new MirButton
             {
                 //HoverIndex = 124,
@@ -115,6 +128,22 @@ namespace Client.MirScenes.Dialogs
             BeforeDraw += GroupPanel_BeforeDraw;
 
             GroupList.Clear();
+        }
+
+        private void NewGroup()
+        {
+            if (GroupList.Count > 0)
+            {
+                GameScene.Scene.ChatDialog.ReceiveChat("Your group already exists.", ChatType.System);
+                return;
+            }
+            MirInputBox inputBox = new MirInputBox("Please enter the name of the person you wish to group.");
+
+            inputBox.OKButton.Click += (o, e) =>
+            {
+                Network.Enqueue(new C.AddMember { Name = inputBox.InputTextBox.Text });
+                inputBox.Dispose();
+            };
         }
 
         private void GroupPanel_BeforeDraw(object sender, EventArgs e)

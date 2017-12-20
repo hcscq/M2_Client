@@ -86,7 +86,7 @@ namespace Client.MirControls
                     return;
                 _pixelDetect = value;
                 OnPixelDetectChanged();
-            }
+            } 
         }
         public event EventHandler PixelDetectChanged;
         private void OnPixelDetectChanged()
@@ -131,6 +131,10 @@ namespace Client.MirControls
                         if (Library != null && Index >= 0)
                             return Library.GetTrueSize(Index);
                         break;
+                    case UsedSize.Primitive:
+                        if (Library != null && Index >= 0)
+                            return Library.GetSize(Index);
+                        break;
                     case UsedSize.Specify:
                     default: break;
                 }
@@ -157,6 +161,7 @@ namespace Client.MirControls
             ForeColour = Color.White;
         }
 
+
         protected internal override void DrawControl()
         {
             base.DrawControl();
@@ -168,7 +173,6 @@ namespace Client.MirControls
                 if (Blending)
                     Library.DrawBlend(Index, DisplayLocation, ForeColour, false, BlendingRate);
                 else
-                    //Library.DrawWithOutOffset(Index, DisplayLocation, ForeColour, Opacity);
                     Library.Draw(Index, DisplayLocation, ForeColour, false, Opacity);
 
 

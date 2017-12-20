@@ -1410,8 +1410,10 @@ namespace Client.MirScenes.Dialogs
             Movable = true;
             Sort = true;
             Visible = false;
-
-            //UseOffSet = true;
+            DrawImage = false;
+            Location = new Point(7, 34);
+            UseOffSet = true;
+            this.BeforeDraw += InventoryDialog_BeforeDraw;
 
             WeightBar = new MirImageControl
             {
@@ -1487,7 +1489,7 @@ namespace Client.MirScenes.Dialogs
             {
                 HoverIndex = 233,//361,
                 //Index = 149,//360,
-                Location = new Point(336, 59),
+                Location = new Point(329, 29),
                 Library = Libraries.Prguse3,
                 Parent = this,
                 TakeSizeMode=UsedSize.HoverIndex,
@@ -1499,7 +1501,7 @@ namespace Client.MirScenes.Dialogs
             GoldLabel = new MirLabel
             {
                 Parent = this,
-                Location = new Point(65, 210),
+                Location = new Point(58, 180),
                 Size = new Size(111, 14),
                 Sound = SoundList.Gold,
             };
@@ -1507,7 +1509,7 @@ namespace Client.MirScenes.Dialogs
             GoldButton = new MirImageControl
             {
                 Parent=this,
-                Location=new Point(17,217),
+                Location=new Point(10,187),
                 Index=29,
                 Library=Libraries.Prguse,
                 Sound=SoundList.Gold
@@ -1532,7 +1534,7 @@ namespace Client.MirScenes.Dialogs
                         Library = Libraries.Items,
                         Parent = this,
                         //Location = new Point(x * 36 + 20 + x, y % 5 * 32 + 42 + y % 5),
-                        Location = new Point(x * 36 + 27 , y % 5 * 32 + 42 ),
+                        Location = new Point(x * 36 + 20 , y % 5 * 32 + 12 ),
                     };
 
                     if (idx >= 40)
@@ -1552,7 +1554,7 @@ namespace Client.MirScenes.Dialogs
                         GridType = MirGridType.QuestInventory,
                         Library = Libraries.Items,
                         Parent = this,
-                        Location = new Point(x * 36 + 9 + x, y * 32 + 37 + y),
+                        Location = new Point(x * 36 + 2 + x, y * 32 + 7 + y),
                         Visible = false
                     };
                 }
@@ -1561,7 +1563,7 @@ namespace Client.MirScenes.Dialogs
             WeightLabel = new MirLabel
             {
                 Parent = this,
-                Location = new Point(215, 215),
+                Location = new Point(208, 185),
                 Size = new Size(80, 14)
             };
             WeightBar.BeforeDraw += WeightBar_BeforeDraw;
@@ -1580,6 +1582,11 @@ namespace Client.MirScenes.Dialogs
                 };
             }
 
+        }
+
+        private void InventoryDialog_BeforeDraw(object sender, EventArgs e)
+        {
+            Library.DrawWithOutOffset(Index, Size, DisplayLocation, ForeColour, Opacity);
         }
 
         void Button_Click(object sender, EventArgs e)

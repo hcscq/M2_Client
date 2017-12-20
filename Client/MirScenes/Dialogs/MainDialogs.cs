@@ -568,7 +568,7 @@ namespace Client.MirScenes.Dialogs
         public Font ChatFont = new Font(Settings.FontName, 8F);
         public string LastPM = string.Empty;
 
-        public int StartIndex, LineCount = 4, WindowSize;
+        public int StartIndex, LineCount = 8, WindowSize;
         public string ChatPrefix = "";
 
         public bool Transparent;
@@ -577,10 +577,13 @@ namespace Client.MirScenes.Dialogs
         {
             //Index = Settings.Resolution != 800 ? 2221 : 2201;
             //Library = Libraries.Prguse;
-            Location = new Point(GameScene.Scene.MainDialog.Location.X + 200, Settings.ScreenHeight - 117);
-            PixelDetect = true;
+            Location = new Point(GameScene.Scene.MainDialog.Location.X + 208, Settings.ScreenHeight - 131);
+            //PixelDetect = true;
+            //Movable = true;
 
-            this.BorderColour = Color.Red;
+
+            TakeSizeMode = UsedSize.Specify;
+            Size = new Size(387,125);
             KeyPress += ChatPanel_KeyPress;
             KeyDown += ChatPanel_KeyDown;
             MouseWheel += ChatPanel_MouseWheel;
@@ -590,8 +593,8 @@ namespace Client.MirScenes.Dialogs
                 BackColour = Color.DarkGray,
                 ForeColour = Color.Black,
                 Parent = this,
-                Size = new Size(Settings.Resolution != 800 ? 627 : 403, 13),
-                Location = new Point(1, 54),
+                Size = new Size(this.Size.Width, 13),
+                Location = new Point(0, this.Size.Height-13),
                 MaxLength = Globals.MaxChatLength,
                 Visible = false,
                 Font = ChatFont,
@@ -982,6 +985,7 @@ namespace Client.MirScenes.Dialogs
         }
         private void ChatPanel_KeyPress(object sender, KeyPressEventArgs e)
         {
+            GameScene.Scene.ChatDialog.ReceiveChat("SYS:Chat test.", ChatType.System);
             switch (e.KeyChar)
             {
                 case '@':
@@ -4176,7 +4180,7 @@ namespace Client.MirScenes.Dialogs
             Location = new Point((Settings.ScreenWidth - Size.Width)/2, GameScene.Scene.MainDialog.Location.Y + this.Size.Height + 76);
             Sort = true;
             Visible = true;
-            Movable = true;
+            //Movable = true;
             
 
             ExitButton = new MirButton

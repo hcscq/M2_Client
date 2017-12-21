@@ -989,7 +989,7 @@ namespace Client.MirScenes.Dialogs
         }
         private void ChatPanel_KeyPress(object sender, KeyPressEventArgs e)
         {
-            GameScene.Scene.ChatDialog.ReceiveChat("SYS:Chat test.", ChatType.System);
+            //GameScene.Scene.ChatDialog.ReceiveChat("SYS:Chat test.", ChatType.System);
             switch (e.KeyChar)
             {
                 case '@':

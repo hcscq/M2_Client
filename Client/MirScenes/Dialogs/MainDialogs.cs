@@ -736,7 +736,11 @@ namespace Client.MirScenes.Dialogs
                         {
                             string[] parts = ChatTextBox.Text.Split(' ');
                             if (parts.Length > 0)
+                            {
                                 LastPM = parts[0];
+                                GameScene.Scene.ChatDialog.ReceiveChat(ChatTextBox.Text, ChatType.WhisperOut);
+                            }
+                            
                         }
                     }
                     ChatTextBox.Visible = false;

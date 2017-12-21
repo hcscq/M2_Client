@@ -321,11 +321,11 @@ namespace ClientPackets
         public string Message = string.Empty;
         protected override void ReadPacket(BinaryReader reader)
         {
-            Message = reader.ReadString();
+            Message = System.Text.Encoding.Default.GetString(reader.ReadBytes((int)reader.BaseStream.Length));
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(Message);
+            writer.Write(System.Text.Encoding.Default.GetBytes(Message));
         }
     }
     public sealed class MoveItem : Packet

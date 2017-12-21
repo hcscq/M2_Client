@@ -925,22 +925,20 @@ namespace ServerPackets
     {
         public override short Index
         {
-            get { return (short)ServerPacketIds.Chat; }
+            get { return (short)ServerPacketIds.SM_HEAR; }
         }
 
         public string Message = string.Empty;
-        public ChatType Type;
+        public ChatType Type { get { return (ChatType)wParam; }set { wParam = (short)value; } }
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            Message = reader.ReadString();
-            Type = (ChatType)reader.ReadByte();
+            Message =GetString(reader.ReadBytes((int)reader.BaseStream.Length));
         }
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(Message);
-            writer.Write((byte)Type);
+            writer.Write(System.Text.Encoding.Default.GetBytes(Message));
         }
     }
     public sealed class ObjectChat : Packet

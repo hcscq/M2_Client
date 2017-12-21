@@ -1319,27 +1319,36 @@ public enum ServerPacketIds : short
     ClientVersion,
     Disconnect,
     KeepAlive,
+
+    SM_HEAR = 40,
+    SM_SYSMESSAGE = 100,
+    SM_GROUPMESSAGE = 101,
+    SM_CRY = 102,
+    SM_WHISPER = 103,
+    SM_GUILDMESSAGE = 104,
+
+
     SM_PASSWD_FAIL = 503,
-    SM_NEWID_SUCCESS =504,
-    SM_LOGIN_BANNED=507,
-    SM_QUERYCHR=520,
-    SM_QUERYCHR_FAIL=527,
+    SM_NEWID_SUCCESS = 504,
+    SM_LOGIN_BANNED = 507,
+    SM_QUERYCHR = 520,
+    SM_QUERYCHR_FAIL = 527,
     SM_SELECTSERVER_OK = 530,
-    SM_PASSOK_SELECTSERVER =529,
-    SM_CHANGEPASSWORD =2003,
+    SM_PASSOK_SELECTSERVER = 529,
+    SM_CHANGEPASSWORD = 2003,
     ChangePasswordBanned,
 
 
-    SM_NEWCHR_FAIL=522,
-    SM_NEWCHR_SUCCESS=521,
-    SM_DELCHR_FAIL=524,
-    SM_DELCHR_SUCCESS=523,
-    SM_STARTPLAY=525,
+    SM_NEWCHR_FAIL = 522,
+    SM_NEWCHR_SUCCESS = 521,
+    SM_DELCHR_FAIL = 524,
+    SM_DELCHR_SUCCESS = 523,
+    SM_STARTPLAY = 525,
 
 
 
     // For game process
-    SM_ACTIONRESULT=3000,
+    SM_ACTIONRESULT = 3000,
 
     StartGameBanned,
     StartGameDelay,
@@ -1534,7 +1543,7 @@ public enum ServerPacketIds : short
     MailSent,
     ParcelCollected,
     MailCost,
-	ResizeInventory,
+    ResizeInventory,
     ResizeStorage,
     NewIntelligentCreature,
     UpdateIntelligentCreatureList,
@@ -5152,18 +5161,8 @@ public abstract class Packet
                 return new SEX.SendMagic();
 
             /*text msg begin*/
-            case ServerMsgIds.SM_HEAR:
-                return new SEX.HearedMessage();
-            case ServerMsgIds.SM_SYSMESSAGE:
-                return new SEX.SysMessage();
-            case ServerMsgIds.SM_GROUPMESSAGE:
-                return new SEX.GroupMessage();
-            case ServerMsgIds.SM_CRY:
-                return new SEX.CryMessage();
-            case ServerMsgIds.SM_WHISPER:
-                return new SEX.WhisperMessage();
-            case ServerMsgIds.SM_GUILDMESSAGE:
-                return new SEX.GuildMessage();
+            case (short)ServerPacketIds.SM_HEAR:
+                return new S.Chat();
             /*text msg end*/
             ///////////////////////////////////////////////////////////////////////////
             case (short)ServerPacketIds.Connected:
@@ -5218,8 +5217,6 @@ public abstract class Packet
                 return new S.ObjectWalk();
             case (short)ServerPacketIds.ObjectRun:
                 return new S.ObjectRun();
-            case (short)ServerPacketIds.Chat:
-                return new S.Chat();
             case (short)ServerPacketIds.ObjectChat:
                 return new S.ObjectChat();
             case (short)ServerPacketIds.NewItemInfo:

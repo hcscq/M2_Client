@@ -1703,6 +1703,9 @@ namespace Client.MirScenes
                     break;
                 case ServerMsgIds.SM_SENDMYMAGIC:
                     break;
+                case (short)ServerPacketIds.SM_HEAR:
+                    ReceiveChat((S.Chat)p);
+                    break;
                 /*EX process end*/
                 default:
                     base.ProcessPacket(p);

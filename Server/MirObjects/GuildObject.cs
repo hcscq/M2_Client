@@ -187,7 +187,7 @@ namespace Server.MirObjects
             writer.Write(FlagColour.ToArgb());   
         }
 
-        public void SendMessage(string message, ChatType Type = ChatType.Guild)
+        public void SendMessage(string message, MessageType Type = MessageType.Guild)
         {
             for (int i = 0; i < Ranks.Count; i++)
                 for (int j = 0; j < Ranks[i].Members.Count; j++)
@@ -299,7 +299,7 @@ namespace Server.MirObjects
             if (Character == null) return false;
             if ((RankIndex == 0) && (Character.Level < Settings.Guild_RequiredLevel))
             {
-                Self.ReceiveChat(String.Format("A guild leader needs to be at least level {0}", Settings.Guild_RequiredLevel), ChatType.System);
+                Self.ReceiveChat(String.Format("A guild leader needs to be at least level {0}", Settings.Guild_RequiredLevel), MessageType.System);
                 return false;
             }
 
@@ -308,7 +308,7 @@ namespace Server.MirObjects
             {
                 if (MemberRank.Members.Count <= 2)
                 {
-                    Self.ReceiveChat("A guild needs at least 2 leaders.", ChatType.System);
+                    Self.ReceiveChat("A guild needs at least 2 leaders.", MessageType.System);
                     return false;
                 }
                 for (int i = 0; i < MemberRank.Members.Count; i++)
@@ -316,7 +316,7 @@ namespace Server.MirObjects
                     if ((MemberRank.Members[i].Player != null) && (MemberRank.Members[i] != Member))
                         goto AllOk;
                 }
-                Self.ReceiveChat("You need at least 1 leader online.", ChatType.System);
+                Self.ReceiveChat("You need at least 1 leader online.", MessageType.System);
                 return false;
             }
 
@@ -352,7 +352,7 @@ namespace Server.MirObjects
         {
             if (Ranks.Count >= byte.MaxValue)
             {
-                Self.ReceiveChat("You cannot have anymore ranks.", ChatType.System);
+                Self.ReceiveChat("You cannot have anymore ranks.", MessageType.System);
                 return false;
             }
             int NewIndex = Ranks.Count > 1? Ranks.Count -1: 1;
@@ -370,12 +370,12 @@ namespace Server.MirObjects
         {
             if ((RankIndex >= Ranks.Count) || (Option > 7))
             {
-                Self.ReceiveChat("Rank not found!", ChatType.System);
+                Self.ReceiveChat("Rank not found!", MessageType.System);
                 return false;
             }
             if (Self.MyGuildRank.Index >= RankIndex)
             {
-                Self.ReceiveChat("You cannot change the options of your own rank!", ChatType.System);
+                Self.ReceiveChat("You cannot change the options of your own rank!", MessageType.System);
                 return false;
             }
             if ((Enabled != "true") && (Enabled != "false"))
@@ -405,7 +405,7 @@ namespace Server.MirObjects
 
             if (SelfRankIndex > RankIndex)
             {
-                Self.ReceiveChat("Your rank is not adequate.", ChatType.System);
+                Self.ReceiveChat("Your rank is not adequate.", MessageType.System);
                 return false;
             }
             if (RankIndex >= Ranks.Count)
@@ -449,20 +449,20 @@ namespace Server.MirObjects
             if (Member == null) return false;
             if (((Kicker.MyGuildRank.Index >= MemberRank.Index) && (Kicker.MyGuildRank.Index != 0)) && (Kicker.Info.Name != membername))
             {
-                Kicker.ReceiveChat("Your rank is not adequate.", ChatType.System);
+                Kicker.ReceiveChat("Your rank is not adequate.", MessageType.System);
                 return false;
             }
             if (MemberRank.Index == 0)
             {
                 if (MemberRank.Members.Count < 2)
                 {
-                    Kicker.ReceiveChat("You cannot leave the guild when you're leader.", ChatType.System);
+                    Kicker.ReceiveChat("You cannot leave the guild when you're leader.", MessageType.System);
                     return false;
                 }
                 for (int i = 0; i < MemberRank.Members.Count; i++)
                     if ((MemberRank.Members[i].Online) && (MemberRank.Members[i] != Member))
                         goto AllOk;
-                Kicker.ReceiveChat("You need at least 1 leader online.", ChatType.System);
+                Kicker.ReceiveChat("You need at least 1 leader online.", MessageType.System);
                 return false;
             }
             AllOk:
@@ -496,7 +496,7 @@ namespace Server.MirObjects
                 formermember.Info.GuildIndex = -1;
                 formermember.MyGuild = null;
                 formermember.MyGuildRank = null;
-                formermember.ReceiveChat(kickself ? "You have left your guild." : "You have been removed from your guild.", ChatType.Guild);
+                formermember.ReceiveChat(kickself ? "You have left your guild." : "You have been removed from your guild.", MessageType.Guild);
                 formermember.RefreshStats();
                 formermember.Enqueue(new ServerPackets.GuildStatus() { GuildName = "", GuildRankName = "", MyOptions = (RankOptions)0 });
                 formermember.BroadcastInfo();
@@ -804,8 +804,8 @@ namespace Server.MirObjects
             GuildA.WarringGuilds.Remove(GuildB);
             GuildB.WarringGuilds.Remove(GuildA);
 
-            GuildA.SendMessage(string.Format("War ended with {0}.", GuildB.Name, ChatType.Guild));
-            GuildB.SendMessage(string.Format("War ended with {0}.", GuildA.Name, ChatType.Guild));
+            GuildA.SendMessage(string.Format("War ended with {0}.", GuildB.Name, MessageType.Guild));
+            GuildB.SendMessage(string.Format("War ended with {0}.", GuildA.Name, MessageType.Guild));
             GuildA.UpdatePlayersColours();
             GuildB.UpdatePlayersColours();
         }

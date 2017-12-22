@@ -618,7 +618,7 @@ namespace Server.MirObjects
                 ReincarnationReady = false;
                 ActiveReincarnation = false;
                 ReincarnationTarget = null;
-                ReceiveChat("Reincarnation failed.", ChatType.System);
+                ReceiveChat("Reincarnation failed.", MessageType.System);
             }
             if ((ReincarnationReady || ActiveReincarnation) && (ReincarnationTarget == null || !ReincarnationTarget.Dead))
             {
@@ -662,7 +662,7 @@ namespace Server.MirObjects
 
             if (NewMail)
             {
-                ReceiveChat("New mail has arrived.", ChatType.System);
+                ReceiveChat("New mail has arrived.", MessageType.System);
 
                 GetMail();
             }
@@ -670,7 +670,7 @@ namespace Server.MirObjects
             if (Account.ExpandedStorageExpiryDate < Envir.Now && Account.HasExpandedStorage)
             {
                 Account.HasExpandedStorage = false;
-                ReceiveChat("Expanded storage has expired.", ChatType.System);
+                ReceiveChat("Expanded storage has expired.", MessageType.System);
                 Enqueue(new S.ResizeStorage { Size = Account.Storage.Length, HasExpandedStorage = Account.HasExpandedStorage, ExpiryTime = Account.ExpandedStorageExpiryDate });
             }
 
@@ -1099,7 +1099,7 @@ namespace Server.MirObjects
 
                 if (item?.ExpireInfo?.ExpiryDate <= Envir.Now)
                 {
-                    ReceiveChat($"{item.Info.FriendlyName} has just expired from your inventory.", ChatType.Hint);
+                    ReceiveChat($"{item.Info.FriendlyName} has just expired from your inventory.", MessageType.Hint);
                     Enqueue(new S.DeleteItem { UniqueID = item.UniqueID, Count = item.Count });
                     Info.Inventory[i] = null;
 
@@ -1110,7 +1110,7 @@ namespace Server.MirObjects
                     !(item?.RentalInformation?.ExpiryDate <= Envir.Now))
                     continue;
 
-                ReceiveChat($"The rental lock has been removed from {item.Info.FriendlyName}.", ChatType.Hint);
+                ReceiveChat($"The rental lock has been removed from {item.Info.FriendlyName}.", MessageType.Hint);
                 item.RentalInformation = null;
             }
 
@@ -1120,7 +1120,7 @@ namespace Server.MirObjects
 
                 if (item?.ExpireInfo?.ExpiryDate <= Envir.Now)
                 {
-                    ReceiveChat($"{item.Info.FriendlyName} has just expired from your equipment.", ChatType.Hint);
+                    ReceiveChat($"{item.Info.FriendlyName} has just expired from your equipment.", MessageType.Hint);
                     Enqueue(new S.DeleteItem { UniqueID = item.UniqueID, Count = item.Count });
                     Info.Equipment[i] = null;
 
@@ -1131,7 +1131,7 @@ namespace Server.MirObjects
                     !(item?.RentalInformation?.ExpiryDate <= Envir.Now))
                     continue;
 
-                ReceiveChat($"The rental lock has been removed from {item.Info.FriendlyName}.", ChatType.Hint);
+                ReceiveChat($"The rental lock has been removed from {item.Info.FriendlyName}.", MessageType.Hint);
                 item.RentalInformation = null;
             }
         }
@@ -1249,7 +1249,7 @@ namespace Server.MirObjects
                     item.CurrentDura = (ushort)(item.CurrentDura - 1000);
                     Enqueue(new S.DuraChanged { UniqueID = item.UniqueID, CurrentDura = item.CurrentDura });
                     RefreshStats();
-                    ReceiveChat("You have been given a second chance at life", ChatType.System);
+                    ReceiveChat("You have been given a second chance at life", MessageType.System);
                     return;
                 }
             }
@@ -1260,20 +1260,20 @@ namespace Server.MirObjects
 
                 if (AtWar(hitter) || WarZone)
                 {
-                    hitter.ReceiveChat(string.Format("You've been protected by the law"), ChatType.System);
+                    hitter.ReceiveChat(string.Format("You've been protected by the law"), MessageType.System);
                 }
                 else if (Envir.Time > BrownTime && PKPoints < 200)
                 {
                     UserItem weapon = hitter.Info.Equipment[(byte)EquipmentSlot.Weapon];
 
                     hitter.PKPoints = Math.Min(int.MaxValue, LastHitter.PKPoints + 100);
-                    hitter.ReceiveChat(string.Format("You have murdered {0}", Name), ChatType.System);
-                    ReceiveChat(string.Format("You have been murdered by {0}", LastHitter.Name), ChatType.System);
+                    hitter.ReceiveChat(string.Format("You have murdered {0}", Name), MessageType.System);
+                    ReceiveChat(string.Format("You have been murdered by {0}", LastHitter.Name), MessageType.System);
 
                     if (weapon != null && weapon.Luck > (Settings.MaxLuck * -1) && Envir.Random.Next(4) == 0)
                     {
                         weapon.Luck--;
-                        hitter.ReceiveChat("Your weapon has been cursed.", ChatType.System);
+                        hitter.ReceiveChat("Your weapon has been cursed.", MessageType.System);
                         hitter.Enqueue(new S.RefreshItem { Item = weapon });
                     }
                 }
@@ -1358,7 +1358,7 @@ namespace Server.MirObjects
                         {
                             Info.Equipment[i] = null;
                             Enqueue(new S.DeleteItem { UniqueID = item.UniqueID, Count = item.Count });
-                            ReceiveChat($"Your {item.FriendlyName} shattered upon death.", ChatType.System2);
+                            ReceiveChat($"Your {item.FriendlyName} shattered upon death.", MessageType.System2);
                             Report.ItemChanged("Death Drop", item, item.Count, 1);
                         }
                     }
@@ -1402,7 +1402,7 @@ namespace Server.MirObjects
                             Info.Equipment[i] = null;
                             Enqueue(new S.DeleteItem { UniqueID = item.UniqueID, Count = item.Count });
    
-                            ReceiveChat($"You died and {item.Info.FriendlyName} has been returned to it's owner.", ChatType.Hint);
+                            ReceiveChat($"You died and {item.Info.FriendlyName} has been returned to it's owner.", MessageType.Hint);
                             Report.ItemMailed("Death Dropped Rental Item", item, 1, 1);
 
                             continue;
@@ -1414,7 +1414,7 @@ namespace Server.MirObjects
                         if (item.Info.GlobalDropNotify)
                             foreach (var player in Envir.Players)
                             {
-                                player.ReceiveChat($"{Name} has dropped {item.FriendlyName}.", ChatType.System2);
+                                player.ReceiveChat($"{Name} has dropped {item.FriendlyName}.", MessageType.System2);
                             }
 
                         Info.Equipment[i] = null;
@@ -1472,7 +1472,7 @@ namespace Server.MirObjects
                         Info.Inventory[i] = null;
                         Enqueue(new S.DeleteItem { UniqueID = item.UniqueID, Count = item.Count });
 
-                        ReceiveChat($"You died and {item.Info.FriendlyName} has been returned to has been returned to it's owner.", ChatType.Hint);
+                        ReceiveChat($"You died and {item.Info.FriendlyName} has been returned to has been returned to it's owner.", MessageType.Hint);
                         Report.ItemMailed("Death Dropped Rental Item", item, 1, 1);
 
                         continue;
@@ -1484,7 +1484,7 @@ namespace Server.MirObjects
                     if (item.Info.GlobalDropNotify)
                         foreach (var player in Envir.Players)
                         {
-                            player.ReceiveChat($"{Name} has dropped {item.FriendlyName}.", ChatType.System2);
+                            player.ReceiveChat($"{Name} has dropped {item.FriendlyName}.", MessageType.System2);
                         }
 
                     Info.Inventory[i] = null;
@@ -1518,7 +1518,7 @@ namespace Server.MirObjects
                     {
                         Info.Equipment[i] = null;
                         Enqueue(new S.DeleteItem { UniqueID = item.UniqueID, Count = item.Count });
-                        ReceiveChat($"Your {item.FriendlyName} shattered upon death.", ChatType.System2);
+                        ReceiveChat($"Your {item.FriendlyName} shattered upon death.", MessageType.System2);
                         Report.ItemChanged("RedDeathDrop", item, item.Count, 1);
                     }
 
@@ -1551,7 +1551,7 @@ namespace Server.MirObjects
                             Info.Equipment[i] = null;
                             Enqueue(new S.DeleteItem { UniqueID = item.UniqueID, Count = item.Count });
 
-                            ReceiveChat($"You died and {item.Info.FriendlyName} has been returned to it's owner.", ChatType.Hint);
+                            ReceiveChat($"You died and {item.Info.FriendlyName} has been returned to it's owner.", MessageType.Hint);
                             Report.ItemMailed("Death Dropped Rental Item", item, 1, 1);
 
                             continue;
@@ -1563,7 +1563,7 @@ namespace Server.MirObjects
                         if (item.Info.GlobalDropNotify)
                             foreach (var player in Envir.Players)
                             {
-                                player.ReceiveChat($"{Name} has dropped {item.FriendlyName}.", ChatType.System2);
+                                player.ReceiveChat($"{Name} has dropped {item.FriendlyName}.", MessageType.System2);
                             }
 
                         Info.Equipment[i] = null;
@@ -1593,7 +1593,7 @@ namespace Server.MirObjects
                     Info.Inventory[i] = null;
                     Enqueue(new S.DeleteItem { UniqueID = item.UniqueID, Count = item.Count });
 
-                    ReceiveChat($"You died and {item.Info.FriendlyName} has been returned to it's owner.", ChatType.Hint);
+                    ReceiveChat($"You died and {item.Info.FriendlyName} has been returned to it's owner.", MessageType.Hint);
                     Report.ItemMailed("Death Dropped Rental Item", item, 1, 1);
 
                     continue;
@@ -1605,7 +1605,7 @@ namespace Server.MirObjects
                 if (item.Info.GlobalDropNotify)
                     foreach (var player in Envir.Players)
                     {
-                        player.ReceiveChat($"{Name} has dropped {item.FriendlyName}.", ChatType.System2);
+                        player.ReceiveChat($"{Name} has dropped {item.FriendlyName}.", MessageType.System2);
                     }
 
                 Info.Inventory[i] = null;
@@ -2018,11 +2018,11 @@ namespace Server.MirObjects
                 Info.Magics[i].CastTime = Envir.Time > TimeSpend ? Envir.Time - TimeSpend : 0;
             }
             Enqueue(new S.StartGame { Result = 4, Resolution = Settings.AllowedResolution });
-            ReceiveChat("Welcome to the Legend of Mir 2 Crystal Server.", ChatType.Hint);
+            ReceiveChat("Welcome to the Legend of Mir 2 Crystal Server.", MessageType.Hint);
 
             if (Settings.TestServer)
             {
-                ReceiveChat("Game is currently in test mode.", ChatType.Hint);
+                ReceiveChat("Game is currently in test mode.", MessageType.Hint);
                 Chat("@GAMEMASTER");
             }
 
@@ -2032,7 +2032,7 @@ namespace Server.MirObjects
                 if (MyGuild == null)
                 {
                     Info.GuildIndex = -1;
-                    ReceiveChat("You have been removed from the guild.", ChatType.System);
+                    ReceiveChat("You have been removed from the guild.", MessageType.System);
                 }
                 else
                 {
@@ -2041,7 +2041,7 @@ namespace Server.MirObjects
                     {
                         MyGuild = null;
                         Info.GuildIndex = -1;
-                        ReceiveChat("You have been removed from the guild.", ChatType.System);
+                        ReceiveChat("You have been removed from the guild.", MessageType.System);
                     }
                 }
             }
@@ -2161,7 +2161,7 @@ namespace Server.MirObjects
 
             if (Info.Mail.Count > Settings.MailCapacity)
             {
-                ReceiveChat("Your mailbox is overflowing.", ChatType.System);
+                ReceiveChat("Your mailbox is overflowing.", MessageType.System);
             }
 
             Report.Connected(Connection.IPAddress);
@@ -3414,13 +3414,13 @@ namespace Server.MirObjects
                 {
                     IsGM = true;
                     SMain.Enqueue(string.Format("{0} is now a GM", Name));
-                    ReceiveChat("You have been made a GM", ChatType.System);
+                    ReceiveChat("You have been made a GM", MessageType.System);
                     Envir.RemoveRank(Info);//remove gm chars from ranking to avoid causing bugs in rank list
                 }
                 else
                 {
                     SMain.Enqueue(string.Format("{0} attempted a GM login", Name));
-                    ReceiveChat("Incorrect login password", ChatType.System);
+                    ReceiveChat("Incorrect login password", MessageType.System);
                 }
                 GMLogin = false;
                 return;
@@ -3430,7 +3430,7 @@ namespace Server.MirObjects
             {
                 if (Info.ChatBanExpiryDate > DateTime.Now)
                 {
-                    ReceiveChat("You are currently banned from chatting.", ChatType.System);
+                    ReceiveChat("You are currently banned from chatting.", MessageType.System);
                     return;
                 }
 
@@ -3444,7 +3444,7 @@ namespace Server.MirObjects
                     {
                         Info.ChatBanned = true;
                         Info.ChatBanExpiryDate = DateTime.Now.AddMinutes(5);
-                        ReceiveChat("You have been banned from chatting for 5 minutes.", ChatType.System);
+                        ReceiveChat("You have been banned from chatting for 5 minutes.", MessageType.System);
                         return;
                     }
 
@@ -3477,27 +3477,27 @@ namespace Server.MirObjects
                     IntelligentCreatureObject creature = GetCreatureByName(parts[0]);
                     if (creature != null)
                     {
-                        creature.ReceiveChat(message.Remove(0, parts[0].Length), ChatType.WhisperIn);
+                        creature.ReceiveChat(message.Remove(0, parts[0].Length), MessageType.WhisperIn);
                         return;
                     }
-                    ReceiveChat(string.Format("Could not find {0}.", parts[0]), ChatType.System);
+                    ReceiveChat(string.Format("Could not find {0}.", parts[0]), MessageType.System);
                     return;
                 }
 
                 if (player.Info.Friends.Any(e => e.Info == Info && e.Blocked))
                 {
-                    ReceiveChat("Player is not accepting your messages.", ChatType.System);
+                    ReceiveChat("Player is not accepting your messages.", MessageType.System);
                     return;
                 }
 
                 if (Info.Friends.Any(e => e.Info == player.Info && e.Blocked))
                 {
-                    ReceiveChat("Cannot message player whilst they are on your blacklist.", ChatType.System);
+                    ReceiveChat("Cannot message player whilst they are on your blacklist.", MessageType.System);
                     return;
                 }
 
-                ReceiveChat(string.Format("/{0}", message), ChatType.WhisperOut);
-                player.ReceiveChat(string.Format("{0}=>{1}", Name, message.Remove(0, parts[0].Length)), ChatType.WhisperIn);
+                ReceiveChat(string.Format("/{0}", message), MessageType.WhisperOut);
+                player.ReceiveChat(string.Format("{0}=>{1}", Name, message.Remove(0, parts[0].Length)), MessageType.WhisperIn);
             }
             else if (message.StartsWith("!!"))
             {
@@ -3505,7 +3505,7 @@ namespace Server.MirObjects
                 //Group
                 message = String.Format("{0}:{1}", Name, message.Remove(0, 2));
 
-                p = new S.ObjectChat { ObjectID = ObjectID, Text = message, Type = ChatType.Group };
+                p = new S.ObjectChat { ObjectID = ObjectID, Text = message, Type = MessageType.Group };
 
                 for (int i = 0; i < GroupMembers.Count; i++)
                     GroupMembers[i].Enqueue(p);
@@ -3534,24 +3534,24 @@ namespace Server.MirObjects
 
                 if (player == null)
                 {
-                    ReceiveChat(string.Format("{0} isn't online.", Mentor.Name), ChatType.System);
+                    ReceiveChat(string.Format("{0} isn't online.", Mentor.Name), MessageType.System);
                     return;
                 }
 
-                ReceiveChat(string.Format("{0}: {1}", Name, message), ChatType.Mentor);
-                player.ReceiveChat(string.Format("{0}: {1}", Name, message), ChatType.Mentor);
+                ReceiveChat(string.Format("{0}: {1}", Name, message), MessageType.Mentor);
+                player.ReceiveChat(string.Format("{0}: {1}", Name, message), MessageType.Mentor);
             }
             else if (message.StartsWith("!"))
             {
                 //Shout
                 if (Envir.Time < ShoutTime)
                 {
-                    ReceiveChat(string.Format("You cannot shout for another {0} seconds.", Math.Ceiling((ShoutTime - Envir.Time) / 1000D)), ChatType.System);
+                    ReceiveChat(string.Format("You cannot shout for another {0} seconds.", Math.Ceiling((ShoutTime - Envir.Time) / 1000D)), MessageType.System);
                     return;
                 }
                 if (Level < 8 && (!HasMapShout && !HasServerShout))
                 {
-                    ReceiveChat("You need to be level 8 before you can shout.", ChatType.System);
+                    ReceiveChat("You need to be level 8 before you can shout.", MessageType.System);
                     return;
                 }
 
@@ -3560,7 +3560,7 @@ namespace Server.MirObjects
 
                 if (HasMapShout)
                 {
-                    p = new S.Chat { Message = message, Type = ChatType.Shout2 };
+                    p = new S.Chat { Message = message, Type = MessageType.Shout2 };
                     HasMapShout = false;
 
                     for (int i = 0; i < CurrentMap.Players.Count; i++)
@@ -3571,7 +3571,7 @@ namespace Server.MirObjects
                 }
                 else if (HasServerShout)
                 {
-                    p = new S.Chat { Message = message, Type = ChatType.Shout3 };
+                    p = new S.Chat { Message = message, Type = MessageType.Shout3 };
                     HasServerShout = false;
 
                     for (int i = 0; i < Envir.Players.Count; i++)
@@ -3582,7 +3582,7 @@ namespace Server.MirObjects
                 }
                 else
                 {
-                    p = new S.Chat { Message = message, Type = ChatType.Shout };
+                    p = new S.Chat { Message = message, Type = MessageType.Shout };
 
                     //Envir.Broadcast(p);
                     for (int i = 0; i < CurrentMap.Players.Count; i++)
@@ -3608,12 +3608,12 @@ namespace Server.MirObjects
             
                 if (player == null)
                 {
-                    ReceiveChat(string.Format("{0} isn't online.", Lover.Name), ChatType.System);
+                    ReceiveChat(string.Format("{0} isn't online.", Lover.Name), MessageType.System);
                     return;
                 }
 
-                ReceiveChat(string.Format("{0}: {1}", Name, message), ChatType.Relationship);
-                player.ReceiveChat(string.Format("{0}: {1}", Name, message), ChatType.Relationship);
+                ReceiveChat(string.Format("{0}: {1}", Name, message), MessageType.Relationship);
+                player.ReceiveChat(string.Format("{0}: {1}", Name, message), MessageType.Relationship);
             }
             else if (message.StartsWith("@!"))
             {
@@ -3621,7 +3621,7 @@ namespace Server.MirObjects
 
                 message = String.Format("(*){0}:{1}", Name, message.Remove(0, 2));
 
-                p = new S.Chat { Message = message, Type = ChatType.Announcement };
+                p = new S.Chat { Message = message, Type = MessageType.Announcement };
 
                 Envir.Broadcast(p);
             }
@@ -3643,7 +3643,7 @@ namespace Server.MirObjects
                 {
                     case "LOGIN":
                         GMLogin = true;
-                        ReceiveChat("Please type the GM Password", ChatType.Hint);
+                        ReceiveChat("Please type the GM Password", MessageType.Hint);
                         return;
 
                     case "KILL":
@@ -3655,7 +3655,7 @@ namespace Server.MirObjects
 
                             if (player == null)
                             {
-                                ReceiveChat(string.Format("Could not find {0}", parts[0]), ChatType.System);
+                                ReceiveChat(string.Format("Could not find {0}", parts[0]), MessageType.System);
                                 return;
                             }
                             if (!player.GMNeverDie) player.Die();
@@ -3695,14 +3695,14 @@ namespace Server.MirObjects
 
                         if (data == null)
                         {
-                            ReceiveChat(string.Format("Player {0} was not found", parts[1]), ChatType.System);
+                            ReceiveChat(string.Format("Player {0} was not found", parts[1]), MessageType.System);
                             return;
                         }
 
                         if (!data.Deleted) return;
                         data.Deleted = false;
 
-                        ReceiveChat(string.Format("Player {0} has been restored by", data.Name), ChatType.System);
+                        ReceiveChat(string.Format("Player {0} has been restored by", data.Name), MessageType.System);
                         SMain.Enqueue(string.Format("Player {0} has been restored by {1}", data.Name, Name));
 
                         break;
@@ -3724,7 +3724,7 @@ namespace Server.MirObjects
                                 break;
                         }
 
-                        ReceiveChat(string.Format("Player {0} has been changed to {1}", data.Name, data.Gender), ChatType.System);
+                        ReceiveChat(string.Format("Player {0} has been changed to {1}", data.Name, data.Gender), MessageType.System);
                         SMain.Enqueue(string.Format("Player {0} has been changed to {1} by {2}", data.Name, data.Gender, Name));
 
                         if (data.Player != null)
@@ -3750,7 +3750,7 @@ namespace Server.MirObjects
                                 player.Level = level;
                                 player.LevelUp();
 
-                                ReceiveChat(string.Format("Player {0} has been Leveled {1} -> {2}.", player.Name, old, player.Level), ChatType.System);
+                                ReceiveChat(string.Format("Player {0} has been Leveled {1} -> {2}.", player.Name, old, player.Level), MessageType.System);
                                 SMain.Enqueue(string.Format("Player {0} has been Leveled {1} -> {2} by {3}", player.Name, old, player.Level, Name));
                                 return;
                             }
@@ -3769,13 +3769,13 @@ namespace Server.MirObjects
                                 Level = level;
                                 LevelUp();
 
-                                ReceiveChat(string.Format("Leveled {0} -> {1}.", old, Level), ChatType.System);
+                                ReceiveChat(string.Format("Leveled {0} -> {1}.", old, Level), MessageType.System);
                                 SMain.Enqueue(string.Format("Player {0} has been Leveled {1} -> {2} by {3}", Name, old, Level, Name));
                                 return;
                             }
                         }
 
-                        ReceiveChat("Could not level player", ChatType.System);
+                        ReceiveChat("Could not level player", MessageType.System);
                         break;
 
                     case "MAKE":
@@ -3809,7 +3809,7 @@ namespace Server.MirObjects
                             GainItem(item);
                         }
 
-                        ReceiveChat(string.Format("{0} x{1} has been created.", iInfo.Name, tempCount), ChatType.System);
+                        ReceiveChat(string.Format("{0} x{1} has been created.", iInfo.Name, tempCount), MessageType.System);
                         SMain.Enqueue(string.Format("Player {0} has attempted to Create {1} x{2}", Name, iInfo.Name, tempCount));
                         break;
 
@@ -3838,7 +3838,7 @@ namespace Server.MirObjects
                         GMNeverDie = !GMNeverDie;
 
                         hintstring = GMNeverDie ? "Invincible Mode." : "Normal Mode.";
-                        ReceiveChat(hintstring, ChatType.Hint);
+                        ReceiveChat(hintstring, MessageType.Hint);
                         UpdateGMBuff();
                         break;
 
@@ -3848,7 +3848,7 @@ namespace Server.MirObjects
                         GMGameMaster = !GMGameMaster;
 
                         hintstring = GMGameMaster ? "GameMaster Mode." : "Normal Mode.";
-                        ReceiveChat(hintstring, ChatType.Hint);
+                        ReceiveChat(hintstring, MessageType.Hint);
                         UpdateGMBuff();
                         break;
 
@@ -3857,13 +3857,13 @@ namespace Server.MirObjects
                         Observer = !Observer;
 
                         hintstring = Observer ? "Observer Mode." : "Normal Mode.";
-                        ReceiveChat(hintstring, ChatType.Hint);
+                        ReceiveChat(hintstring, MessageType.Hint);
                         UpdateGMBuff();
                         break;
                     case "ALLOWGUILD":
                         EnableGuildInvite = !EnableGuildInvite;
                         hintstring = EnableGuildInvite ? "Guild invites enabled." : "Guild invites disabled.";
-                        ReceiveChat(hintstring, ChatType.Hint);
+                        ReceiveChat(hintstring, MessageType.Hint);
                         break;
                     case "RECALL":
                         if (!IsGM) return;
@@ -3878,7 +3878,7 @@ namespace Server.MirObjects
                     case "ENABLEGROUPRECALL":
                         EnableGroupRecall = !EnableGroupRecall;
                         hintstring = EnableGroupRecall ? "Group Recall Enabled." : "Group Recall Disabled.";
-                        ReceiveChat(hintstring, ChatType.Hint);
+                        ReceiveChat(hintstring, MessageType.Hint);
                         break;
 
                     case "GROUPRECALL":
@@ -3887,13 +3887,13 @@ namespace Server.MirObjects
 
                         if (CurrentMap.Info.NoRecall)
                         {
-                            ReceiveChat("You cannot recall people on this map", ChatType.System);
+                            ReceiveChat("You cannot recall people on this map", MessageType.System);
                             return;
                         }
 
                         if (Envir.Time < LastRecallTime)
                         {
-                            ReceiveChat(string.Format("You cannot recall for another {0} seconds", (LastRecallTime - Envir.Time) / 1000), ChatType.System);
+                            ReceiveChat(string.Format("You cannot recall for another {0} seconds", (LastRecallTime - Envir.Time) / 1000), MessageType.System);
                             return;
                         }
 
@@ -3906,32 +3906,32 @@ namespace Server.MirObjects
                                     GroupMembers[i].Teleport(CurrentMap, CurrentLocation);
                                 else
                                     GroupMembers[i].ReceiveChat("A recall was attempted without your permission",
-                                        ChatType.System);
+                                        MessageType.System);
                             }
                         }
                         break;
                     case "RECALLMEMBER":
                         if (GroupMembers == null || GroupMembers[0] != this)
                         {
-                            ReceiveChat("You are not a group leader.", ChatType.System);
+                            ReceiveChat("You are not a group leader.", MessageType.System);
                             return;
                         }
 
                         if (Dead)
                         {
-                            ReceiveChat("You cannot recall when you are dead.", ChatType.System);
+                            ReceiveChat("You cannot recall when you are dead.", MessageType.System);
                             return;
                         }
 
                         if (CurrentMap.Info.NoRecall)
                         {
-                            ReceiveChat("You cannot recall people on this map", ChatType.System);
+                            ReceiveChat("You cannot recall people on this map", MessageType.System);
                             return;
                         }
 
                         if (Envir.Time < LastRecallTime)
                         {
-                            ReceiveChat(string.Format("You cannot recall for another {0} seconds", (LastRecallTime - Envir.Time) / 1000), ChatType.System);
+                            ReceiveChat(string.Format("You cannot recall for another {0} seconds", (LastRecallTime - Envir.Time) / 1000), MessageType.System);
                             return;
                         }
                         if (ItemSets.Any(set => set.Set == ItemSet.Recall && set.SetComplete))
@@ -3941,14 +3941,14 @@ namespace Server.MirObjects
 
                             if (player == null || !IsMember(player) || this == player)
                             {
-                                ReceiveChat((string.Format("Player {0} could not be found", parts[1])), ChatType.System);
+                                ReceiveChat((string.Format("Player {0} could not be found", parts[1])), MessageType.System);
                                 return;
                             }
                             if (!player.EnableGroupRecall)
                             {
                                 player.ReceiveChat("A recall was attempted without your permission",
-                                        ChatType.System);
-                                ReceiveChat((string.Format("{0} is blocking grouprecall", player.Name)), ChatType.System);
+                                        MessageType.System);
+                                ReceiveChat((string.Format("{0} is blocking grouprecall", player.Name)), MessageType.System);
                                 return;
                             }
                             LastRecallTime = Envir.Time + 60000;
@@ -3958,7 +3958,7 @@ namespace Server.MirObjects
                         }
                         else
                         {
-                            ReceiveChat("You cannot recall without a recallset.", ChatType.System);
+                            ReceiveChat("You cannot recall without a recallset.", MessageType.System);
                             return;
                         }
                         break;
@@ -3966,25 +3966,25 @@ namespace Server.MirObjects
                     case "RECALLLOVER":
                         if (Info.Married == 0)
                         {
-                            ReceiveChat("You're not married.", ChatType.System);
+                            ReceiveChat("You're not married.", MessageType.System);
                             return;
                         }
 
                         if (Dead)
                         {
-                            ReceiveChat("You can't recall when you are dead.", ChatType.System);
+                            ReceiveChat("You can't recall when you are dead.", MessageType.System);
                             return;
                         }
 
                         if (CurrentMap.Info.NoRecall)
                         {
-                            ReceiveChat("You cannot recall people on this map", ChatType.System);
+                            ReceiveChat("You cannot recall people on this map", MessageType.System);
                             return;
                         }
 
                         if (Info.Equipment[(int)EquipmentSlot.RingL] == null)
                         {
-                            ReceiveChat("You need to be wearing a Wedding Ring for recall.", ChatType.System);
+                            ReceiveChat("You need to be wearing a Wedding Ring for recall.", MessageType.System);
                             return;
                         }
 
@@ -3999,41 +3999,41 @@ namespace Server.MirObjects
 
                             if (player == null)
                             {
-                                ReceiveChat((string.Format("{0} is not online.", Lover.Name)), ChatType.System);
+                                ReceiveChat((string.Format("{0} is not online.", Lover.Name)), MessageType.System);
                                 return;
                             }
 
                             if (player.Dead)
                             {
-                                ReceiveChat("You can't recall a dead player.", ChatType.System);
+                                ReceiveChat("You can't recall a dead player.", MessageType.System);
                                 return;
                             }
 
                             if (player.Info.Equipment[(int)EquipmentSlot.RingL] == null)
                             {
-                                player.ReceiveChat((string.Format("You need to wear a Wedding Ring for recall.", Lover.Name)), ChatType.System);
-                                ReceiveChat((string.Format("{0} Isn't wearing a Wedding Ring.", Lover.Name)), ChatType.System);
+                                player.ReceiveChat((string.Format("You need to wear a Wedding Ring for recall.", Lover.Name)), MessageType.System);
+                                ReceiveChat((string.Format("{0} Isn't wearing a Wedding Ring.", Lover.Name)), MessageType.System);
                                 return;
                             }
 
                             if (player.Info.Equipment[(int)EquipmentSlot.RingL].WeddingRing != player.Info.Married)
                             {
-                                player.ReceiveChat((string.Format("You need to wear a Wedding Ring on your left finger for recall.", Lover.Name)), ChatType.System);
-                                ReceiveChat((string.Format("{0} Isn't wearing a Wedding Ring.", Lover.Name)), ChatType.System);
+                                player.ReceiveChat((string.Format("You need to wear a Wedding Ring on your left finger for recall.", Lover.Name)), MessageType.System);
+                                ReceiveChat((string.Format("{0} Isn't wearing a Wedding Ring.", Lover.Name)), MessageType.System);
                                 return;
                             }
 
                             if (!player.AllowLoverRecall)
                             {
                                 player.ReceiveChat("A recall was attempted without your permission",
-                                        ChatType.System);
-                                ReceiveChat((string.Format("{0} is blocking Lover Recall.", player.Name)), ChatType.System);
+                                        MessageType.System);
+                                ReceiveChat((string.Format("{0} is blocking Lover Recall.", player.Name)), MessageType.System);
                                 return;
                             }
 
                             if ((Envir.Time < LastRecallTime) && (Envir.Time < player.LastRecallTime))
                             {
-                                ReceiveChat(string.Format("You cannot recall for another {0} seconds", (LastRecallTime - Envir.Time) / 1000), ChatType.System);
+                                ReceiveChat(string.Format("You cannot recall for another {0} seconds", (LastRecallTime - Envir.Time) / 1000), MessageType.System);
                                 return;
                             }
 
@@ -4045,12 +4045,12 @@ namespace Server.MirObjects
                         }
                         else
                         {
-                            ReceiveChat("You cannot recall your lover without wearing a wedding ring", ChatType.System);
+                            ReceiveChat("You cannot recall your lover without wearing a wedding ring", MessageType.System);
                             return;
                         }
                         break;
                     case "TIME":
-                        ReceiveChat(string.Format("The time is : {0}", DateTime.Now.ToString("hh:mm tt")), ChatType.System);
+                        ReceiveChat(string.Format("The time is : {0}", DateTime.Now.ToString("hh:mm tt")), MessageType.System);
                         break;
 
                     case "ROLL":
@@ -4061,14 +4061,14 @@ namespace Server.MirObjects
                         for (int i = 0; i < GroupMembers.Count; i++)
                         {
                             PlayerObject playerSend = GroupMembers[i];
-                            playerSend.ReceiveChat(string.Format("{0} has rolled a {1}", Name, diceNum), ChatType.Group);
+                            playerSend.ReceiveChat(string.Format("{0} has rolled a {1}", Name, diceNum), MessageType.Group);
                         }
                         break;
 
                     case "MAP":
                         var mapName = CurrentMap.Info.FileName;
                         var mapTitle = CurrentMap.Info.Title;
-                        ReceiveChat((string.Format("You are currently in {0}. Map ID: {1}", mapTitle, mapName)), ChatType.System);
+                        ReceiveChat((string.Format("You are currently in {0}. Map ID: {1}", mapTitle, mapName)), MessageType.System);
                         break;
 
                     case "SAVEPLAYER":
@@ -4126,7 +4126,7 @@ namespace Server.MirObjects
 
                                         if(Envir.AccountList[i].Characters[j].Index != tt.Index)
                                         {
-                                            ReceiveChat("Player name was matched however IDs did not. Likely due to player being recreated. Player not restored", ChatType.System);
+                                            ReceiveChat("Player name was matched however IDs did not. Likely due to player being recreated. Player not restored", MessageType.System);
                                             return;
                                         }
 
@@ -4143,12 +4143,12 @@ namespace Server.MirObjects
                         if (!IsGM && !HasTeleportRing && !Settings.TestServer) return;
                         if (!IsGM && CurrentMap.Info.NoPosition)
                         {
-                            ReceiveChat(("You cannot position move on this map"), ChatType.System);
+                            ReceiveChat(("You cannot position move on this map"), MessageType.System);
                             return;
                         }
                         if (Envir.Time < LastTeleportTime)
                         {
-                            ReceiveChat(string.Format("You cannot teleport for another {0} seconds", (LastTeleportTime - Envir.Time) / 1000), ChatType.System);
+                            ReceiveChat(string.Format("You cannot teleport for another {0} seconds", (LastTeleportTime - Envir.Time) / 1000), MessageType.System);
                             return;
                         }
 
@@ -4178,7 +4178,7 @@ namespace Server.MirObjects
                         var map = SMain.Envir.GetMapByNameAndInstance(parts[1], instanceID);
                         if (map == null)
                         {
-                            ReceiveChat((string.Format("Map {0}:[{1}] could not be found", parts[1], instanceID)), ChatType.System);
+                            ReceiveChat((string.Format("Map {0}:[{1}] could not be found", parts[1], instanceID)), MessageType.System);
                             return;
                         }
 
@@ -4192,19 +4192,19 @@ namespace Server.MirObjects
                         {
                             case 2:
                                 ReceiveChat(TeleportRandom(200, 0, map) ? (string.Format("Moved to Map {0}", map.Info.FileName)) :
-                                    (string.Format("Failed movement to Map {0}", map.Info.FileName)), ChatType.System);
+                                    (string.Format("Failed movement to Map {0}", map.Info.FileName)), MessageType.System);
                                 break;
                             case 3:
                                 ReceiveChat(TeleportRandom(200, 0, map) ? (string.Format("Moved to Map {0}:[{1}]", map.Info.FileName, instanceID)) :
-                                    (string.Format("Failed movement to Map {0}:[{1}]", map.Info.FileName, instanceID)), ChatType.System);
+                                    (string.Format("Failed movement to Map {0}:[{1}]", map.Info.FileName, instanceID)), MessageType.System);
                                 break;
                             case 4:
                                 ReceiveChat(Teleport(map, new Point(x, y)) ? (string.Format("Moved to Map {0} at {1}:{2}", map.Info.FileName, x, y)) :
-                                    (string.Format("Failed movement to Map {0} at {1}:{2}", map.Info.FileName, x, y)), ChatType.System);
+                                    (string.Format("Failed movement to Map {0} at {1}:{2}", map.Info.FileName, x, y)), MessageType.System);
                                 break;
                             case 5:
                                 ReceiveChat(Teleport(map, new Point(x, y)) ? (string.Format("Moved to Map {0}:[{1}] at {2}:{3}", map.Info.FileName, instanceID, x, y)) :
-                                    (string.Format("Failed movement to Map {0}:[{1}] at {2}:{3}", map.Info.FileName, instanceID, x, y)), ChatType.System);
+                                    (string.Format("Failed movement to Map {0}:[{1}] at {2}:{3}", map.Info.FileName, instanceID, x, y)), MessageType.System);
                                 break;
                         }
                         break;
@@ -4224,14 +4224,14 @@ namespace Server.MirObjects
                         if (!IsGM && !Settings.TestServer) return;
                         if (parts.Length < 2)
                         {
-                            ReceiveChat("Not enough parameters to spawn monster", ChatType.System);
+                            ReceiveChat("Not enough parameters to spawn monster", MessageType.System);
                             return;
                         }
 
                         MonsterInfo mInfo = Envir.GetMonsterInfo(parts[1]);
                         if (mInfo == null)
                         {
-                            ReceiveChat((string.Format("Monster {0} does not exist", parts[1])), ChatType.System);
+                            ReceiveChat((string.Format("Monster {0} does not exist", parts[1])), MessageType.System);
                             return;
                         }
 
@@ -4246,7 +4246,7 @@ namespace Server.MirObjects
                             monster.Spawn(CurrentMap, Front);
                         }
 
-                        ReceiveChat((string.Format("Monster {0} x{1} has been spawned.", mInfo.Name, count)), ChatType.System);
+                        ReceiveChat((string.Format("Monster {0} x{1} has been spawned.", mInfo.Name, count)), MessageType.System);
                         break;
 
                     case "RECALLMOB":
@@ -4279,14 +4279,14 @@ namespace Server.MirObjects
                             Pets.Add(monster);
                         }
 
-                        ReceiveChat((string.Format("Pet {0} x{1} has been recalled.", mInfo2.Name, count)), ChatType.System);
+                        ReceiveChat((string.Format("Pet {0} x{1} has been recalled.", mInfo2.Name, count)), MessageType.System);
                         break;
 
                     case "RELOADDROPS":
                         if (!IsGM) return;
                         foreach (var t in Envir.MonsterInfoList)
                             t.LoadDrops();
-                        ReceiveChat("Drops Reloaded.", ChatType.Hint);
+                        ReceiveChat("Drops Reloaded.", MessageType.Hint);
                         break;
 
                     case "RELOADNPCS":
@@ -4299,7 +4299,7 @@ namespace Server.MirObjects
 
                         DefaultNPC.LoadInfo(true);
 
-                        ReceiveChat("NPCs Reloaded.", ChatType.Hint);
+                        ReceiveChat("NPCs Reloaded.", MessageType.Hint);
                         break;
 
                     case "GIVEGOLD":
@@ -4316,7 +4316,7 @@ namespace Server.MirObjects
 
                             if (player == null)
                             {
-                                ReceiveChat(string.Format("Player {0} was not found.", parts[1]), ChatType.System);
+                                ReceiveChat(string.Format("Player {0} was not found.", parts[1]), MessageType.System);
                                 return;
                             }
                         }
@@ -4344,7 +4344,7 @@ namespace Server.MirObjects
 
                             if (player == null)
                             {
-                                ReceiveChat(string.Format("Player {0} was not found.", parts[1]), ChatType.System);
+                                ReceiveChat(string.Format("Player {0} was not found.", parts[1]), MessageType.System);
                                 return;
                             }
                         }
@@ -4374,7 +4374,7 @@ namespace Server.MirObjects
 
                             if (player == null)
                             {
-                                ReceiveChat(string.Format("Player {0} was not found.", parts[1]), ChatType.System);
+                                ReceiveChat(string.Format("Player {0} was not found.", parts[1]), MessageType.System);
                                 return;
                             }
                         }
@@ -4409,7 +4409,7 @@ namespace Server.MirObjects
 
                             if (player == null)
                             {
-                                ReceiveChat(string.Format("Player {0} was not found.", parts[1]), ChatType.System);
+                                ReceiveChat(string.Format("Player {0} was not found.", parts[1]), MessageType.System);
                                 return;
                             }
                         }
@@ -4419,16 +4419,16 @@ namespace Server.MirObjects
                         if (player.Info.Magics.Any(e => e.Spell == skill))
                         {
                             player.Info.Magics.FirstOrDefault(e => e.Spell == skill).Level = spellLevel;
-                            player.ReceiveChat(string.Format("Spell {0} changed to level {1}", skill.ToString(), spellLevel), ChatType.Hint);
+                            player.ReceiveChat(string.Format("Spell {0} changed to level {1}", skill.ToString(), spellLevel), MessageType.Hint);
                             return;
                         }
                         else
                         {
-                            player.ReceiveChat(string.Format("You have learned {0} at level {1}", skill.ToString(), spellLevel), ChatType.Hint);
+                            player.ReceiveChat(string.Format("You have learned {0} at level {1}", skill.ToString(), spellLevel), MessageType.Hint);
 
                             if (player != this)
                             {
-                                ReceiveChat(string.Format("{0} has learned {1} at level {2}", player.Name, skill.ToString(), spellLevel), ChatType.Hint);
+                                ReceiveChat(string.Format("{0} has learned {1} at level {2}", player.Name, skill.ToString(), spellLevel), MessageType.Hint);
                             }
 
                             player.Info.Magics.Add(magic);
@@ -4443,7 +4443,7 @@ namespace Server.MirObjects
 
                         if (Envir.Time < LastProbeTime)
                         {
-                            ReceiveChat(string.Format("You cannot search for another {0} seconds", (LastProbeTime - Envir.Time) / 1000), ChatType.System);
+                            ReceiveChat(string.Format("You cannot search for another {0} seconds", (LastProbeTime - Envir.Time) / 1000), MessageType.System);
                             return;
                         }
 
@@ -4452,13 +4452,13 @@ namespace Server.MirObjects
 
                         if (player == null)
                         {
-                            ReceiveChat(parts[1] + " is not online", ChatType.System);
+                            ReceiveChat(parts[1] + " is not online", MessageType.System);
                             return;
                         }
                         if (player.CurrentMap == null) return;
                         if (!IsGM)
                             LastProbeTime = Envir.Time + 180000;
-                        ReceiveChat((string.Format("{0} is located at {1} ({2},{3})", player.Name, player.CurrentMap.Info.Title, player.CurrentLocation.X, player.CurrentLocation.Y)), ChatType.System);
+                        ReceiveChat((string.Format("{0} is located at {1} ({2},{3})", player.Name, player.CurrentMap.Info.Title, player.CurrentLocation.X, player.CurrentLocation.Y)), MessageType.System);
                         break;
 
                     case "LEAVEGUILD":
@@ -4466,7 +4466,7 @@ namespace Server.MirObjects
                         if (MyGuildRank == null) return;
                         if(MyGuild.IsAtWar())
                         {
-                            ReceiveChat("Cannot leave guild whilst at war.", ChatType.System);
+                            ReceiveChat("Cannot leave guild whilst at war.", MessageType.System);
                             return;
                         }
 
@@ -4481,32 +4481,32 @@ namespace Server.MirObjects
 
                         if (player == null)
                         {
-                            ReceiveChat(string.Format("Player {0} was not found.", parts[1]), ChatType.System);
+                            ReceiveChat(string.Format("Player {0} was not found.", parts[1]), MessageType.System);
                             return;
                         }
                         if (player.MyGuild != null)
                         {
-                            ReceiveChat(string.Format("Player {0} is already in a guild.", player.Name), ChatType.System);
+                            ReceiveChat(string.Format("Player {0} is already in a guild.", player.Name), MessageType.System);
                             return;
                         }
 
                         String gName = parts.Length < 3 ? parts[2] : parts[1];
                         if ((gName.Length < 3) || (gName.Length > 20))
                         {
-                            ReceiveChat("Guildname is restricted to 3-20 characters.", ChatType.System);
+                            ReceiveChat("Guildname is restricted to 3-20 characters.", MessageType.System);
                             return;
                         }
                         GuildObject guild = Envir.GetGuild(gName);
                         if (guild != null)
                         {
-                            ReceiveChat(string.Format("Guild {0} already exists.", gName), ChatType.System);
+                            ReceiveChat(string.Format("Guild {0} already exists.", gName), MessageType.System);
                             return;
                         }
                         player.CanCreateGuild = true;
                         if (player.CreateGuild(gName))
-                            ReceiveChat(string.Format("Successfully created guild {0}", gName), ChatType.System);
+                            ReceiveChat(string.Format("Successfully created guild {0}", gName), MessageType.System);
                         else
-                            ReceiveChat("Failed to create guild", ChatType.System);
+                            ReceiveChat("Failed to create guild", MessageType.System);
                         player.CanCreateGuild = false;
                         break;
 
@@ -4514,9 +4514,9 @@ namespace Server.MirObjects
                         AllowTrade = !AllowTrade;
 
                         if (AllowTrade)
-                            ReceiveChat("You are now allowing trade", ChatType.System);
+                            ReceiveChat("You are now allowing trade", MessageType.System);
                         else
-                            ReceiveChat("You are no longer allowing trade", ChatType.System);
+                            ReceiveChat("You are no longer allowing trade", MessageType.System);
                         break;
 
                     case "TRIGGER":
@@ -4529,7 +4529,7 @@ namespace Server.MirObjects
 
                             if (player == null)
                             {
-                                ReceiveChat(string.Format("Player {0} was not found.", parts[2]), ChatType.System);
+                                ReceiveChat(string.Format("Player {0} was not found.", parts[2]), MessageType.System);
                                 return;
                             }
 
@@ -4552,7 +4552,7 @@ namespace Server.MirObjects
                             RefreshMount();
                         }
                         else
-                            ReceiveChat("You haven't a mount...", ChatType.System);
+                            ReceiveChat("You haven't a mount...", MessageType.System);
 
                         ChatTime = 0;
                         break;
@@ -4584,7 +4584,7 @@ namespace Server.MirObjects
                         {
                             if (Info.Flags[i] == false) continue;
 
-                            ReceiveChat("Flag " + i, ChatType.Hint);
+                            ReceiveChat("Flag " + i, MessageType.Hint);
                         }
                         break;
 
@@ -4595,7 +4595,7 @@ namespace Server.MirObjects
 
                         if (player == null)
                         {
-                            ReceiveChat(parts[1] + " is not online", ChatType.System);
+                            ReceiveChat(parts[1] + " is not online", MessageType.System);
                             return;
                         }
 
@@ -4650,7 +4650,7 @@ namespace Server.MirObjects
 
                         data.Class = mirClass;
 
-                        ReceiveChat(string.Format("Player {0} has been changed to {1}", data.Name, data.Class), ChatType.System);
+                        ReceiveChat(string.Format("Player {0} has been changed to {1}", data.Name, data.Class), MessageType.System);
                         SMain.Enqueue(string.Format("Player {0} has been changed to {1} by {2}", data.Name, data.Class, Name));
 
                         if (data.Player != null)
@@ -4748,13 +4748,13 @@ namespace Server.MirObjects
                                     switch (result)
                                     {
                                         case -1:
-                                            ReceiveChat(string.Format("{0} : Condition Error.", temp.Name), ChatType.System);
+                                            ReceiveChat(string.Format("{0} : Condition Error.", temp.Name), MessageType.System);
                                             break;
                                         case 0:
-                                            ReceiveChat(string.Format("{0} : Upgrade Failed.", temp.Name), ChatType.System);
+                                            ReceiveChat(string.Format("{0} : Upgrade Failed.", temp.Name), MessageType.System);
                                             break;
                                         case 1:
-                                            ReceiveChat(string.Format("{0} : AWAKE Level {1}, value {2}~{3}.", temp.Name, awake.getAwakeLevel(), awake.getAwakeValue(), awake.getAwakeValue()), ChatType.System);
+                                            ReceiveChat(string.Format("{0} : AWAKE Level {1}, value {2}~{3}.", temp.Name, awake.getAwakeLevel(), awake.getAwakeValue(), awake.getAwakeValue()), MessageType.System);
                                             p = new S.RefreshItem { Item = temp };
                                             Enqueue(p);
                                             break;
@@ -4786,10 +4786,10 @@ namespace Server.MirObjects
                                     switch (result)
                                     {
                                         case 0:
-                                            ReceiveChat(string.Format("{0} : Remove failed Level 0", temp.Name), ChatType.System);
+                                            ReceiveChat(string.Format("{0} : Remove failed Level 0", temp.Name), MessageType.System);
                                             break;
                                         case 1:
-                                            ReceiveChat(string.Format("{0} : Remove success. Level {1}", temp.Name, temp.Awake.getAwakeLevel()), ChatType.System);
+                                            ReceiveChat(string.Format("{0} : Remove success. Level {1}", temp.Name, temp.Awake.getAwakeLevel()), MessageType.System);
                                             p = new S.RefreshItem { Item = temp };
                                             Enqueue(p);
                                             break;
@@ -4809,37 +4809,37 @@ namespace Server.MirObjects
 
                         if (MyGuild == null)
                         {
-                            ReceiveChat("You are not in a guild.", ChatType.System);
+                            ReceiveChat("You are not in a guild.", MessageType.System);
                         }
 
                         if (MyGuild.Ranks[0] != MyGuildRank)
                         {
-                            ReceiveChat("You must be a leader to start a war.", ChatType.System);
+                            ReceiveChat("You must be a leader to start a war.", MessageType.System);
                             return;
                         }
 
                         if (enemyGuild == null)
                         {
-                            ReceiveChat(string.Format("Could not find guild {0}.", parts[1]), ChatType.System);
+                            ReceiveChat(string.Format("Could not find guild {0}.", parts[1]), MessageType.System);
                             return;
                         }
 
                         if (MyGuild == enemyGuild)
                         {
-                            ReceiveChat("Cannot go to war with your own guild.", ChatType.System);
+                            ReceiveChat("Cannot go to war with your own guild.", MessageType.System);
                             return;
                         }
 
                         if (MyGuild.WarringGuilds.Contains(enemyGuild))
                         {
-                            ReceiveChat("Already at war with this guild.", ChatType.System);
+                            ReceiveChat("Already at war with this guild.", MessageType.System);
                             return;
                         }
 
                         if (MyGuild.GoToWar(enemyGuild))
                         {
-                            ReceiveChat(string.Format("You started a war with {0}.", parts[1]), ChatType.System);
-                            enemyGuild.SendMessage(string.Format("{0} has started a war", MyGuild.Name), ChatType.System);
+                            ReceiveChat(string.Format("You started a war with {0}.", parts[1]), MessageType.System);
+                            enemyGuild.SendMessage(string.Format("{0} has started a war", MyGuild.Name), MessageType.System);
                         }
 
                         break;
@@ -4853,11 +4853,11 @@ namespace Server.MirObjects
                                 Account.Gold -= openGold;
                                 Enqueue(new S.LoseGold { Gold = openGold });
                                 Enqueue(new S.ResizeInventory { Size = Info.ResizeInventory() });
-                                ReceiveChat("Inventory size increased.", ChatType.System);
+                                ReceiveChat("Inventory size increased.", MessageType.System);
                             }
                             else
                             {
-                                ReceiveChat("Not enough gold.", ChatType.System);
+                                ReceiveChat("Not enough gold.", MessageType.System);
                             }
                             ChatTime = 0;
                         }
@@ -4876,12 +4876,12 @@ namespace Server.MirObjects
                                 if (Account.ExpandedStorageExpiryDate > Envir.Now)
                                 {
                                     Account.ExpandedStorageExpiryDate = Account.ExpandedStorageExpiryDate + addedTime;
-                                    ReceiveChat("Expanded storage time extended, expires on: " + Account.ExpandedStorageExpiryDate.ToString(), ChatType.System);
+                                    ReceiveChat("Expanded storage time extended, expires on: " + Account.ExpandedStorageExpiryDate.ToString(), MessageType.System);
                                 }
                                 else
                                 {
                                     Account.ExpandedStorageExpiryDate = Envir.Now + addedTime;
-                                    ReceiveChat("Storage expanded, expires on: " + Account.ExpandedStorageExpiryDate.ToString(), ChatType.System);
+                                    ReceiveChat("Storage expanded, expires on: " + Account.ExpandedStorageExpiryDate.ToString(), MessageType.System);
                                 }
 
                                 Enqueue(new S.LoseGold { Gold = cost });
@@ -4889,7 +4889,7 @@ namespace Server.MirObjects
                             }
                             else
                             {
-                                ReceiveChat("Not enough gold.", ChatType.System);
+                                ReceiveChat("Not enough gold.", MessageType.System);
                             }
                             ChatTime = 0;
                         }
@@ -4921,22 +4921,22 @@ namespace Server.MirObjects
                             {
                                 case ObjectType.Player:
                                     PlayerObject plOb = (PlayerObject)ob;
-                                    ReceiveChat("--Player Info--", ChatType.System2);
-                                    ReceiveChat(string.Format("Name : {0}, Level : {1}, X : {2}, Y : {3}", plOb.Name, plOb.Level, plOb.CurrentLocation.X, plOb.CurrentLocation.Y), ChatType.System2);
+                                    ReceiveChat("--Player Info--", MessageType.System2);
+                                    ReceiveChat(string.Format("Name : {0}, Level : {1}, X : {2}, Y : {3}", plOb.Name, plOb.Level, plOb.CurrentLocation.X, plOb.CurrentLocation.Y), MessageType.System2);
                                     break;
                                 case ObjectType.Monster:
                                     MonsterObject monOb = (MonsterObject)ob;
-                                    ReceiveChat("--Monster Info--", ChatType.System2);
-                                    ReceiveChat(string.Format("ID : {0}, Name : {1}", monOb.Info.Index, monOb.Name), ChatType.System2);
-                                    ReceiveChat(string.Format("Level : {0}, X : {1}, Y : {2}", monOb.Level, monOb.CurrentLocation.X, monOb.CurrentLocation.Y), ChatType.System2);
-                                    ReceiveChat(string.Format("HP : {0}, MinDC : {1}, MaxDC : {1}", monOb.Info.HP, monOb.MinDC, monOb.MaxDC), ChatType.System2);
+                                    ReceiveChat("--Monster Info--", MessageType.System2);
+                                    ReceiveChat(string.Format("ID : {0}, Name : {1}", monOb.Info.Index, monOb.Name), MessageType.System2);
+                                    ReceiveChat(string.Format("Level : {0}, X : {1}, Y : {2}", monOb.Level, monOb.CurrentLocation.X, monOb.CurrentLocation.Y), MessageType.System2);
+                                    ReceiveChat(string.Format("HP : {0}, MinDC : {1}, MaxDC : {1}", monOb.Info.HP, monOb.MinDC, monOb.MaxDC), MessageType.System2);
                                     break;
                                 case ObjectType.Merchant:
                                     NPCObject npcOb = (NPCObject)ob;
-                                    ReceiveChat("--NPC Info--", ChatType.System2);
-                                    ReceiveChat(string.Format("ID : {0}, Name : {1}", npcOb.Info.Index, npcOb.Name), ChatType.System2);
-                                    ReceiveChat(string.Format("X : {0}, Y : {1}", ob.CurrentLocation.X, ob.CurrentLocation.Y), ChatType.System2);
-                                    ReceiveChat(string.Format("File : {0}", npcOb.Info.FileName), ChatType.System2);
+                                    ReceiveChat("--NPC Info--", MessageType.System2);
+                                    ReceiveChat(string.Format("ID : {0}, Name : {1}", npcOb.Info.Index, npcOb.Name), MessageType.System2);
+                                    ReceiveChat(string.Format("X : {0}, Y : {1}", ob.CurrentLocation.X, ob.CurrentLocation.Y), MessageType.System2);
+                                    ReceiveChat(string.Format("File : {0}", npcOb.Info.FileName), MessageType.System2);
                                     break;
                             }
                         }
@@ -4949,7 +4949,7 @@ namespace Server.MirObjects
 
                         if (player == null)
                         {
-                            ReceiveChat(parts[1] + " is not online", ChatType.System);
+                            ReceiveChat(parts[1] + " is not online", MessageType.System);
                             return;
                         }
 
@@ -4972,7 +4972,7 @@ namespace Server.MirObjects
 
                         if (player == null)
                         {
-                            ReceiveChat(parts[3] + " is not online", ChatType.System);
+                            ReceiveChat(parts[3] + " is not online", MessageType.System);
                             return;
                         }
 
@@ -5024,7 +5024,7 @@ namespace Server.MirObjects
                         RefreshStats();
 
                         hintstring = b.Paused ? "Transform Disabled." : "Transform Enabled.";
-                        ReceiveChat(hintstring, ChatType.Hint);
+                        ReceiveChat(hintstring, MessageType.Hint);
                         break;
 
                     case "CREATEMAPINSTANCE": //TEST CODE
@@ -5034,13 +5034,13 @@ namespace Server.MirObjects
 
                         if (map == null)
                         {
-                            ReceiveChat(string.Format("Map {0} does not exist", parts[1]), ChatType.System);
+                            ReceiveChat(string.Format("Map {0} does not exist", parts[1]), MessageType.System);
                             return;
                         }
 
                         MapInfo mapInfo = map.Info;
                         mapInfo.CreateInstance();
-                        ReceiveChat(string.Format("Map instance created for map {0}", mapInfo.FileName), ChatType.System);
+                        ReceiveChat(string.Format("Map instance created for map {0}", mapInfo.FileName), MessageType.System);
                         break;
                     case "STARTCONQUEST":
                         //Needs some work, but does job for now.
@@ -5049,13 +5049,13 @@ namespace Server.MirObjects
 
                         if (parts.Length < 1)
                         {
-                            ReceiveChat(string.Format("The Syntax is /StartConquest [ConquestID]"), ChatType.System);
+                            ReceiveChat(string.Format("The Syntax is /StartConquest [ConquestID]"), MessageType.System);
                             return;
                         }
 
                         if (MyGuild == null)
                         {
-                            ReceiveChat(string.Format("You need to be in a guild to start a War"), ChatType.System);
+                            ReceiveChat(string.Format("You need to be in a guild to start a War"), MessageType.System);
                             return;
                         }
                 
@@ -5070,7 +5070,7 @@ namespace Server.MirObjects
                             tempConq.AttackerID = MyGuild.Guildindex;
                         }
                         else return;
-                        ReceiveChat(string.Format("{0} War Started.", tempConq.Info.Name), ChatType.System);
+                        ReceiveChat(string.Format("{0} War Started.", tempConq.Info.Name), MessageType.System);
                         SMain.Enqueue(string.Format("{0} War Started.", tempConq.Info.Name));
                         break;
                     case "RESETCONQUEST":
@@ -5080,13 +5080,13 @@ namespace Server.MirObjects
 
                         if (parts.Length < 1)
                         {
-                            ReceiveChat(string.Format("The Syntax is /ResetConquest [ConquestID]"), ChatType.System);
+                            ReceiveChat(string.Format("The Syntax is /ResetConquest [ConquestID]"), MessageType.System);
                             return;
                         }
 
                         if (MyGuild == null)
                         {
-                            ReceiveChat(string.Format("You need to be in a guild to start a War"), ChatType.System);
+                            ReceiveChat(string.Format("You need to be in a guild to start a War"), MessageType.System);
                             return;
                         }
 
@@ -5100,16 +5100,16 @@ namespace Server.MirObjects
                         }
                         else
                         {
-                            ReceiveChat("Conquest not found or War is currently on.", ChatType.System);
+                            ReceiveChat("Conquest not found or War is currently on.", MessageType.System);
                             return;
                         }
-                        ReceiveChat(string.Format("{0} has been reset.", ResetConq.Info.Name), ChatType.System);
+                        ReceiveChat(string.Format("{0} has been reset.", ResetConq.Info.Name), MessageType.System);
                         break;
                     case "GATES":
 
                         if (MyGuild == null || MyGuild.Conquest == null || !MyGuildRank.Options.HasFlag(RankOptions.CanChangeRank) || MyGuild.Conquest.WarIsOn)
                         {
-                            ReceiveChat(string.Format("You don't have access to control any gates at the moment."), ChatType.System);
+                            ReceiveChat(string.Format("You don't have access to control any gates at the moment."), MessageType.System);
                             return;
                         }
 
@@ -5123,7 +5123,7 @@ namespace Server.MirObjects
                             else if (openclose.ToUpper() == "OPEN") OpenClose = false;
                             else
                             {
-                                ReceiveChat(string.Format("You must type /Gates Open or /Gates Close."), ChatType.System);
+                                ReceiveChat(string.Format("You must type /Gates Open or /Gates Close."), MessageType.System);
                                 return;
                             }
 
@@ -5151,15 +5151,15 @@ namespace Server.MirObjects
                         }
 
                         if (OpenClose)
-                            ReceiveChat(string.Format("The gates at {0} have been closed.", MyGuild.Conquest.Info.Name), ChatType.System);
+                            ReceiveChat(string.Format("The gates at {0} have been closed.", MyGuild.Conquest.Info.Name), MessageType.System);
                         else
-                            ReceiveChat(string.Format("The gates at {0} have been opened.", MyGuild.Conquest.Info.Name), ChatType.System);
+                            ReceiveChat(string.Format("The gates at {0} have been opened.", MyGuild.Conquest.Info.Name), MessageType.System);
                         break;
 
                     case "CHANGEFLAG":
                         if (MyGuild == null || MyGuild.Conquest == null || !MyGuildRank.Options.HasFlag(RankOptions.CanChangeRank) || MyGuild.Conquest.WarIsOn)
                         {
-                            ReceiveChat(string.Format("You don't have access to change any flags at the moment."), ChatType.System);
+                            ReceiveChat(string.Format("You don't have access to change any flags at the moment."), MessageType.System);
                             return;
                         }
 
@@ -5186,7 +5186,7 @@ namespace Server.MirObjects
                         {
                             if (MyGuild == null || MyGuild.Conquest == null || !MyGuildRank.Options.HasFlag(RankOptions.CanChangeRank) || MyGuild.Conquest.WarIsOn)
                             {
-                                ReceiveChat(string.Format("You don't have access to change any flags at the moment."), ChatType.System);
+                                ReceiveChat(string.Format("You don't have access to change any flags at the moment."), MessageType.System);
                                 return;
                             }
 
@@ -5223,7 +5223,7 @@ namespace Server.MirObjects
             {
                 message = String.Format("{0}:{1}", CurrentMap.Info.NoNames ? "?????" : Name, message);
 
-                p = new S.ObjectChat { ObjectID = ObjectID, Text = message, Type = ChatType.Normal };
+                p = new S.ObjectChat { ObjectID = ObjectID, Text = message, Type = MessageType.Normal };
 
                 Enqueue(p);
                 Broadcast(p);
@@ -5325,7 +5325,7 @@ namespace Server.MirObjects
             }
 
             if (send)
-                ReceiveChat("You do not own any nearby carcasses.", ChatType.System);
+                ReceiveChat("You do not own any nearby carcasses.", MessageType.System);
         }
         public void Walk(MirDirection dir)
         {
@@ -6716,7 +6716,7 @@ namespace Server.MirObjects
 
             if (spell == null)
             {
-                ReceiveChat("Skill requires meditation.", ChatType.System);
+                ReceiveChat("Skill requires meditation.", MessageType.System);
                 return;
             }
 
@@ -7372,7 +7372,7 @@ namespace Server.MirObjects
                     Show = true,
                     CurrentMap = CurrentMap,
                 };
-                Packet p = new S.Chat { Message = string.Format("{0} is attempting to revive {1}", Name, target.Name), Type = ChatType.Shout };
+                Packet p = new S.Chat { Message = string.Format("{0} is attempting to revive {1}", Name, target.Name), Type = MessageType.Shout };
                 Envir.Broadcast(p);
                 CurrentMap.AddObject(ob);
                 ob.Spawned();
@@ -7810,7 +7810,7 @@ namespace Server.MirObjects
 
                 Enqueue(new S.UserDashFail { Direction = Direction, Location = CurrentLocation });
                 Broadcast(new S.ObjectDashFail { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
-                ReceiveChat("Not enough pushing Power.", ChatType.System);
+                ReceiveChat("Not enough pushing Power.", MessageType.System);
             }
 
 
@@ -8268,7 +8268,7 @@ namespace Server.MirObjects
             else
             {
                 Broadcast(new S.ObjectBackStep { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Distance = jumpDistance });
-                ReceiveChat("Not enough jumping power.", ChatType.System);
+                ReceiveChat("Not enough jumping power.", MessageType.System);
             }
 
             magic.CastTime = Envir.Time;
@@ -8618,7 +8618,7 @@ namespace Server.MirObjects
                     location = (Point) data[1];
                     if (CurrentMap.Info.NoTeleport)
                     {
-                        ReceiveChat(("You cannot teleport on this map"), ChatType.System);
+                        ReceiveChat(("You cannot teleport on this map"), MessageType.System);
                         return;
                     }
                     if (!CurrentMap.ValidPoint(location) || Envir.Random.Next(4) >= magic.Level + 1 || !Teleport(CurrentMap, location, false)) return;
@@ -8636,7 +8636,7 @@ namespace Server.MirObjects
 
                     if (CurrentMap.Info.NoTeleport)
                     {
-                        ReceiveChat(("You cannot teleport on this map"), ChatType.System);
+                        ReceiveChat(("You cannot teleport on this map"), MessageType.System);
                         return;
                     }
 
@@ -8661,7 +8661,7 @@ namespace Server.MirObjects
                         location = (Point)data[1];
                         if (CurrentMap.Info.NoTeleport)
                         {
-                            ReceiveChat(("You cannot teleport on this map"), ChatType.System);
+                            ReceiveChat(("You cannot teleport on this map"), MessageType.System);
                             return;
                         }
                         if (Functions.InRange(CurrentLocation, location, magic.Info.Range) == false) return;
@@ -10272,7 +10272,7 @@ namespace Server.MirObjects
                 if ((PoisonList[i].PType != PoisonType.Green) && ((PoisonList[i].Duration - PoisonList[i].Time) > p.Duration)) return;//cant cast 1 second poison to make a 1minute poison go away!
                 if ((PoisonList[i].PType == PoisonType.Frozen) || (PoisonList[i].PType == PoisonType.Slow) || (PoisonList[i].PType == PoisonType.Paralysis) || (PoisonList[i].PType == PoisonType.LRParalysis)) return;//prevents mobs from being perma frozen/slowed
                 if (p.PType == PoisonType.DelayedExplosion) return;
-                ReceiveChat("You have been poisoned.", ChatType.System2);
+                ReceiveChat("You have been poisoned.", MessageType.System2);
                 PoisonList[i] = p;
                 return;
             }
@@ -10282,10 +10282,10 @@ namespace Server.MirObjects
                 ExplosionInflictedTime = Envir.Time + 4000;
                 Enqueue(new S.ObjectEffect { ObjectID = ObjectID, Effect = SpellEffect.DelayedExplosion });
                 Broadcast(new S.ObjectEffect { ObjectID = ObjectID, Effect = SpellEffect.DelayedExplosion });
-                ReceiveChat("You are a walking explosive.", ChatType.System);
+                ReceiveChat("You are a walking explosive.", MessageType.System);
             }
             else
-                ReceiveChat("You have been poisoned.", ChatType.System2);
+                ReceiveChat("You have been poisoned.", MessageType.System2);
 
             PoisonList.Add(p);
         }
@@ -10709,7 +10709,7 @@ namespace Server.MirObjects
                 if (array[from] == null)
                 {
                     Report.ItemError("MoveItem", grid, grid, from, to);
-                    ReceiveChat("Item Move Error - Please report the item you tried to move and the time", ChatType.System);
+                    ReceiveChat("Item Move Error - Please report the item you tried to move and the time", MessageType.System);
                     Enqueue(p);
                     return;
                 }
@@ -10846,7 +10846,7 @@ namespace Server.MirObjects
 
             if (temp.Weight + CurrentBagWeight > MaxBagWeight)
             {
-                ReceiveChat("Too heavy to get back.", ChatType.System);
+                ReceiveChat("Too heavy to get back.", MessageType.System);
                 Enqueue(p);
                 return;
             }
@@ -11027,11 +11027,11 @@ namespace Server.MirObjects
                         case 2: //MysteryWater
                             if (UnlockCurse)
                             {
-                                ReceiveChat("You can already unequip a cursed item.", ChatType.Hint);
+                                ReceiveChat("You can already unequip a cursed item.", MessageType.Hint);
                                 Enqueue(p);
                                 return;
                             }
-                            ReceiveChat("You can now unequip a cursed item.", ChatType.Hint);
+                            ReceiveChat("You can now unequip a cursed item.", MessageType.Hint);
                             UnlockCurse = true;
                             break;
                         case 3: //Buff
@@ -11117,7 +11117,7 @@ namespace Server.MirObjects
                             temp.CurrentDura = (ushort)Math.Min(temp.MaxDura, temp.CurrentDura + 5000);
                             temp.DuraChanged = false;
 
-                            ReceiveChat("Your weapon has been partially repaired", ChatType.Hint);
+                            ReceiveChat("Your weapon has been partially repaired", MessageType.Hint);
                             Enqueue(new S.ItemRepaired { UniqueID = temp.UniqueID, MaxDura = temp.MaxDura, CurrentDura = temp.CurrentDura });
                             break;
                         case 5: //WarGodOil
@@ -11135,7 +11135,7 @@ namespace Server.MirObjects
                             temp.CurrentDura = temp.MaxDura;
                             temp.DuraChanged = false;
 
-                            ReceiveChat("Your weapon has been completely repaired", ChatType.Hint);
+                            ReceiveChat("Your weapon has been completely repaired", MessageType.Hint);
                             Enqueue(new S.ItemRepaired { UniqueID = temp.UniqueID, MaxDura = temp.MaxDura, CurrentDura = temp.CurrentDura });
                             break;
                         case 6: //ResurrectionScroll
@@ -11149,16 +11149,16 @@ namespace Server.MirObjects
                             if (item.Info.Price > 0)
                             {
                                 GainCredit(item.Info.Price);
-                                ReceiveChat(String.Format("{0} Credits have been added to your Account", item.Info.Price), ChatType.Hint);
+                                ReceiveChat(String.Format("{0} Credits have been added to your Account", item.Info.Price), MessageType.Hint);
                             }
                             break;
                         case 8: //MapShoutScroll
                             HasMapShout = true;
-                            ReceiveChat("You have been given one free shout across your current map", ChatType.Hint);
+                            ReceiveChat("You have been given one free shout across your current map", MessageType.Hint);
                             break;
                         case 9://ServerShoutScroll
                             HasServerShout = true;
-                            ReceiveChat("You have been given one free shout across the server", ChatType.Hint);
+                            ReceiveChat("You have been given one free shout across the server", MessageType.Hint);
                             break;
                         case 10://GuildSkillScroll
                             MyGuild.NewBuff(item.Info.Effect, false);
@@ -11173,37 +11173,37 @@ namespace Server.MirObjects
                         case 12://LotteryTicket                                                                                    
                             if (Envir.Random.Next(item.Info.Effect * 32) == 1) // 1st prize : 1,000,000
                             {
-                                ReceiveChat("You won 1st Prize! Received 1,000,000 gold", ChatType.Hint);
+                                ReceiveChat("You won 1st Prize! Received 1,000,000 gold", MessageType.Hint);
                                 GainGold(1000000);
                             }
                             else if (Envir.Random.Next(item.Info.Effect * 16) == 1)  // 2nd prize : 200,000
                             {
-                                ReceiveChat("You won 2nd Prize! Received 200,000 gold", ChatType.Hint);
+                                ReceiveChat("You won 2nd Prize! Received 200,000 gold", MessageType.Hint);
                                 GainGold(200000);
                             }
                             else if (Envir.Random.Next(item.Info.Effect * 8) == 1)  // 3rd prize : 100,000
                             {
-                                ReceiveChat("You won 3rd Prize! Received 100,000 gold", ChatType.Hint);
+                                ReceiveChat("You won 3rd Prize! Received 100,000 gold", MessageType.Hint);
                                 GainGold(100000);
                             }
                             else if (Envir.Random.Next(item.Info.Effect * 4) == 1) // 4th prize : 10,000
                             {
-                                ReceiveChat("You won 4th Prize! Received 10,000 gold", ChatType.Hint);
+                                ReceiveChat("You won 4th Prize! Received 10,000 gold", MessageType.Hint);
                                 GainGold(10000);
                             }
                             else if (Envir.Random.Next(item.Info.Effect * 2) == 1)  // 5th prize : 1,000
                             {
-                                ReceiveChat("You won 5th Prize! Received 1,000 gold", ChatType.Hint);
+                                ReceiveChat("You won 5th Prize! Received 1,000 gold", MessageType.Hint);
                                 GainGold(1000);
                             }
                             else if (Envir.Random.Next(item.Info.Effect) == 1)  // 6th prize 500
                             {
-                                ReceiveChat("You won 6th Prize! Received 500 gold", ChatType.Hint);
+                                ReceiveChat("You won 6th Prize! Received 500 gold", MessageType.Hint);
                                 GainGold(500);
                             }
                             else
                             {
-                                ReceiveChat("You haven't won anything.", ChatType.Hint);
+                                ReceiveChat("You haven't won anything.", MessageType.Hint);
                             }
                             break;
                     }
@@ -11244,7 +11244,7 @@ namespace Server.MirObjects
                     temp.CurrentDura = (ushort)Math.Min(temp.MaxDura, temp.CurrentDura + item.CurrentDura);
                     temp.DuraChanged = false;
 
-                    ReceiveChat("Your mount has been fed.", ChatType.Hint);
+                    ReceiveChat("Your mount has been fed.", MessageType.Hint);
                     Enqueue(new S.ItemRepaired { UniqueID = temp.UniqueID, MaxDura = temp.MaxDura, CurrentDura = temp.CurrentDura });
 
                     RefreshStats();
@@ -11348,7 +11348,7 @@ namespace Server.MirObjects
                         UserIntelligentCreature petInfo = new UserIntelligentCreature((IntelligentCreatureType)item.Info.Shape, slotIndex, item.Info.Effect);
                         if (Info.CheckHasIntelligentCreature((IntelligentCreatureType)item.Info.Shape))
                         {
-                            ReceiveChat("You already have this creature.", ChatType.Hint);
+                            ReceiveChat("You already have this creature.", MessageType.Hint);
                             petInfo = null;
                         }
 
@@ -11358,7 +11358,7 @@ namespace Server.MirObjects
                             return;
                         }
 
-                        ReceiveChat("Obtained a new creature {" + petInfo.CustomName + "}.", ChatType.Hint);
+                        ReceiveChat("Obtained a new creature {" + petInfo.CustomName + "}.", MessageType.Hint);
 
                         Info.IntelligentCreatures.Add(petInfo);
                         Enqueue(petInfo.GetInfo());
@@ -11737,7 +11737,7 @@ namespace Server.MirObjects
 
                     if (tempTo.CurrentDura == tempTo.MaxDura)
                     {
-                        ReceiveChat("Item does not need to be repaired.", ChatType.Hint);
+                        ReceiveChat("Item does not need to be repaired.", MessageType.Hint);
                         Enqueue(p);
                         return;
                     }
@@ -11758,7 +11758,7 @@ namespace Server.MirObjects
 
                     if ((tempTo.GemCount >= tempFrom.Info.CriticalDamage) || (GetCurrentStatCount(tempFrom, tempTo) >= tempFrom.Info.HpDrainRate))
                     {
-                        ReceiveChat("Item has already reached maximum added stats", ChatType.Hint);
+                        ReceiveChat("Item has already reached maximum added stats", MessageType.Hint);
                         Enqueue(p);
                         return;
                     }
@@ -11884,7 +11884,7 @@ namespace Server.MirObjects
 
                     if (!ValidGemForItem(tempFrom, itemType))
                     {
-                        ReceiveChat("Invalid combination", ChatType.Hint);
+                        ReceiveChat("Invalid combination", MessageType.Hint);
                         Enqueue(p);
                         return;
                     }
@@ -11959,7 +11959,7 @@ namespace Server.MirObjects
                     }
                     else
                     {
-                        ReceiveChat("Cannot combine these items.", ChatType.Hint);
+                        ReceiveChat("Cannot combine these items.", MessageType.Hint);
                         Enqueue(p);
                         return;
                     }
@@ -11970,7 +11970,7 @@ namespace Server.MirObjects
                         if ((tempFrom.Info.Shape == 3) && (Envir.Random.Next(15) < 3))
                         {
                             //item destroyed
-                            ReceiveChat("Item has been destroyed.", ChatType.Hint);
+                            ReceiveChat("Item has been destroyed.", MessageType.Hint);
                             Report.ItemChanged("CombineItem (Item Destroyed)", Info.Inventory[indexTo], 1, 1);
 
                             Info.Inventory[indexTo] = null;
@@ -11979,7 +11979,7 @@ namespace Server.MirObjects
                         else
                         {
                             //upgrade has no effect
-                            ReceiveChat("Upgrade has no effect.", ChatType.Hint);
+                            ReceiveChat("Upgrade has no effect.", MessageType.Hint);
                         }
 
                         canUpgrade = false;
@@ -12010,14 +12010,14 @@ namespace Server.MirObjects
                 tempTo.CurrentDura = tempTo.MaxDura;
                 tempTo.DuraChanged = false;
 
-                ReceiveChat("Item has been repaired.", ChatType.Hint);
+                ReceiveChat("Item has been repaired.", MessageType.Hint);
                 Enqueue(new S.ItemRepaired { UniqueID = tempTo.UniqueID, MaxDura = tempTo.MaxDura, CurrentDura = tempTo.CurrentDura });
             }
 
             if (canUpgrade && Info.Inventory[indexTo] != null)
             {
                 tempTo.GemCount++;
-                ReceiveChat("Item has been upgraded.", ChatType.Hint);
+                ReceiveChat("Item has been upgraded.", MessageType.Hint);
                 Enqueue(new S.ItemUpgraded { Item = tempTo });
             }
 
@@ -12253,7 +12253,7 @@ namespace Server.MirObjects
 
             if (CurrentMap.Info.NoThrowItem)
             {
-                ReceiveChat("You cannot drop items on this map", ChatType.System);
+                ReceiveChat("You cannot drop items on this map", MessageType.System);
                 Enqueue(p);
                 return;
             }
@@ -12357,7 +12357,7 @@ namespace Server.MirObjects
                     if (item.Item.Info.ShowGroupPickup && IsGroupMember(this))
                         for (int j = 0; j < GroupMembers.Count; j++)
                             GroupMembers[j].ReceiveChat(Name + " Picked up: {" + item.Item.Name + "}",
-                                ChatType.System);
+                                MessageType.System);
 
                     GainItem(item.Item);
 
@@ -12378,7 +12378,7 @@ namespace Server.MirObjects
             }
 
             if (sendFail)
-                ReceiveChat("Can not pick up, You do not own this item.", ChatType.System);
+                ReceiveChat("Can not pick up, You do not own this item.", MessageType.System);
 
         }
 
@@ -12590,14 +12590,14 @@ namespace Server.MirObjects
                 case MirGender.Male:
                     if (!item.Info.RequiredGender.HasFlag(RequiredGender.Male))
                     {
-                        ReceiveChat("You are not Female.", ChatType.System);
+                        ReceiveChat("You are not Female.", MessageType.System);
                         return false;
                     }
                     break;
                 case MirGender.Female:
                     if (!item.Info.RequiredGender.HasFlag(RequiredGender.Female))
                     {
-                        ReceiveChat("You are not Male.", ChatType.System);
+                        ReceiveChat("You are not Male.", MessageType.System);
                         return false;
                     }
                     break;
@@ -12608,28 +12608,28 @@ namespace Server.MirObjects
                 case MirClass.Warrior:
                     if (!item.Info.RequiredClass.HasFlag(RequiredClass.Warrior))
                     {
-                        ReceiveChat("Warriors cannot use this item.", ChatType.System);
+                        ReceiveChat("Warriors cannot use this item.", MessageType.System);
                         return false;
                     }
                     break;
                 case MirClass.Wizard:
                     if (!item.Info.RequiredClass.HasFlag(RequiredClass.Wizard))
                     {
-                        ReceiveChat("Wizards cannot use this item.", ChatType.System);
+                        ReceiveChat("Wizards cannot use this item.", MessageType.System);
                         return false;
                     }
                     break;
                 case MirClass.Taoist:
                     if (!item.Info.RequiredClass.HasFlag(RequiredClass.Taoist))
                     {
-                        ReceiveChat("Taoists cannot use this item.", ChatType.System);
+                        ReceiveChat("Taoists cannot use this item.", MessageType.System);
                         return false;
                     }
                     break;
                 case MirClass.Assassin:
                     if (!item.Info.RequiredClass.HasFlag(RequiredClass.Assassin))
                     {
-                        ReceiveChat("Assassins cannot use this item.", ChatType.System);
+                        ReceiveChat("Assassins cannot use this item.", MessageType.System);
                         return false;
                     }
                     break;
@@ -12640,42 +12640,42 @@ namespace Server.MirObjects
                 case RequiredType.Level:
                     if (Level < item.Info.RequiredAmount)
                     {
-                        ReceiveChat("You are not a high enough level.", ChatType.System);
+                        ReceiveChat("You are not a high enough level.", MessageType.System);
                         return false;
                     }
                     break;
                 case RequiredType.AC:
                     if (MaxAC < item.Info.RequiredAmount)
                     {
-                        ReceiveChat("You do not have enough AC.", ChatType.System);
+                        ReceiveChat("You do not have enough AC.", MessageType.System);
                         return false;
                     }
                     break;
                 case RequiredType.MAC:
                     if (MaxMAC < item.Info.RequiredAmount)
                     {
-                        ReceiveChat("You do not have enough MAC.", ChatType.System);
+                        ReceiveChat("You do not have enough MAC.", MessageType.System);
                         return false;
                     }
                     break;
                 case RequiredType.DC:
                     if (MaxDC < item.Info.RequiredAmount)
                     {
-                        ReceiveChat("You do not have enough DC.", ChatType.System);
+                        ReceiveChat("You do not have enough DC.", MessageType.System);
                         return false;
                     }
                     break;
                 case RequiredType.MC:
                     if (MaxMC < item.Info.RequiredAmount)
                     {
-                        ReceiveChat("You do not have enough MC.", ChatType.System);
+                        ReceiveChat("You do not have enough MC.", MessageType.System);
                         return false;
                     }
                     break;
                 case RequiredType.SC:
                     if (MaxSC < item.Info.RequiredAmount)
                     {
-                        ReceiveChat("You do not have enough SC.", ChatType.System);
+                        ReceiveChat("You do not have enough SC.", MessageType.System);
                         return false;
                     }
                     break;
@@ -12689,21 +12689,21 @@ namespace Server.MirObjects
                         case 0:
                             if (CurrentMap.Info.NoEscape)
                             {
-                                ReceiveChat("You cannot use Dungeon Escapes here", ChatType.System);
+                                ReceiveChat("You cannot use Dungeon Escapes here", MessageType.System);
                                 return false;
                             }
                             break;
                         case 2:
                             if (CurrentMap.Info.NoRandom)
                             {
-                                ReceiveChat("You cannot use Random Teleports here", ChatType.System);
+                                ReceiveChat("You cannot use Random Teleports here", MessageType.System);
                                 return false;
                             }
                             break;
                         case 6:
                             if (!Dead)
                             {
-                                ReceiveChat("You cannot use Resurrection Scrolls whilst alive", ChatType.Hint);
+                                ReceiveChat("You cannot use Resurrection Scrolls whilst alive", MessageType.Hint);
                                 return false;
                             }
                             break;
@@ -12713,12 +12713,12 @@ namespace Server.MirObjects
 
                                 if (MyGuild == null)
                                 {
-                                    ReceiveChat("You must be in a guild to use this skill", ChatType.Hint);
+                                    ReceiveChat("You must be in a guild to use this skill", MessageType.Hint);
                                     return false;
                                 }
                                 if (MyGuildRank != MyGuild.Ranks[0])
                                 {
-                                    ReceiveChat("You must be the guild leader to use this skill", ChatType.Hint);
+                                    ReceiveChat("You must be the guild leader to use this skill", MessageType.Hint);
                                     return false;
                                 }
                                 GuildBuffInfo buffInfo = Envir.FindGuildBuffInfo(skillId);
@@ -12727,7 +12727,7 @@ namespace Server.MirObjects
 
                                 if (MyGuild.BuffList.Any(e => e.Info.Id == skillId))
                                 {
-                                    ReceiveChat("Your guild already has this skill", ChatType.Hint);
+                                    ReceiveChat("Your guild already has this skill", MessageType.Hint);
                                     return false;
                                 }
                             }
@@ -12737,7 +12737,7 @@ namespace Server.MirObjects
                 case ItemType.Potion:
                     if (CurrentMap.Info.NoDrug)
                     {
-                        ReceiveChat("You cannot use Potions here", ChatType.System);
+                        ReceiveChat("You cannot use Potions here", MessageType.System);
                         return false;
                     }
                     break;
@@ -12755,7 +12755,7 @@ namespace Server.MirObjects
                 case ItemType.Reins:
                     if (Info.Equipment[(int)EquipmentSlot.Mount] == null)
                     {
-                        ReceiveChat("Can only be used with a mount", ChatType.System);
+                        ReceiveChat("Can only be used with a mount", MessageType.System);
                         return false;
                     }
                     break;
@@ -12767,7 +12767,7 @@ namespace Server.MirObjects
                     if (Info.Equipment[(int)EquipmentSlot.Weapon] == null ||
                         (Info.Equipment[(int)EquipmentSlot.Weapon].Info.Shape != 49 && Info.Equipment[(int)EquipmentSlot.Weapon].Info.Shape != 50))
                     {
-                        ReceiveChat("Can only be used with a fishing rod", ChatType.System);
+                        ReceiveChat("Can only be used with a fishing rod", MessageType.System);
                         return false;
                     }
                     break;
@@ -12782,14 +12782,14 @@ namespace Server.MirObjects
                         case 22://nuts maintain food levels
                             if (!CreatureSummoned)
                             {
-                                ReceiveChat("Can only be used with a creature summoned", ChatType.System);
+                                ReceiveChat("Can only be used with a creature summoned", MessageType.System);
                                 return false;
                             }
                             break;
                         case 23://basic creature food
                             if (!CreatureSummoned)
                             {
-                                ReceiveChat("Can only be used with a creature summoned", ChatType.System);
+                                ReceiveChat("Can only be used with a creature summoned", MessageType.System);
                                 return false;
                             }
                             else
@@ -12802,7 +12802,7 @@ namespace Server.MirObjects
 
                                     if (((IntelligentCreatureObject)Pets[i]).Fullness > 9900)
                                     {
-                                        ReceiveChat(((IntelligentCreatureObject)Pets[i]).Name + " is not hungry", ChatType.System);
+                                        ReceiveChat(((IntelligentCreatureObject)Pets[i]).Name + " is not hungry", MessageType.System);
                                         return false;
                                     }
                                     return true;
@@ -12812,7 +12812,7 @@ namespace Server.MirObjects
                         case 24://wonderpill vitalize creature
                             if (!CreatureSummoned)
                             {
-                                ReceiveChat("Can only be used with a creature summoned", ChatType.System);
+                                ReceiveChat("Can only be used with a creature summoned", MessageType.System);
                                 return false;
                             }
                             else
@@ -12825,7 +12825,7 @@ namespace Server.MirObjects
 
                                     if (((IntelligentCreatureObject)Pets[i]).Fullness > 0)
                                     {
-                                        ReceiveChat(((IntelligentCreatureObject)Pets[i]).Name + " does not need to be vitalized", ChatType.System);
+                                        ReceiveChat(((IntelligentCreatureObject)Pets[i]).Name + " does not need to be vitalized", MessageType.System);
                                         return false;
                                     }
                                     return true;
@@ -13054,7 +13054,7 @@ namespace Server.MirObjects
                 }
             }
 
-            ReceiveChat("You cannot carry anymore quest items.", ChatType.System);
+            ReceiveChat("You cannot carry anymore quest items.", MessageType.System);
 
             return false;
         }
@@ -13174,18 +13174,18 @@ namespace Server.MirObjects
                 Luck--;
                 item.Luck--;
                 Enqueue(new S.RefreshItem { Item = item });
-                ReceiveChat("Curse dwells within your weapon.", ChatType.System);
+                ReceiveChat("Curse dwells within your weapon.", MessageType.System);
             }
             else if (item.Luck <= 0 || Envir.Random.Next(10 * item.Luck) == 0)
             {
                 Luck++;
                 item.Luck++;
                 Enqueue(new S.RefreshItem { Item = item });
-                ReceiveChat("Luck dwells within your weapon.", ChatType.Hint);
+                ReceiveChat("Luck dwells within your weapon.", MessageType.Hint);
             }
             else
             {
-                ReceiveChat("No effect.", ChatType.Hint);
+                ReceiveChat("No effect.", MessageType.Hint);
             }
 
             return true;
@@ -13872,7 +13872,7 @@ namespace Server.MirObjects
             player.Enqueue(new S.ObjectHealth { ObjectID = ObjectID, Percent = PercentHealth, Expire = time });
         }
 
-        public override void ReceiveChat(string text, ChatType type)
+        public override void ReceiveChat(string text, MessageType type)
         {
             Enqueue(new S.Chat { Message = text, Type = type });
 
@@ -14178,7 +14178,7 @@ namespace Server.MirObjects
 
                 if (ob.Types.Count != 0 && !ob.Types.Contains(temp.Info.Type))
                 {
-                    ReceiveChat("You cannot sell this item here.", ChatType.System);
+                    ReceiveChat("You cannot sell this item here.", MessageType.System);
                     Enqueue(p);
                     return;
                 }
@@ -14240,13 +14240,13 @@ namespace Server.MirObjects
 
                 if ((temp.Info.Bind.HasFlag(BindMode.DontRepair)) || (temp.Info.Bind.HasFlag(BindMode.NoSRepair) && special))
                 {
-                    ReceiveChat("You cannot Repair this item.", ChatType.System);
+                    ReceiveChat("You cannot Repair this item.", MessageType.System);
                     return;
                 }
 
                 if (ob.Types.Count != 0 && !ob.Types.Contains(temp.Info.Type))
                 {
-                    ReceiveChat("You cannot Repair this item here.", ChatType.System);
+                    ReceiveChat("You cannot Repair this item here.", MessageType.System);
                     return;
                 }
 
@@ -14536,7 +14536,7 @@ namespace Server.MirObjects
 
                     Report.ItemChanged("BuyMarketItem", auction.Item, auction.Item.Count, 2);
 
-                    Envir.MessageAccount(auction.CharacterInfo.AccountInfo, string.Format("You Sold {0} for {1:#,##0} Gold", auction.Item.FriendlyName, auction.Price), ChatType.Hint);
+                    Envir.MessageAccount(auction.CharacterInfo.AccountInfo, string.Format("You Sold {0} for {1:#,##0} Gold", auction.Item.FriendlyName, auction.Price), MessageType.Hint);
                     Enqueue(new S.MarketSuccess { Message = string.Format("You brought {0} for {1:#,##0} Gold", auction.Item.FriendlyName, auction.Price) });
                     MarketSearch(MatchName);
                     return;
@@ -14705,7 +14705,7 @@ namespace Server.MirObjects
                     {
                         if (item.RentalInformation != null)
                         {
-                            ReceiveChat($"Unable to downgrade {item.FriendlyName} as it belongs to {item.RentalInformation.OwnerName}", ChatType.System);
+                            ReceiveChat($"Unable to downgrade {item.FriendlyName} as it belongs to {item.RentalInformation.OwnerName}", MessageType.System);
                             return;
                         }
 
@@ -14719,7 +14719,7 @@ namespace Server.MirObjects
                             switch (result)
                             {
                                 case 0:
-                                    ReceiveChat(string.Format("{0} : Remove failed Level 0", item.Name), ChatType.System);
+                                    ReceiveChat(string.Format("{0} : Remove failed Level 0", item.Name), MessageType.System);
                                     break;
                                 case 1:
                                     ushort maxDura = (Envir.Random.Next(20) == 0) ? (ushort)(item.MaxDura - 1000) : item.MaxDura;
@@ -14727,7 +14727,7 @@ namespace Server.MirObjects
 
                                     Info.Inventory[i].CurrentDura = (Info.Inventory[i].CurrentDura >= maxDura) ? maxDura : Info.Inventory[i].CurrentDura;
                                     Info.Inventory[i].MaxDura = maxDura;
-                                    ReceiveChat(string.Format("{0} : Remove success. Level {1}", item.Name, item.Awake.getAwakeLevel()), ChatType.System);
+                                    ReceiveChat(string.Format("{0} : Remove success. Level {1}", item.Name, item.Awake.getAwakeLevel()), MessageType.System);
                                     Enqueue(new S.RefreshItem { Item = item });
                                     break;
                                 default:
@@ -14753,13 +14753,13 @@ namespace Server.MirObjects
 
                 if (item.Info.Bind.HasFlag(BindMode.UnableToDisassemble))
                 {
-                    ReceiveChat($"Unable to disassemble {item.FriendlyName}", ChatType.System);
+                    ReceiveChat($"Unable to disassemble {item.FriendlyName}", MessageType.System);
                     return;
                 }
 
                 if (item.RentalInformation != null && item.RentalInformation.BindingFlags.HasFlag(BindMode.UnableToDisassemble))
                 {
-                    ReceiveChat($"Unable to disassemble {item.FriendlyName} as it belongs to {item.RentalInformation.OwnerName}", ChatType.System);
+                    ReceiveChat($"Unable to disassemble {item.FriendlyName} as it belongs to {item.RentalInformation.OwnerName}", MessageType.System);
                     return;
                 }
 
@@ -14815,7 +14815,7 @@ namespace Server.MirObjects
                     {
                         if (item.RentalInformation != null)
                         {
-                            ReceiveChat($"Unable to reset {item.FriendlyName} as it belongs to {item.RentalInformation.OwnerName}", ChatType.System);
+                            ReceiveChat($"Unable to reset {item.FriendlyName} as it belongs to {item.RentalInformation.OwnerName}", MessageType.System);
                             return;
                         }
 
@@ -15087,13 +15087,13 @@ namespace Server.MirObjects
         {
             if (GroupMembers != null && GroupMembers[0] != this)
             {
-                ReceiveChat("You are not the group leader.", ChatType.System);
+                ReceiveChat("You are not the group leader.", MessageType.System);
                 return;
             }
 
             if (GroupMembers != null && GroupMembers.Count >= Globals.MaxGroup)
             {
-                ReceiveChat("Your group already has the maximum number of members.", ChatType.System);
+                ReceiveChat("Your group already has the maximum number of members.", MessageType.System);
                 return;
             }
 
@@ -15101,30 +15101,30 @@ namespace Server.MirObjects
 
             if (player == null)
             {
-                ReceiveChat(name + " could not be found.", ChatType.System);
+                ReceiveChat(name + " could not be found.", MessageType.System);
                 return;
             }
             if (player == this)
             {
-                ReceiveChat("You cannot group yourself.", ChatType.System);
+                ReceiveChat("You cannot group yourself.", MessageType.System);
                 return;
             }
 
             if (!player.AllowGroup)
             {
-                ReceiveChat(name + " is not allowing group.", ChatType.System);
+                ReceiveChat(name + " is not allowing group.", MessageType.System);
                 return;
             }
 
             if (player.GroupMembers != null)
             {
-                ReceiveChat(name + " is already in another group.", ChatType.System);
+                ReceiveChat(name + " is already in another group.", MessageType.System);
                 return;
             }
 
             if (player.GroupInvitation != null)
             {
-                ReceiveChat(name + " is already receiving an invite from another player.", ChatType.System);
+                ReceiveChat(name + " is already receiving an invite from another player.", MessageType.System);
                 return;
             }
 
@@ -15137,12 +15137,12 @@ namespace Server.MirObjects
         {
             if (GroupMembers == null)
             {
-                ReceiveChat("You are not in a group.", ChatType.System);
+                ReceiveChat("You are not in a group.", MessageType.System);
                 return;
             }
             if (GroupMembers[0] != this)
             {
-                ReceiveChat("You are not the group leader.", ChatType.System);
+                ReceiveChat("You are not the group leader.", MessageType.System);
                 return;
             }
 
@@ -15158,7 +15158,7 @@ namespace Server.MirObjects
 
             if (player == null)
             {
-                ReceiveChat(name + " is not in your group.", ChatType.System);
+                ReceiveChat(name + " is not in your group.", MessageType.System);
                 return;
             }
 
@@ -15185,46 +15185,46 @@ namespace Server.MirObjects
         {
             if (GroupInvitation == null)
             {
-                ReceiveChat("You have not been invited to a group.", ChatType.System);
+                ReceiveChat("You have not been invited to a group.", MessageType.System);
                 return;
             }
 
             if (!accept)
             {
-                GroupInvitation.ReceiveChat(Name + " has declined your group invite.", ChatType.System);
+                GroupInvitation.ReceiveChat(Name + " has declined your group invite.", MessageType.System);
                 GroupInvitation = null;
                 return;
             }
 
             if (GroupMembers != null)
             {
-                ReceiveChat(string.Format("You can no longer join {0}'s group", GroupInvitation.Name), ChatType.System);
+                ReceiveChat(string.Format("You can no longer join {0}'s group", GroupInvitation.Name), MessageType.System);
                 GroupInvitation = null;
                 return;
             }
 
             if (GroupInvitation.GroupMembers != null && GroupInvitation.GroupMembers[0] != GroupInvitation)
             {
-                ReceiveChat(GroupInvitation.Name + " is no longer the group leader.", ChatType.System);
+                ReceiveChat(GroupInvitation.Name + " is no longer the group leader.", MessageType.System);
                 GroupInvitation = null;
                 return;
             }
 
             if (GroupInvitation.GroupMembers != null && GroupInvitation.GroupMembers.Count >= Globals.MaxGroup)
             {
-                ReceiveChat(GroupInvitation.Name + "'s group already has the maximum number of members.", ChatType.System);
+                ReceiveChat(GroupInvitation.Name + "'s group already has the maximum number of members.", MessageType.System);
                 GroupInvitation = null;
                 return;
             }
             if (!GroupInvitation.AllowGroup)
             {
-                ReceiveChat(GroupInvitation.Name + " is not on allow group.", ChatType.System);
+                ReceiveChat(GroupInvitation.Name + " is not on allow group.", MessageType.System);
                 GroupInvitation = null;
                 return;
             }
             if (GroupInvitation.Node == null)
             {
-                ReceiveChat(GroupInvitation.Name + " no longer online.", ChatType.System);
+                ReceiveChat(GroupInvitation.Name + " no longer online.", MessageType.System);
                 GroupInvitation = null;
                 return;
             }
@@ -15315,7 +15315,7 @@ namespace Server.MirObjects
             if (Envir.GetGuild(GuildName) != null) return false;
             if (Info.Level < Settings.Guild_RequiredLevel)
             {
-                ReceiveChat(String.Format("Your level is not high enough to create a guild, required: {0}", Settings.Guild_RequiredLevel), ChatType.System);
+                ReceiveChat(String.Format("Your level is not high enough to create a guild, required: {0}", Settings.Guild_RequiredLevel), MessageType.System);
                 return false;
             }
             //check if we have the required items
@@ -15326,7 +15326,7 @@ namespace Server.MirObjects
                 {
                     if (Info.AccountInfo.Gold < Required.Amount)
                     {
-                        ReceiveChat(String.Format("Insufficient gold. Creating a guild requires {0} gold.", Required.Amount), ChatType.System);
+                        ReceiveChat(String.Format("Insufficient gold. Creating a guild requires {0} gold.", Required.Amount), MessageType.System);
                         return false;
                     }
                 }
@@ -15349,13 +15349,13 @@ namespace Server.MirObjects
                     if (count != 0)
                     {
                         if (Required.Amount == 1)
-                            ReceiveChat(String.Format("{0} is required to create a guild.", Required.Item.Name), ChatType.System);
+                            ReceiveChat(String.Format("{0} is required to create a guild.", Required.Item.Name), MessageType.System);
                         else
                         {
                             if (Required.Item.Type == ItemType.Ore)
-                                ReceiveChat(string.Format("{0} with purity {1} is recuired to create a guild.", Required.Item.Name, Required.Amount / 1000), ChatType.System);
+                                ReceiveChat(string.Format("{0} with purity {1} is recuired to create a guild.", Required.Item.Name, Required.Amount / 1000), MessageType.System);
                             else
-                                ReceiveChat(string.Format("Insufficient {0}, you need {1} to create a guild.", Required.Item.Name, Required.Amount), ChatType.System);
+                                ReceiveChat(string.Format("Insufficient {0}, you need {1} to create a guild.", Required.Item.Name, Required.Amount), MessageType.System);
                         }
                         return false;
                     }
@@ -15424,7 +15424,7 @@ namespace Server.MirObjects
         {
             if ((MyGuild == null) || (MyGuildRank == null))
             {
-                ReceiveChat("You are not in a guild!", ChatType.System);
+                ReceiveChat("You are not in a guild!", MessageType.System);
                 return;
             }
             switch (ChangeType)
@@ -15432,35 +15432,35 @@ namespace Server.MirObjects
                 case 0: //add member
                     if (!MyGuildRank.Options.HasFlag(RankOptions.CanRecruit))
                     {
-                        ReceiveChat("You are not allowed to recruit new members!", ChatType.System);
+                        ReceiveChat("You are not allowed to recruit new members!", MessageType.System);
                         return;
                     }
                     if (Name == "") return;
                     PlayerObject player = Envir.GetPlayer(Name);
                     if (player == null)
                     {
-                        ReceiveChat(String.Format("{0} is not online!", Name), ChatType.System);
+                        ReceiveChat(String.Format("{0} is not online!", Name), MessageType.System);
                         return;
                     }
                     if ((player.MyGuild != null) || (player.MyGuildRank != null) || (player.Info.GuildIndex != -1))
                     {
-                        ReceiveChat(String.Format("{0} is already in a guild!", Name), ChatType.System);
+                        ReceiveChat(String.Format("{0} is already in a guild!", Name), MessageType.System);
                         return;
                     }
                     if (!player.EnableGuildInvite)
                     {
-                        ReceiveChat(String.Format("{0} is disabling guild invites!", Name), ChatType.System);
+                        ReceiveChat(String.Format("{0} is disabling guild invites!", Name), MessageType.System);
                         return;
                     }
                     if (player.PendingGuildInvite != null)
                     {
-                        ReceiveChat(string.Format("{0} already has a guild invite pending.", Name), ChatType.System);
+                        ReceiveChat(string.Format("{0} already has a guild invite pending.", Name), MessageType.System);
                         return;
                     }
 
                     if (MyGuild.IsAtWar())
                     {
-                        ReceiveChat("Cannot recuit members whilst at war.", ChatType.System);
+                        ReceiveChat("Cannot recuit members whilst at war.", MessageType.System);
                         return;
                     }
 
@@ -15470,7 +15470,7 @@ namespace Server.MirObjects
                 case 1: //delete member
                     if (!MyGuildRank.Options.HasFlag(RankOptions.CanKick))
                     {
-                        ReceiveChat("You are not allowed to remove members!", ChatType.System);
+                        ReceiveChat("You are not allowed to remove members!", MessageType.System);
                         return;
                     }
                     if (Name == "") return;
@@ -15483,7 +15483,7 @@ namespace Server.MirObjects
                 case 2: //promote member (and it'll auto create a new rank at bottom if the index > total ranks!)
                     if (!MyGuildRank.Options.HasFlag(RankOptions.CanChangeRank))
                     {
-                        ReceiveChat("You are not allowed to change other members rank!", ChatType.System);
+                        ReceiveChat("You are not allowed to change other members rank!", MessageType.System);
                         return;
                     }
                     if (Name == "") return;
@@ -15492,12 +15492,12 @@ namespace Server.MirObjects
                 case 3: //change rank name
                     if (!MyGuildRank.Options.HasFlag(RankOptions.CanChangeRank))
                     {
-                        ReceiveChat("You are not allowed to change ranks!", ChatType.System);
+                        ReceiveChat("You are not allowed to change ranks!", MessageType.System);
                         return;
                     }
                     if ((RankName == "") || (RankName.Length < 3))
                     {
-                        ReceiveChat("Rank name to short!", ChatType.System);
+                        ReceiveChat("Rank name to short!", MessageType.System);
                         return;
                     }
                     if (RankName.Contains("\\") || RankName.Length > 20)
@@ -15510,12 +15510,12 @@ namespace Server.MirObjects
                 case 4: //new rank
                     if (!MyGuildRank.Options.HasFlag(RankOptions.CanChangeRank))
                     {
-                        ReceiveChat("You are not allowed to change ranks!", ChatType.System);
+                        ReceiveChat("You are not allowed to change ranks!", MessageType.System);
                         return;
                     }
                     if (MyGuild.Ranks.Count > 254)
                     {
-                        ReceiveChat("No more rank slots available.", ChatType.System);
+                        ReceiveChat("No more rank slots available.", MessageType.System);
                         return;
                     }
                     MyGuild.NewRank(this);
@@ -15523,7 +15523,7 @@ namespace Server.MirObjects
                 case 5: //change rank setting
                     if (!MyGuildRank.Options.HasFlag(RankOptions.CanChangeRank))
                     {
-                        ReceiveChat("You are not allowed to change ranks!", ChatType.System);
+                        ReceiveChat("You are not allowed to change ranks!", MessageType.System);
                         return;
                     }
                     int temp;
@@ -15540,18 +15540,18 @@ namespace Server.MirObjects
         {
             if ((MyGuild == null) || (MyGuildRank == null))
             {
-                ReceiveChat("You are not in a guild!", ChatType.System);
+                ReceiveChat("You are not in a guild!", MessageType.System);
                 return;
             }
             if (!MyGuildRank.Options.HasFlag(RankOptions.CanChangeNotice))
             {
 
-                ReceiveChat("You are not allowed to change the guild notice!", ChatType.System);
+                ReceiveChat("You are not allowed to change the guild notice!", MessageType.System);
                 return;
             }
             if (notice.Count > 200)
             {
-                ReceiveChat("Guild notice can not be longer then 200 lines!", ChatType.System);
+                ReceiveChat("Guild notice can not be longer then 200 lines!", MessageType.System);
                 return;
             }
             MyGuild.NewNotice(notice);
@@ -15560,13 +15560,13 @@ namespace Server.MirObjects
         {
             if (PendingGuildInvite == null)
             {
-                ReceiveChat("You have not been invited to a guild.", ChatType.System);
+                ReceiveChat("You have not been invited to a guild.", MessageType.System);
                 return;
             }
             if (!accept) return;
             if (!PendingGuildInvite.HasRoom())
             {
-                ReceiveChat(String.Format("{0} is full.", PendingGuildInvite.Name), ChatType.System);
+                ReceiveChat(String.Format("{0} is full.", PendingGuildInvite.Name), MessageType.System);
                 return;
             }
             PendingGuildInvite.NewMember(this);
@@ -15609,7 +15609,7 @@ namespace Server.MirObjects
             if (!CanCreateGuild) return;
             if ((Name.Length < 3) || (Name.Length > 20))
             {
-                ReceiveChat("Guild name too long.", ChatType.System);
+                ReceiveChat("Guild name too long.", MessageType.System);
                 CanCreateGuild = false;
                 return;
             }
@@ -15620,14 +15620,14 @@ namespace Server.MirObjects
             }
             if (MyGuild != null)
             {
-                ReceiveChat("You are already part of a guild.", ChatType.System);
+                ReceiveChat("You are already part of a guild.", MessageType.System);
                 CanCreateGuild = false;
                 return;
             }
             GuildObject guild = Envir.GetGuild(Name);
             if (guild != null)
             {
-                ReceiveChat(string.Format("Guild {0} already exists.", Name), ChatType.System);
+                ReceiveChat(string.Format("Guild {0} already exists.", Name), MessageType.System);
                 CanCreateGuild = false;
                 return;
             }
@@ -15639,13 +15639,13 @@ namespace Server.MirObjects
         {
             if ((MyGuild == null) || (MyGuildRank == null))
             {
-                ReceiveChat("You are not part of a guild.", ChatType.System);
+                ReceiveChat("You are not part of a guild.", MessageType.System);
                 return;
             }
 
             if (!InSafeZone)
             {
-                ReceiveChat("You cannot use guild storage outside safezones.", ChatType.System);
+                ReceiveChat("You cannot use guild storage outside safezones.", MessageType.System);
                 return;
             }
 
@@ -15653,12 +15653,12 @@ namespace Server.MirObjects
             {
                 if (Account.Gold < Amount)
                 {
-                    ReceiveChat("Insufficient gold.", ChatType.System);
+                    ReceiveChat("Insufficient gold.", MessageType.System);
                     return;
                 }
                 if ((MyGuild.Gold + (UInt64)Amount) > uint.MaxValue)
                 {
-                    ReceiveChat("Guild gold limit reached.", ChatType.System);
+                    ReceiveChat("Guild gold limit reached.", MessageType.System);
                     return;
                 }
                 Account.Gold -= Amount;
@@ -15671,17 +15671,17 @@ namespace Server.MirObjects
             {
                 if (MyGuild.Gold < Amount)
                 {
-                    ReceiveChat("Insufficient gold.", ChatType.System);
+                    ReceiveChat("Insufficient gold.", MessageType.System);
                     return;
                 }
                 if (!CanGainGold(Amount))
                 {
-                    ReceiveChat("Gold limit reached.", ChatType.System);
+                    ReceiveChat("Gold limit reached.", MessageType.System);
                     return;
                 }
                 if (MyGuildRank.Index != 0)
                 {
-                    ReceiveChat("Insufficient rank.", ChatType.System);
+                    ReceiveChat("Insufficient rank.", MessageType.System);
                     return;
                 }
 
@@ -15697,14 +15697,14 @@ namespace Server.MirObjects
             if ((MyGuild == null) || (MyGuildRank == null))
             {
                 Enqueue(p);
-                ReceiveChat("You are not part of a guild.", ChatType.System);
+                ReceiveChat("You are not part of a guild.", MessageType.System);
                 return;
             }
 
             if (!InSafeZone && Type != 3)
             {
                 Enqueue(p);
-                ReceiveChat("You cannot use guild storage outside safezones.", ChatType.System);
+                ReceiveChat("You cannot use guild storage outside safezones.", MessageType.System);
                 return;
             }
 
@@ -15714,7 +15714,7 @@ namespace Server.MirObjects
                     if (!MyGuildRank.Options.HasFlag(RankOptions.CanStoreItem))
                     {
                         Enqueue(p);
-                        ReceiveChat("You do not have permission to store items in guild storage.", ChatType.System);
+                        ReceiveChat("You do not have permission to store items in guild storage.", MessageType.System);
                         return;
                     }
                     if (from < 0 || from >= Info.Inventory.Length)
@@ -15744,7 +15744,7 @@ namespace Server.MirObjects
                     }
                     if (MyGuild.StoredItems[to] != null)
                     {
-                        ReceiveChat("Target slot not empty.", ChatType.System);
+                        ReceiveChat("Target slot not empty.", MessageType.System);
                         Enqueue(p);
                         return;
                     }
@@ -15759,7 +15759,7 @@ namespace Server.MirObjects
                     if (!MyGuildRank.Options.HasFlag(RankOptions.CanRetrieveItem))
                     {
 
-                        ReceiveChat("You do not have permission to retrieve items from guild storage.", ChatType.System);
+                        ReceiveChat("You do not have permission to retrieve items from guild storage.", MessageType.System);
                         return;
                     }
                     if (from < 0 || from >= MyGuild.StoredItems.Length)
@@ -15774,7 +15774,7 @@ namespace Server.MirObjects
                     }
                     if (Info.Inventory[to] != null)
                     {
-                        ReceiveChat("Target slot not empty.", ChatType.System);
+                        ReceiveChat("Target slot not empty.", MessageType.System);
                         Enqueue(p);
                         return;
                     }
@@ -15785,7 +15785,7 @@ namespace Server.MirObjects
                     }
                     if (MaxBagWeight < CurrentBagWeight + MyGuild.StoredItems[from].Item.Weight)
                     {
-                        ReceiveChat("Too overweight to retrieve item.", ChatType.System);
+                        ReceiveChat("Too overweight to retrieve item.", MessageType.System);
                         Enqueue(p);
                         return;
                     }
@@ -15805,7 +15805,7 @@ namespace Server.MirObjects
                     if (!MyGuildRank.Options.HasFlag(RankOptions.CanStoreItem))
                     {
                         Enqueue(p);
-                        ReceiveChat("You do not have permission to move items in guild storage.", ChatType.System);
+                        ReceiveChat("You do not have permission to move items in guild storage.", MessageType.System);
                         return;
                     }
                     if (from < 0 || from >= MyGuild.StoredItems.Length)
@@ -15867,32 +15867,32 @@ namespace Server.MirObjects
 
             if (enemyGuild == null)
             {
-                ReceiveChat(string.Format("Could not find guild {0}.", Name), ChatType.System);
+                ReceiveChat(string.Format("Could not find guild {0}.", Name), MessageType.System);
                 return;
             }
 
             if (MyGuild == enemyGuild)
             {
-                ReceiveChat("Cannot go to war with your own guild.", ChatType.System);
+                ReceiveChat("Cannot go to war with your own guild.", MessageType.System);
                 return;
             }
 
             if (MyGuild.WarringGuilds.Contains(enemyGuild))
             {
-                ReceiveChat("Already at war with this guild.", ChatType.System);
+                ReceiveChat("Already at war with this guild.", MessageType.System);
                 return;
             }
 
             if (MyGuild.Gold < Settings.Guild_WarCost)
             {
-                ReceiveChat("Not enough funds in guild bank.", ChatType.System);
+                ReceiveChat("Not enough funds in guild bank.", MessageType.System);
                 return;
             }
 
             if (MyGuild.GoToWar(enemyGuild))
             {
-                ReceiveChat(string.Format("You started a war with {0}.", Name), ChatType.System);
-                enemyGuild.SendMessage(string.Format("{0} has started a war", MyGuild.Name), ChatType.System);
+                ReceiveChat(string.Format("You started a war with {0}.", Name), MessageType.System);
+                enemyGuild.SendMessage(string.Format("{0} has started a war", MyGuild.Name), MessageType.System);
 
                 MyGuild.Gold -= Settings.Guild_WarCost;
                 MyGuild.SendServerPacket(new S.GuildStorageGoldChange() { Type = 2, Name = Info.Name, Amount = Settings.Guild_WarCost });
@@ -15926,18 +15926,18 @@ namespace Server.MirObjects
                 case 1://buy the buff
                     if (!MyGuildRank.Options.HasFlag(RankOptions.CanActivateBuff))
                     {
-                        ReceiveChat("You do not have the correct guild rank.", ChatType.System);
+                        ReceiveChat("You do not have the correct guild rank.", MessageType.System);
                         return;
                     }
                     GuildBuffInfo BuffInfo = Envir.FindGuildBuffInfo(Id);
                     if (BuffInfo == null)
                     {
-                        ReceiveChat("Buff does not excist.", ChatType.System);
+                        ReceiveChat("Buff does not excist.", MessageType.System);
                         return;
                     }
                     if (MyGuild.GetBuff(Id) != null)
                     {
-                        ReceiveChat("Buff already obtained.", ChatType.System);
+                        ReceiveChat("Buff already obtained.", MessageType.System);
                         return;
                     }
                     if ((MyGuild.Level < BuffInfo.LevelRequirement) || (MyGuild.SparePoints < BuffInfo.PointsRequirement)) return;//client checks this so it shouldnt be possible without a moded client :p
@@ -15946,13 +15946,13 @@ namespace Server.MirObjects
                 case 2://activate the buff
                     if (!MyGuildRank.Options.HasFlag(RankOptions.CanActivateBuff))
                     {
-                        ReceiveChat("You do not have the correct guild rank.", ChatType.System);
+                        ReceiveChat("You do not have the correct guild rank.", MessageType.System);
                         return;
                     }
                     GuildBuff Buff = MyGuild.GetBuff(Id);
                     if (Buff == null)
                     {
-                        ReceiveChat("Buff not obtained.", ChatType.System);
+                        ReceiveChat("Buff not obtained.", MessageType.System);
                         return;
                     }
                     if ((MyGuild.Gold < Buff.Info.ActivationCost) || (Buff.Active)) return;
@@ -16043,7 +16043,7 @@ namespace Server.MirObjects
 
             if (temp.Weight + CurrentBagWeight > MaxBagWeight)
             {
-                ReceiveChat("Too heavy to get back.", ChatType.System);
+                ReceiveChat("Too heavy to get back.", MessageType.System);
                 Enqueue(p);
                 return;
             }
@@ -16067,7 +16067,7 @@ namespace Server.MirObjects
         {
             if (TradePartner != null)
             {
-                ReceiveChat("You are already trading.", ChatType.System);
+                ReceiveChat("You are already trading.", MessageType.System);
                 return;
             }
 
@@ -16087,7 +16087,7 @@ namespace Server.MirObjects
 
             if (player == null)
             {
-                ReceiveChat(string.Format("You must face someone to trade."), ChatType.System);
+                ReceiveChat(string.Format("You must face someone to trade."), MessageType.System);
                 return;
             }
 
@@ -16095,43 +16095,43 @@ namespace Server.MirObjects
             {
                 if (!Functions.FacingEachOther(Direction, CurrentLocation, player.Direction, player.CurrentLocation))
                 {
-                    ReceiveChat(string.Format("You must face someone to trade."), ChatType.System);
+                    ReceiveChat(string.Format("You must face someone to trade."), MessageType.System);
                     return;
                 }
 
                 if (player == this)
                 {
-                    ReceiveChat("You cannot trade with your self.", ChatType.System);
+                    ReceiveChat("You cannot trade with your self.", MessageType.System);
                     return;
                 }
 
                 if (player.Dead || Dead)
                 {
-                    ReceiveChat("Cannot trade when dead", ChatType.System);
+                    ReceiveChat("Cannot trade when dead", MessageType.System);
                     return;
                 }
 
                 if (player.TradeInvitation != null)
                 {
-                    ReceiveChat(string.Format("Player {0} already has a trade invitation.", player.Info.Name), ChatType.System);
+                    ReceiveChat(string.Format("Player {0} already has a trade invitation.", player.Info.Name), MessageType.System);
                     return;
                 }
 
                 if (!player.AllowTrade)
                 {
-                    ReceiveChat(string.Format("Player {0} is not allowing trade at the moment.", player.Info.Name), ChatType.System);
+                    ReceiveChat(string.Format("Player {0} is not allowing trade at the moment.", player.Info.Name), MessageType.System);
                     return;
                 }
 
                 if (!Functions.InRange(player.CurrentLocation, CurrentLocation, Globals.DataRange) || player.CurrentMap != CurrentMap)
                 {
-                    ReceiveChat(string.Format("Player {0} is not within trading range.", player.Info.Name), ChatType.System);
+                    ReceiveChat(string.Format("Player {0} is not within trading range.", player.Info.Name), MessageType.System);
                     return;
                 }
 
                 if (player.TradePartner != null)
                 {
-                    ReceiveChat(string.Format("Player {0} is already trading.", player.Info.Name), ChatType.System);
+                    ReceiveChat(string.Format("Player {0} is already trading.", player.Info.Name), MessageType.System);
                     return;
                 }
 
@@ -16149,21 +16149,21 @@ namespace Server.MirObjects
 
             if (!accept)
             {
-                TradeInvitation.ReceiveChat(string.Format("Player {0} has refused to trade.", Info.Name), ChatType.System);
+                TradeInvitation.ReceiveChat(string.Format("Player {0} has refused to trade.", Info.Name), MessageType.System);
                 TradeInvitation = null;
                 return;
             }
 
             if (TradePartner != null)
             {
-                ReceiveChat("You are already trading.", ChatType.System);
+                ReceiveChat("You are already trading.", MessageType.System);
                 TradeInvitation = null;
                 return;
             }
 
             if (TradeInvitation.TradePartner != null)
             {
-                ReceiveChat(string.Format("Player {0} is already trading.", TradeInvitation.Info.Name), ChatType.System);
+                ReceiveChat(string.Format("Player {0} is already trading.", TradeInvitation.Info.Name), MessageType.System);
                 TradeInvitation = null;
                 return;
             }
@@ -16245,7 +16245,7 @@ namespace Server.MirObjects
 
             if (TradeLocked && !TradePartner.TradeLocked)
             {
-                TradePartner.ReceiveChat(string.Format("Player {0} is waiting for you to confirm trade.", Info.Name), ChatType.System);
+                TradePartner.ReceiveChat(string.Format("Player {0} is waiting for you to confirm trade.", Info.Name), MessageType.System);
             }
 
             if (!TradeLocked || !TradePartner.TradeLocked) return;
@@ -16263,10 +16263,10 @@ namespace Server.MirObjects
                 if (!TradePair[o].CanGainItems(TradePair[p].Info.Trade))
                 {
                     CanTrade = false;
-                    TradePair[p].ReceiveChat("Trading partner cannot accept all items.", ChatType.System);
+                    TradePair[p].ReceiveChat("Trading partner cannot accept all items.", MessageType.System);
                     TradePair[p].Enqueue(new S.TradeCancel { Unlock = true });
 
-                    TradePair[o].ReceiveChat("Unable to accept all items.", ChatType.System);
+                    TradePair[o].ReceiveChat("Unable to accept all items.", MessageType.System);
                     TradePair[o].Enqueue(new S.TradeCancel { Unlock = true });
 
                     return;
@@ -16275,10 +16275,10 @@ namespace Server.MirObjects
                 if (!TradePair[o].CanGainGold(TradePair[p].TradeGoldAmount))
                 {
                     CanTrade = false;
-                    TradePair[p].ReceiveChat("Trading partner cannot accept any more gold.", ChatType.System);
+                    TradePair[p].ReceiveChat("Trading partner cannot accept any more gold.", MessageType.System);
                     TradePair[p].Enqueue(new S.TradeCancel { Unlock = true });
 
-                    TradePair[o].ReceiveChat("Unable to accept any more gold.", ChatType.System);
+                    TradePair[o].ReceiveChat("Unable to accept any more gold.", MessageType.System);
                     TradePair[o].Enqueue(new S.TradeCancel { Unlock = true });
 
                     return;
@@ -16312,7 +16312,7 @@ namespace Server.MirObjects
                         TradePair[p].TradeGoldAmount = 0;
                     }
 
-                    TradePair[p].ReceiveChat("Trade successful.", ChatType.System);
+                    TradePair[p].ReceiveChat("Trade successful.", MessageType.System);
                     TradePair[p].Enqueue(new S.TradeConfirm());
 
                     TradePair[p].TradeLocked = false;
@@ -16406,17 +16406,17 @@ namespace Server.MirObjects
                 else if (!Mount.CanRide)
                 {
                     RidingMount = false;
-                    ReceiveChat("You must have a saddle to ride your mount", ChatType.System);
+                    ReceiveChat("You must have a saddle to ride your mount", MessageType.System);
                 }
                 else if (!Mount.CanMapRide)
                 {
                     RidingMount = false;
-                    ReceiveChat("You cannot ride on this map", ChatType.System);
+                    ReceiveChat("You cannot ride on this map", MessageType.System);
                 }
                 else if (!Mount.CanDungeonRide)
                 {
                     RidingMount = false;
-                    ReceiveChat("You cannot ride here without a bridle", ChatType.System);
+                    ReceiveChat("You cannot ride here without a bridle", MessageType.System);
                 }
             }
             else
@@ -16506,7 +16506,7 @@ namespace Server.MirObjects
 
             if (hook == null)
             {
-                ReceiveChat("You need a hook.", ChatType.System);
+                ReceiveChat("You need a hook.", MessageType.System);
                 return;
             }
             else
@@ -16577,7 +16577,7 @@ namespace Server.MirObjects
 
                 if (item == null)
                 {
-                    ReceiveChat("You need bait.", ChatType.System);
+                    ReceiveChat("You need bait.", MessageType.System);
                     return;
                 }
 
@@ -16626,9 +16626,9 @@ namespace Server.MirObjects
                         }
 
                         if (dropItem == null)
-                            ReceiveChat("Your fish got away!", ChatType.System);
+                            ReceiveChat("Your fish got away!", MessageType.System);
                         else if (FreeSpace(Info.Inventory) < 1)
-                            ReceiveChat("You do not have enough space in your bag.", ChatType.System);
+                            ReceiveChat("You do not have enough space in your bag.", MessageType.System);
                         else
                         {
                             GainItem(dropItem);
@@ -16649,7 +16649,7 @@ namespace Server.MirObjects
                         cancel = true;
                     }
                     else
-                        ReceiveChat("Your fish got away!", ChatType.System);
+                        ReceiveChat("Your fish got away!", MessageType.System);
                 }
 
                 FishFound = false;
@@ -16765,13 +16765,13 @@ namespace Server.MirObjects
 
             if (CurrentQuests.Count >= Globals.MaxConcurrentQuests)
             {
-                ReceiveChat("Maximum amount of quests already taken.", ChatType.System);
+                ReceiveChat("Maximum amount of quests already taken.", MessageType.System);
                 return;
             }
 
             if (CompletedQuests.Contains(index))
             {
-                ReceiveChat("Quest has already been completed.", ChatType.System);
+                ReceiveChat("Quest has already been completed.", MessageType.System);
                 return;
             }
 
@@ -16790,7 +16790,7 @@ namespace Server.MirObjects
 
             if (!canAccept)
             {
-                ReceiveChat("Could not accept quest.", ChatType.System);
+                ReceiveChat("Could not accept quest.", MessageType.System);
                 return;
             }
 
@@ -16910,7 +16910,7 @@ namespace Server.MirObjects
 
             if (!CanGainItems(rewardItems.ToArray()))
             {
-                ReceiveChat("Cannot hand in quest whilst bag is full.", ChatType.System);
+                ReceiveChat("Cannot hand in quest whilst bag is full.", MessageType.System);
                 return;
             }
 
@@ -16978,7 +16978,7 @@ namespace Server.MirObjects
 
             if (!shared)
             {
-                ReceiveChat("Quest could not be shared with anyone.", ChatType.System);
+                ReceiveChat("Quest could not be shared with anyone.", MessageType.System);
             }
         }
 
@@ -17140,19 +17140,19 @@ namespace Server.MirObjects
 
             if (player == null)
             {
-                ReceiveChat(string.Format("Could not find player {0}", name), ChatType.System);
+                ReceiveChat(string.Format("Could not find player {0}", name), MessageType.System);
                 return;
             }
 
             if (player.Friends.Any(e => e.Info == Info && e.Blocked))
             {
-                ReceiveChat("Player is not accepting your mail.", ChatType.System);
+                ReceiveChat("Player is not accepting your mail.", MessageType.System);
                 return;
             }
 
             if (Info.Friends.Any(e => e.Info == player && e.Blocked))
             {
-                ReceiveChat("Cannot mail player whilst they are on your blacklist.", ChatType.System);
+                ReceiveChat("Cannot mail player whilst they are on your blacklist.", MessageType.System);
                 return;
             }
 
@@ -17173,7 +17173,7 @@ namespace Server.MirObjects
 
             if (player == null)
             {
-                ReceiveChat(string.Format("Could not find player {0}", name), ChatType.System);
+                ReceiveChat(string.Format("Could not find player {0}", name), MessageType.System);
                 return;
             }
 
@@ -17222,13 +17222,13 @@ namespace Server.MirObjects
 
                     if(item.Info.Bind.HasFlag(BindMode.DontTrade))
                     {
-                        ReceiveChat(string.Format("{0} cannot be mailed", item.FriendlyName), ChatType.System);
+                        ReceiveChat(string.Format("{0} cannot be mailed", item.FriendlyName), MessageType.System);
                         return;
                     }
 
                     if (item.RentalInformation != null && item.RentalInformation.BindingFlags.HasFlag(BindMode.DontTrade))
                     {
-                        ReceiveChat(string.Format("{0} cannot be mailed", item.FriendlyName), ChatType.System);
+                        ReceiveChat(string.Format("{0} cannot be mailed", item.FriendlyName), MessageType.System);
                         return;
                     }
 
@@ -17279,7 +17279,7 @@ namespace Server.MirObjects
 
             if (!mail.Collected)
             {
-                ReceiveChat("Mail must be collected from the post office.", ChatType.System);
+                ReceiveChat("Mail must be collected from the post office.", MessageType.System);
                 return;
             }
 
@@ -17287,7 +17287,7 @@ namespace Server.MirObjects
             {
                 if (!CanGainItems(mail.Items.ToArray()))
                 {
-                    ReceiveChat("Cannot collect items when bag is full.", ChatType.System);
+                    ReceiveChat("Cannot collect items when bag is full.", MessageType.System);
                     return;
                 }
 
@@ -17467,7 +17467,7 @@ namespace Server.MirObjects
                 CreatureSummoned = true;
                 SummonedCreatureType = pType;
 
-                ReceiveChat((string.Format("Creature {0} has been summoned.", Info.IntelligentCreatures[i].CustomName)), ChatType.System);
+                ReceiveChat((string.Format("Creature {0} has been summoned.", Info.IntelligentCreatures[i].CustomName)), MessageType.System);
                 break;
             }
             //update client
@@ -17482,7 +17482,7 @@ namespace Server.MirObjects
                 if (Pets[i].Info.AI != 64) continue;
                 if (((IntelligentCreatureObject)Pets[i]).petType != pType) continue;
 
-                if (doUpdate) ReceiveChat((string.Format("Creature {0} has been dismissed.", ((IntelligentCreatureObject)Pets[i]).CustomName)), ChatType.System);
+                if (doUpdate) ReceiveChat((string.Format("Creature {0} has been dismissed.", ((IntelligentCreatureObject)Pets[i]).CustomName)), MessageType.System);
 
                 Pets[i].Die();
 
@@ -17502,7 +17502,7 @@ namespace Server.MirObjects
             {
                 if (Info.IntelligentCreatures[i].PetType != pType) continue;
 
-                if (doUpdate) ReceiveChat((string.Format("Creature {0} has been released.", Info.IntelligentCreatures[i].CustomName)), ChatType.System);
+                if (doUpdate) ReceiveChat((string.Format("Creature {0} has been released.", Info.IntelligentCreatures[i].CustomName)), MessageType.System);
 
                 Info.IntelligentCreatures.Remove(Info.IntelligentCreatures[i]);
                 break;
@@ -17608,7 +17608,7 @@ namespace Server.MirObjects
                 }
                 for (int i = (releasedPets.Count - 1); i >= 0; i--)//start with largest value
                 {
-                    ReceiveChat((string.Format("Creature {0} has expired.", Info.IntelligentCreatures[releasedPets[i]].CustomName)), ChatType.System);
+                    ReceiveChat((string.Format("Creature {0} has expired.", Info.IntelligentCreatures[releasedPets[i]].CustomName)), MessageType.System);
                     ReleaseIntelligentCreature(Info.IntelligentCreatures[releasedPets[i]].PetType, false);//release creature
                 }
 
@@ -17709,7 +17709,7 @@ namespace Server.MirObjects
                 if (Pets[i].Info.AI != 64) continue;
                 if (((IntelligentCreatureObject)Pets[i]).petType != pType) continue;
 
-                Enqueue(new S.ObjectChat { ObjectID = Pets[i].ObjectID, Text = message, Type = ChatType.Normal });
+                Enqueue(new S.ObjectChat { ObjectID = Pets[i].ObjectID, Text = message, Type = MessageType.Normal });
                 return;
             }
         }
@@ -17733,7 +17733,7 @@ namespace Server.MirObjects
 
             if (dropItem == null)
             {
-                ReceiveChat("Nothing found.", ChatType.System);
+                ReceiveChat("Nothing found.", MessageType.System);
                 return;
             }
 
@@ -17746,7 +17746,7 @@ namespace Server.MirObjects
 
             if (FreeSpace(Info.Inventory) < 1)
             {
-                ReceiveChat("No more space.", ChatType.System);
+                ReceiveChat("No more space.", MessageType.System);
                 return;
             }
 
@@ -17769,7 +17769,7 @@ namespace Server.MirObjects
             }
             if (FreeSpace(Info.Inventory) < 1)
             {
-                ReceiveChat("No more space.", ChatType.System);
+                ReceiveChat("No more space.", MessageType.System);
                 return;
             }
             if (dropItem != null) GainItem(dropItem);
@@ -17885,19 +17885,19 @@ namespace Server.MirObjects
 
             if (info == null)
             {
-                ReceiveChat("Player doesn't exist", ChatType.System);
+                ReceiveChat("Player doesn't exist", MessageType.System);
                 return;
             }
 
             if (Name == name)
             {
-                ReceiveChat("Cannot add yourself", ChatType.System);
+                ReceiveChat("Cannot add yourself", MessageType.System);
                 return;
             }
 
             if (Info.Friends.Any(e => e.Index == info.Index))
             {
-                ReceiveChat("Player already added", ChatType.System);
+                ReceiveChat("Player already added", MessageType.System);
                 return;
             }
 
@@ -18040,7 +18040,7 @@ namespace Server.MirObjects
 
             if (temp.Weight + CurrentBagWeight > MaxBagWeight)
             {
-                ReceiveChat("Too heavy to get back.", ChatType.System);
+                ReceiveChat("Too heavy to get back.", MessageType.System);
                 Enqueue(p);
                 return;
             }
@@ -18112,25 +18112,25 @@ namespace Server.MirObjects
 
             if (Info.Inventory[index].RefineAdded != 0)
             {
-                ReceiveChat(String.Format("Your {0} needs to be checked before you can attempt to refine it again.", Info.Inventory[index].FriendlyName), ChatType.System);
+                ReceiveChat(String.Format("Your {0} needs to be checked before you can attempt to refine it again.", Info.Inventory[index].FriendlyName), MessageType.System);
                 return;
             }
 
             if ((Info.Inventory[index].Info.Type != ItemType.Weapon) && (Settings.OnlyRefineWeapon))
             {
-                ReceiveChat(String.Format("Your {0} can't be refined.", Info.Inventory[index].FriendlyName), ChatType.System);
+                ReceiveChat(String.Format("Your {0} can't be refined.", Info.Inventory[index].FriendlyName), MessageType.System);
                 return;
             }
 
             if (Info.Inventory[index].Info.Bind.HasFlag(BindMode.DontUpgrade))
             {
-                ReceiveChat(String.Format("Your {0} can't be refined.", Info.Inventory[index].FriendlyName), ChatType.System);
+                ReceiveChat(String.Format("Your {0} can't be refined.", Info.Inventory[index].FriendlyName), MessageType.System);
                 return;
             }
 
             if (Info.Inventory[index].RentalInformation != null && Info.Inventory[index].RentalInformation.BindingFlags.HasFlag(BindMode.DontUpgrade))
             {
-                ReceiveChat(String.Format("Your {0} can't be refined.", Info.Inventory[index].FriendlyName), ChatType.System);
+                ReceiveChat(String.Format("Your {0} can't be refined.", Info.Inventory[index].FriendlyName), MessageType.System);
                 return;
             }
 
@@ -18145,7 +18145,7 @@ namespace Server.MirObjects
 
             if (cost > Account.Gold)
             {
-                ReceiveChat(String.Format("You don't have enough gold to refine your {0}.", Info.Inventory[index].FriendlyName), ChatType.System);
+                ReceiveChat(String.Format("You don't have enough gold to refine your {0}.", Info.Inventory[index].FriendlyName), MessageType.System);
                 return;
             }
 
@@ -18213,7 +18213,7 @@ namespace Server.MirObjects
                 }
                 else
                 {
-                    ReceiveChat(String.Format("Your {0} is now being refined, please check back in {1} minute(s).", Info.CurrentRefine.FriendlyName, Settings.RefineTime), ChatType.System);
+                    ReceiveChat(String.Format("Your {0} is now being refined, please check back in {1} minute(s).", Info.CurrentRefine.FriendlyName, Settings.RefineTime), MessageType.System);
                 }
                 return;
             }
@@ -18228,7 +18228,7 @@ namespace Server.MirObjects
                 }
                 else
                 {
-                    ReceiveChat(String.Format("Your {0} is now being refined, please check back in {1} minute(s).", Info.CurrentRefine.FriendlyName, Settings.RefineTime), ChatType.System);
+                    ReceiveChat(String.Format("Your {0} is now being refined, please check back in {1} minute(s).", Info.CurrentRefine.FriendlyName, Settings.RefineTime), MessageType.System);
                 }
                 return;
             }
@@ -18308,7 +18308,7 @@ namespace Server.MirObjects
             }
             else
             {
-                ReceiveChat(String.Format("Your {0} is now being refined, please check back in {1} minute(s).", Info.CurrentRefine.FriendlyName, Settings.RefineTime), ChatType.System);
+                ReceiveChat(String.Format("Your {0} is now being refined, please check back in {1} minute(s).", Info.CurrentRefine.FriendlyName, Settings.RefineTime), MessageType.System);
             }
         }
         public void CollectRefine()
@@ -18317,14 +18317,14 @@ namespace Server.MirObjects
 
             if (Info.CurrentRefine == null)
             {
-                ReceiveChat("You aren't currently refining any items.", ChatType.System);
+                ReceiveChat("You aren't currently refining any items.", MessageType.System);
                 Enqueue(p);
                 return;
             }
 
             if (Info.CollectTime > Envir.Time)
             {
-                ReceiveChat(string.Format("Your {0} will be ready to collect in {1} minute(s).", Info.CurrentRefine.FriendlyName, ((Info.CollectTime - Envir.Time) / Settings.Minute)), ChatType.System);
+                ReceiveChat(string.Format("Your {0} will be ready to collect in {1} minute(s).", Info.CurrentRefine.FriendlyName, ((Info.CollectTime - Envir.Time) / Settings.Minute)), MessageType.System);
                 Enqueue(p);
                 return;
             }
@@ -18332,7 +18332,7 @@ namespace Server.MirObjects
 
             if (Info.CurrentRefine.Info.Weight + CurrentBagWeight > MaxBagWeight)
             {
-                ReceiveChat(string.Format("Your {0} is too heavy to get back, try again after reducing your bag weight.", Info.CurrentRefine.FriendlyName), ChatType.System);
+                ReceiveChat(string.Format("Your {0} is too heavy to get back, try again after reducing your bag weight.", Info.CurrentRefine.FriendlyName), MessageType.System);
                 Enqueue(p);
                 return;
             }
@@ -18348,12 +18348,12 @@ namespace Server.MirObjects
 
             if (index == -1)
             {
-                ReceiveChat(String.Format("There isn't room in your bag for your {0}, make some space and try again.", Info.CurrentRefine.FriendlyName), ChatType.System);
+                ReceiveChat(String.Format("There isn't room in your bag for your {0}, make some space and try again.", Info.CurrentRefine.FriendlyName), MessageType.System);
                 Enqueue(p);
                 return;
             }
 
-            ReceiveChat(String.Format("Your item has been returned to you."), ChatType.System);
+            ReceiveChat(String.Format("Your item has been returned to you."), MessageType.System);
             p.Success = true;
 
             GainItem(Info.CurrentRefine);
@@ -18386,35 +18386,35 @@ namespace Server.MirObjects
 
             if (Info.Inventory[index].RefineAdded == 0)
             {
-                ReceiveChat(String.Format("{0} doesn't need to be checked as it hasn't been refined yet.", Info.Inventory[index].FriendlyName), ChatType.System);
+                ReceiveChat(String.Format("{0} doesn't need to be checked as it hasn't been refined yet.", Info.Inventory[index].FriendlyName), MessageType.System);
                 return;
             }
 
 
             if ((Info.Inventory[index].RefinedValue == RefinedValue.DC) && (Info.Inventory[index].RefineAdded > 0))
             {
-                ReceiveChat(String.Format("Congratulations, your {0} now has +{1} extra DC.", Info.Inventory[index].FriendlyName, Info.Inventory[index].RefineAdded), ChatType.System);
+                ReceiveChat(String.Format("Congratulations, your {0} now has +{1} extra DC.", Info.Inventory[index].FriendlyName, Info.Inventory[index].RefineAdded), MessageType.System);
                 Info.Inventory[index].DC = (byte)Math.Min(byte.MaxValue, Info.Inventory[index].DC + Info.Inventory[index].RefineAdded);
                 Info.Inventory[index].RefineAdded = 0;
                 Info.Inventory[index].RefinedValue = RefinedValue.None;
             }
             else if ((Info.Inventory[index].RefinedValue == RefinedValue.MC) && (Info.Inventory[index].RefineAdded > 0))
             {
-                ReceiveChat(String.Format("Congratulations, your {0} now has +{1} extra MC.", Info.Inventory[index].FriendlyName, Info.Inventory[index].RefineAdded), ChatType.System);
+                ReceiveChat(String.Format("Congratulations, your {0} now has +{1} extra MC.", Info.Inventory[index].FriendlyName, Info.Inventory[index].RefineAdded), MessageType.System);
                 Info.Inventory[index].MC = (byte)Math.Min(byte.MaxValue, Info.Inventory[index].MC + Info.Inventory[index].RefineAdded);
                 Info.Inventory[index].RefineAdded = 0;
                 Info.Inventory[index].RefinedValue = RefinedValue.None;
             }
             else if ((Info.Inventory[index].RefinedValue == RefinedValue.SC) && (Info.Inventory[index].RefineAdded > 0))
             {
-                ReceiveChat(String.Format("Congratulations, your {0} now has +{1} extra SC.", Info.Inventory[index].FriendlyName, Info.Inventory[index].RefineAdded), ChatType.System);
+                ReceiveChat(String.Format("Congratulations, your {0} now has +{1} extra SC.", Info.Inventory[index].FriendlyName, Info.Inventory[index].RefineAdded), MessageType.System);
                 Info.Inventory[index].SC = (byte)Math.Min(byte.MaxValue, Info.Inventory[index].SC + Info.Inventory[index].RefineAdded);
                 Info.Inventory[index].RefineAdded = 0;
                 Info.Inventory[index].RefinedValue = RefinedValue.None;
             }
             else if ((Info.Inventory[index].RefinedValue == RefinedValue.None) && (Info.Inventory[index].RefineAdded > 0))
             {
-                ReceiveChat(String.Format("Your {0} smashed into a thousand pieces upon testing.", Info.Inventory[index].FriendlyName), ChatType.System);
+                ReceiveChat(String.Format("Your {0} smashed into a thousand pieces upon testing.", Info.Inventory[index].FriendlyName), MessageType.System);
                 Enqueue(new S.RefineItem { UniqueID = Info.Inventory[index].UniqueID });
                 Info.Inventory[index] = null;
                 return;
@@ -18432,7 +18432,7 @@ namespace Server.MirObjects
         {
             if (Info.Married == 0)
             {
-                ReceiveChat(string.Format("You're not married."), ChatType.System);
+                ReceiveChat(string.Format("You're not married."), MessageType.System);
                 return;
             }
 
@@ -18466,7 +18466,7 @@ namespace Server.MirObjects
             if (Player != null)
             {
                 Player.GetRelationship(false);
-                Player.ReceiveChat(string.Format("You've just been forcefully divorced"), ChatType.System);
+                Player.ReceiveChat(string.Format("You've just been forcefully divorced"), MessageType.System);
                 if (Player.Info.Equipment[(int)EquipmentSlot.RingL] != null)
                     Player.Enqueue(new S.RefreshItem { Item = Player.Info.Equipment[(int)EquipmentSlot.RingL] });
             }
@@ -18476,25 +18476,25 @@ namespace Server.MirObjects
         {
             if (Info.Married == 0)
             {
-                ReceiveChat(string.Format("You need to be married to make a Wedding Ring."), ChatType.System);
+                ReceiveChat(string.Format("You need to be married to make a Wedding Ring."), MessageType.System);
                 return false;
             }
 
             if (Info.Equipment[(int)EquipmentSlot.RingL] == null)
             {
-                ReceiveChat(string.Format("You need to wear a ring on your left finger to make a Wedding Ring."), ChatType.System);
+                ReceiveChat(string.Format("You need to wear a ring on your left finger to make a Wedding Ring."), MessageType.System);
                 return false;
             }
 
             if (Info.Equipment[(int)EquipmentSlot.RingL].WeddingRing != -1)
             {
-                ReceiveChat(string.Format("You're already wearing a Wedding Ring."), ChatType.System);
+                ReceiveChat(string.Format("You're already wearing a Wedding Ring."), MessageType.System);
                 return false;
             }
 
             if (Info.Equipment[(int)EquipmentSlot.RingL].Info.Bind.HasFlag(BindMode.NoWeddingRing))
             {
-                ReceiveChat(string.Format("You cannot use this type of ring."), ChatType.System);
+                ReceiveChat(string.Format("You cannot use this type of ring."), MessageType.System);
                 return false;
             }
 
@@ -18521,13 +18521,13 @@ namespace Server.MirObjects
 
             if (CurrentRing == null)
             {
-                ReceiveChat(string.Format("You arn't wearing a  ring to upgrade."), ChatType.System);
+                ReceiveChat(string.Format("You arn't wearing a  ring to upgrade."), MessageType.System);
                 return;
             }
 
             if (CurrentRing.WeddingRing == -1)
             {
-                ReceiveChat(string.Format("You arn't wearing a Wedding Ring to upgrade."), ChatType.System);
+                ReceiveChat(string.Format("You arn't wearing a Wedding Ring to upgrade."), MessageType.System);
                 return;
             }
 
@@ -18548,19 +18548,19 @@ namespace Server.MirObjects
 
             if (temp.Info.Type != ItemType.Ring)
             {
-                ReceiveChat(string.Format("You can't replace a Wedding Ring with this item."), ChatType.System);
+                ReceiveChat(string.Format("You can't replace a Wedding Ring with this item."), MessageType.System);
                 return;
             }
 
             if (!CanEquipItem(temp, (int)EquipmentSlot.RingL))
             {
-                ReceiveChat(string.Format("You can't equip the item you're trying to use."), ChatType.System);
+                ReceiveChat(string.Format("You can't equip the item you're trying to use."), MessageType.System);
                 return;
             }
 
             if (temp.Info.Bind.HasFlag(BindMode.NoWeddingRing))
             {
-                ReceiveChat(string.Format("You cannot use this type of ring."), ChatType.System);
+                ReceiveChat(string.Format("You cannot use this type of ring."), MessageType.System);
                 return;
             }
 
@@ -18568,7 +18568,7 @@ namespace Server.MirObjects
 
             if (cost > Account.Gold)
             {
-                ReceiveChat(String.Format("You don't have enough gold to replace your Wedding Ring."), ChatType.System);
+                ReceiveChat(String.Format("You don't have enough gold to replace your Wedding Ring."), MessageType.System);
                 return;
             }
 
@@ -18594,19 +18594,19 @@ namespace Server.MirObjects
 
             if (Info.Married != 0)
             {
-                ReceiveChat(string.Format("You're already married."), ChatType.System);
+                ReceiveChat(string.Format("You're already married."), MessageType.System);
                 return;
             }
 
             if (Info.MarriedDate.AddDays(Settings.MarriageCooldown) > DateTime.Now)
             {
-                ReceiveChat(string.Format("You can't get married again yet, there is a {0} day cooldown after a divorce.", Settings.MarriageCooldown), ChatType.System);
+                ReceiveChat(string.Format("You can't get married again yet, there is a {0} day cooldown after a divorce.", Settings.MarriageCooldown), MessageType.System);
                 return;
             }
 
             if (Info.Level < Settings.MarriageLevelRequired)
             {
-                ReceiveChat(string.Format("You need to be at least level {0} to get married.", Settings.MarriageLevelRequired), ChatType.System);
+                ReceiveChat(string.Format("You need to be at least level {0} to get married.", Settings.MarriageLevelRequired), MessageType.System);
                 return;
             }
 
@@ -18632,55 +18632,55 @@ namespace Server.MirObjects
 
                 if (!Functions.FacingEachOther(Direction, CurrentLocation, player.Direction, player.CurrentLocation))
                 {
-                    ReceiveChat(string.Format("You need to be facing each other to perform a marriage."), ChatType.System);
+                    ReceiveChat(string.Format("You need to be facing each other to perform a marriage."), MessageType.System);
                     return;
                 }
 
                 if (player.Level < Settings.MarriageLevelRequired)
                 {
-                    ReceiveChat(string.Format("Your lover needs to be at least level {0} to get married.", Settings.MarriageLevelRequired), ChatType.System);
+                    ReceiveChat(string.Format("Your lover needs to be at least level {0} to get married.", Settings.MarriageLevelRequired), MessageType.System);
                     return;
                 }
 
                 if (player.Info.MarriedDate.AddDays(Settings.MarriageCooldown) > DateTime.Now)
                 {
-                    ReceiveChat(string.Format("{0} can't get married again yet, there is a {1} day cooldown after divorce", player.Name, Settings.MarriageCooldown), ChatType.System);
+                    ReceiveChat(string.Format("{0} can't get married again yet, there is a {1} day cooldown after divorce", player.Name, Settings.MarriageCooldown), MessageType.System);
                     return;
                 }
 
                 if (!player.AllowMarriage)
                 {
-                    ReceiveChat("The person you're trying to propose to isn't allowing marriage requests.", ChatType.System);
+                    ReceiveChat("The person you're trying to propose to isn't allowing marriage requests.", MessageType.System);
                     return;
                 }
 
                 if (player == this)
                 {
-                    ReceiveChat("You cant marry yourself.", ChatType.System);
+                    ReceiveChat("You cant marry yourself.", MessageType.System);
                     return;
                 }
 
                 if (player.Dead || Dead)
                 {
-                    ReceiveChat("You can't perform a marriage with a dead player.", ChatType.System);
+                    ReceiveChat("You can't perform a marriage with a dead player.", MessageType.System);
                     return;
                 }
 
                 if (player.MarriageProposal != null)
                 {
-                    ReceiveChat(string.Format("{0} already has a marriage invitation.", player.Info.Name), ChatType.System);
+                    ReceiveChat(string.Format("{0} already has a marriage invitation.", player.Info.Name), MessageType.System);
                     return;
                 }
 
                 if (!Functions.InRange(player.CurrentLocation, CurrentLocation, Globals.DataRange) || player.CurrentMap != CurrentMap)
                 {
-                    ReceiveChat(string.Format("{0} is not within marriage range.", player.Info.Name), ChatType.System);
+                    ReceiveChat(string.Format("{0} is not within marriage range.", player.Info.Name), MessageType.System);
                     return;
                 }
 
                 if (player.Info.Married != 0)
                 {
-                    ReceiveChat(string.Format("{0} is already married.", player.Info.Name), ChatType.System);
+                    ReceiveChat(string.Format("{0} is already married.", player.Info.Name), MessageType.System);
                     return;
                 }
 
@@ -18689,7 +18689,7 @@ namespace Server.MirObjects
             }
             else
             {
-                ReceiveChat(string.Format("You need to be facing a player to request a marriage."), ChatType.System);
+                ReceiveChat(string.Format("You need to be facing a player to request a marriage."), MessageType.System);
                 return;
             }
         }
@@ -18704,21 +18704,21 @@ namespace Server.MirObjects
 
             if (!accept)
             {
-                MarriageProposal.ReceiveChat(string.Format("{0} has refused to marry you.", Info.Name), ChatType.System);
+                MarriageProposal.ReceiveChat(string.Format("{0} has refused to marry you.", Info.Name), MessageType.System);
                 MarriageProposal = null;
                 return;
             }
 
             if (Info.Married != 0)
             {
-                ReceiveChat("You are already married.", ChatType.System);
+                ReceiveChat("You are already married.", MessageType.System);
                 MarriageProposal = null;
                 return;
             }
 
             if (MarriageProposal.Info.Married != 0)
             {
-                ReceiveChat(string.Format("{0} is already married.", MarriageProposal.Info.Name), ChatType.System);
+                ReceiveChat(string.Format("{0} is already married.", MarriageProposal.Info.Name), MessageType.System);
                 MarriageProposal = null;
                 return;
             }
@@ -18733,8 +18733,8 @@ namespace Server.MirObjects
             GetRelationship(false);
             MarriageProposal.GetRelationship(false);
 
-            MarriageProposal.ReceiveChat(string.Format("Congratulations, you're now married to {0}.", Info.Name), ChatType.System);
-            ReceiveChat(String.Format("Congratulations, you're now married to {0}.", MarriageProposal.Info.Name), ChatType.System);
+            MarriageProposal.ReceiveChat(string.Format("Congratulations, you're now married to {0}.", Info.Name), MessageType.System);
+            ReceiveChat(String.Format("Congratulations, you're now married to {0}.", MarriageProposal.Info.Name), MessageType.System);
 
             MarriageProposal = null;
         }
@@ -18744,7 +18744,7 @@ namespace Server.MirObjects
 
             if (Info.Married == 0)
             {
-                ReceiveChat(string.Format("You're not married."), ChatType.System);
+                ReceiveChat(string.Format("You're not married."), MessageType.System);
                 return;
             }
 
@@ -18765,7 +18765,7 @@ namespace Server.MirObjects
 
             if (player == null)
             {
-                ReceiveChat(string.Format("You need to be facing your lover to divorce them."), ChatType.System);
+                ReceiveChat(string.Format("You need to be facing your lover to divorce them."), MessageType.System);
                 return;
             }
 
@@ -18773,31 +18773,31 @@ namespace Server.MirObjects
             {
                 if (!Functions.FacingEachOther(Direction, CurrentLocation, player.Direction, player.CurrentLocation))
                 {
-                    ReceiveChat(string.Format("You need to be facing your lover to divorce them."), ChatType.System);
+                    ReceiveChat(string.Format("You need to be facing your lover to divorce them."), MessageType.System);
                     return;
                 }
 
                 if (player == this)
                 {
-                    ReceiveChat("You can't divorce yourself.", ChatType.System);
+                    ReceiveChat("You can't divorce yourself.", MessageType.System);
                     return;
                 }
 
                 if (player.Dead || Dead)
                 {
-                    ReceiveChat("You can't divorce a dead player.", ChatType.System); //GOT TO HERE, NEED TO KEEP WORKING ON IT.
+                    ReceiveChat("You can't divorce a dead player.", MessageType.System); //GOT TO HERE, NEED TO KEEP WORKING ON IT.
                     return;
                 }
 
                 if (player.Info.Index != Info.Married)
                 {
-                    ReceiveChat(string.Format("You aren't married to {0}", player.Info.Name), ChatType.System);
+                    ReceiveChat(string.Format("You aren't married to {0}", player.Info.Name), MessageType.System);
                     return;
                 }
 
                 if (!Functions.InRange(player.CurrentLocation, CurrentLocation, Globals.DataRange) || player.CurrentMap != CurrentMap)
                 {
-                    ReceiveChat(string.Format("{0} is not within divorce range.", player.Info.Name), ChatType.System);
+                    ReceiveChat(string.Format("{0} is not within divorce range.", player.Info.Name), MessageType.System);
                     return;
                 }
 
@@ -18806,7 +18806,7 @@ namespace Server.MirObjects
             }
             else
             {
-                ReceiveChat(string.Format("You need to be facing your lover to divorce them."), ChatType.System);
+                ReceiveChat(string.Format("You need to be facing your lover to divorce them."), MessageType.System);
                 return;
             }
         }
@@ -18821,14 +18821,14 @@ namespace Server.MirObjects
 
             if (!accept)
             {
-                DivorceProposal.ReceiveChat(string.Format("{0} has refused to divorce you.", Info.Name), ChatType.System);
+                DivorceProposal.ReceiveChat(string.Format("{0} has refused to divorce you.", Info.Name), MessageType.System);
                 DivorceProposal = null;
                 return;
             }
 
             if (Info.Married == 0)
             {
-                ReceiveChat("You aren't married so you don't require a divorce.", ChatType.System);
+                ReceiveChat("You aren't married so you don't require a divorce.", MessageType.System);
                 DivorceProposal = null;
                 return;
             }
@@ -18857,8 +18857,8 @@ namespace Server.MirObjects
             }
 
 
-            DivorceProposal.ReceiveChat(string.Format("You're now divorced", Info.Name), ChatType.System);
-            ReceiveChat("You're now divorced", ChatType.System);
+            DivorceProposal.ReceiveChat(string.Format("You're now divorced", Info.Name), MessageType.System);
+            ReceiveChat("You're now divorced", MessageType.System);
 
             GetRelationship(false);
             DivorceProposal.GetRelationship(false);
@@ -18885,7 +18885,7 @@ namespace Server.MirObjects
                     if (CheckOnline)
                     {
                         player.GetRelationship(false);
-                        player.ReceiveChat(String.Format("{0} has come online.", Info.Name), ChatType.System);
+                        player.ReceiveChat(String.Format("{0} has come online.", Info.Name), MessageType.System);
                     }
                 }
             }
@@ -18905,7 +18905,7 @@ namespace Server.MirObjects
             if (player != null)
             {
                 player.Enqueue(new S.LoverUpdate { Name = Info.Name, Date = player.Info.MarriedDate, MapName = "", MarriedDays = (short)(DateTime.Now - Info.MarriedDate).TotalDays });
-                player.ReceiveChat(String.Format("{0} has gone offline.", Info.Name), ChatType.System);
+                player.ReceiveChat(String.Format("{0} has gone offline.", Info.Name), MessageType.System);
             }
         }
 
@@ -18917,7 +18917,7 @@ namespace Server.MirObjects
         {
             if (Info.Mentor == 0)
             {
-                ReceiveChat("You don't currently have a Mentorship to cancel.", ChatType.System);
+                ReceiveChat("You don't currently have a Mentorship to cancel.", MessageType.System);
                 return;
             }
             CharacterInfo Mentor = Envir.GetCharacterInfo(Info.Mentor);
@@ -18926,10 +18926,10 @@ namespace Server.MirObjects
             if (Force)
             {
                 Info.MentorDate = DateTime.Now.AddDays(Settings.MentorLength);
-                ReceiveChat(String.Format("You now have a {0} day cooldown on starting a new Mentorship.", Settings.MentorLength), ChatType.System);
+                ReceiveChat(String.Format("You now have a {0} day cooldown on starting a new Mentorship.", Settings.MentorLength), MessageType.System);
             }
             else
-                ReceiveChat("Your Mentorship has now expired.", ChatType.System);
+                ReceiveChat("Your Mentorship has now expired.", MessageType.System);
 
             if (Info.isMentor)
             {
@@ -18970,7 +18970,7 @@ namespace Server.MirObjects
 
             if (Player != null)
             {
-                Player.ReceiveChat("Your Mentorship has now expired.", ChatType.System);
+                Player.ReceiveChat("Your Mentorship has now expired.", MessageType.System);
                 Player.GetMentor(false);
                 if (Mentor.isMentor && Mentor.MentorExp > 0)
                 {
@@ -18998,19 +18998,19 @@ namespace Server.MirObjects
 
             if (Info.Mentor != 0)
             {
-                ReceiveChat("You already have a Mentor.", ChatType.System);
+                ReceiveChat("You already have a Mentor.", MessageType.System);
                 return;
             }
 
             if (Info.Name == Name)
             {
-                ReceiveChat("You can't Mentor yourself.", ChatType.System);
+                ReceiveChat("You can't Mentor yourself.", MessageType.System);
                 return;
             }
 
             if (Info.MentorDate > DateTime.Now)
             {
-                ReceiveChat("You can't start a new Mentorship yet.", ChatType.System);
+                ReceiveChat("You can't start a new Mentorship yet.", MessageType.System);
                 return;
             }
 
@@ -19018,7 +19018,7 @@ namespace Server.MirObjects
 
             if (Mentor == null)
             {
-                ReceiveChat(String.Format("Can't find anybody by the name {0}.", Name), ChatType.System);
+                ReceiveChat(String.Format("Can't find anybody by the name {0}.", Name), MessageType.System);
             }
             else
             {
@@ -19026,36 +19026,36 @@ namespace Server.MirObjects
 
                 if (!Mentor.AllowMentor)
                 {
-                    ReceiveChat(String.Format("{0} is not allowing Mentor requests.", Mentor.Info.Name), ChatType.System);
+                    ReceiveChat(String.Format("{0} is not allowing Mentor requests.", Mentor.Info.Name), MessageType.System);
                     return;
                 }
 
                 if (Mentor.Info.MentorDate > DateTime.Now)
                 {
-                    ReceiveChat(String.Format("{0} can't start another Mentorship yet.", Mentor.Info.Name), ChatType.System);
+                    ReceiveChat(String.Format("{0} can't start another Mentorship yet.", Mentor.Info.Name), MessageType.System);
                     return;
                 }
 
                 if (Mentor.Info.Mentor != 0)
                 {
-                    ReceiveChat(String.Format("{0} is already a Mentor.", Mentor.Info.Name), ChatType.System);
+                    ReceiveChat(String.Format("{0} is already a Mentor.", Mentor.Info.Name), MessageType.System);
                     return;
                 }
 
                 if (Info.Class != Mentor.Info.Class)
                 {
-                    ReceiveChat("You can only be mentored by someone of the same Class.", ChatType.System);
+                    ReceiveChat("You can only be mentored by someone of the same Class.", MessageType.System);
                     return;
                 }
                 if ((Info.Level + Settings.MentorLevelGap) > Mentor.Level)
                 {
-                    ReceiveChat(String.Format("You can only be mentored by someone who at least {0} level(s) above you.", Settings.MentorLevelGap), ChatType.System);
+                    ReceiveChat(String.Format("You can only be mentored by someone who at least {0} level(s) above you.", Settings.MentorLevelGap), MessageType.System);
                     return;
                 }
 
                 Mentor.MentorRequest = this;
                 Mentor.Enqueue(new S.MentorRequest { Name = Info.Name, Level = Info.Level });
-                ReceiveChat(String.Format("Request Sent."), ChatType.System);
+                ReceiveChat(String.Format("Request Sent."), MessageType.System);
             }
 
         }
@@ -19070,14 +19070,14 @@ namespace Server.MirObjects
 
             if (!accept)
             {
-                MentorRequest.ReceiveChat(string.Format("{0} has refused to Mentor you.", Info.Name), ChatType.System);
+                MentorRequest.ReceiveChat(string.Format("{0} has refused to Mentor you.", Info.Name), MessageType.System);
                 MentorRequest = null;
                 return;
             }
 
             if (Info.Mentor != 0)
             {
-                ReceiveChat("You already have a Student.", ChatType.System);
+                ReceiveChat("You already have a Student.", MessageType.System);
                 return;
             }
 
@@ -19086,24 +19086,24 @@ namespace Server.MirObjects
 
             if (Student == null)
             {
-                ReceiveChat(String.Format("{0} is no longer online.", Student.Name), ChatType.System);
+                ReceiveChat(String.Format("{0} is no longer online.", Student.Name), MessageType.System);
                 return;
             }
             else
             {
                 if (Student.Info.Mentor != 0)
                 {
-                    ReceiveChat(String.Format("{0} already has a Mentor.", Student.Info.Name), ChatType.System);
+                    ReceiveChat(String.Format("{0} already has a Mentor.", Student.Info.Name), MessageType.System);
                     return;
                 }
                 if (Info.Class != Student.Info.Class)
                 {
-                    ReceiveChat("You can only mentor someone of the same Class.", ChatType.System);
+                    ReceiveChat("You can only mentor someone of the same Class.", MessageType.System);
                     return;
                 }
                 if ((Info.Level - Settings.MentorLevelGap) < Student.Level)
                 {
-                    ReceiveChat(String.Format("You can only mentor someone who at least {0} level(s) below you.", Settings.MentorLevelGap), ChatType.System);
+                    ReceiveChat(String.Format("You can only mentor someone who at least {0} level(s) below you.", Settings.MentorLevelGap), MessageType.System);
                     return;
                 }
 
@@ -19114,8 +19114,8 @@ namespace Server.MirObjects
                 Student.Info.MentorDate = DateTime.Now;
                 Info.MentorDate = DateTime.Now;
 
-                ReceiveChat(String.Format("You're now the Mentor of {0}.", Student.Info.Name), ChatType.System);
-                Student.ReceiveChat(String.Format("You're now being Mentored by {0}.", Info.Name), ChatType.System);
+                ReceiveChat(String.Format("You're now the Mentor of {0}.", Student.Info.Name), MessageType.System);
+                Student.ReceiveChat(String.Format("You're now being Mentored by {0}.", Info.Name), MessageType.System);
                 GetMentor(false);
                 Student.GetMentor(false);
             }
@@ -19141,7 +19141,7 @@ namespace Server.MirObjects
                     if (CheckOnline)
                     {
                         player.GetMentor(false);
-                        player.ReceiveChat(String.Format("{0} has come online.", Info.Name), ChatType.System);
+                        player.ReceiveChat(String.Format("{0} has come online.", Info.Name), MessageType.System);
                     }
                 }
             }
@@ -19169,7 +19169,7 @@ namespace Server.MirObjects
             if (player != null)
             {
                 player.Enqueue(new S.MentorUpdate { Name = Info.Name, Level = Info.Level, Online = false, MenteeEXP = Mentor.MentorExp });
-                player.ReceiveChat(String.Format("{0} has gone offline.", Info.Name), ChatType.System);
+                player.ReceiveChat(String.Format("{0} has gone offline.", Info.Name), MessageType.System);
             }
         }
 
@@ -19225,7 +19225,7 @@ namespace Server.MirObjects
 
             if (Product == null)
             {
-                ReceiveChat("You're trying to buy an item that isn't in the shop.", ChatType.System);
+                ReceiveChat("You're trying to buy an item that isn't in the shop.", MessageType.System);
                 SMain.EnqueueDebugging(Info.Name + " is trying to buy Something that doesn't exist.");
                 return;
             }
@@ -19250,7 +19250,7 @@ namespace Server.MirObjects
                 }
                 else
                 {
-                    ReceiveChat("You're trying to buy more of this item than is available.", ChatType.System);
+                    ReceiveChat("You're trying to buy more of this item than is available.", MessageType.System);
                     GameShopStock(Product);
                     SMain.EnqueueDebugging(Info.Name + " is trying to buy " + Product.Info.FriendlyName + " x " + Quantity + " - Stock isn't available.");
                     return;
@@ -19280,7 +19280,7 @@ namespace Server.MirObjects
                     else
                     {
 
-                        ReceiveChat("You don't have enough currency for your purchase.", ChatType.System);
+                        ReceiveChat("You don't have enough currency for your purchase.", MessageType.System);
                         SMain.EnqueueDebugging(Info.Name + " is trying to buy " + Product.Info.FriendlyName + " x " + Quantity + " - not enough currency.");
                         return;
                     }
@@ -19379,7 +19379,7 @@ namespace Server.MirObjects
                 mail.Send();
 
             SMain.EnqueueDebugging(Info.Name + " is trying to buy " + Product.Info.FriendlyName + " x " + Quantity + " - Purchases Sent!");
-            ReceiveChat("Your purchases have been sent to your Mailbox.", ChatType.Hint);
+            ReceiveChat("Your purchases have been sent to your Mailbox.", MessageType.Hint);
         }
             
         public void GetGameShop()
@@ -19487,13 +19487,13 @@ namespace Server.MirObjects
         {
             if (Dead)
             {
-                ReceiveChat("Unable to rent items while dead.", ChatType.System);
+                ReceiveChat("Unable to rent items while dead.", MessageType.System);
                 return;
             }
 
             if (ItemRentalPartner != null)
             {
-                ReceiveChat("You are already renting an item to another player.", ChatType.System);
+                ReceiveChat("You are already renting an item to another player.", MessageType.System);
                 return;
             }
 
@@ -19514,51 +19514,51 @@ namespace Server.MirObjects
 
             if (targetPlayer == null)
             {
-                ReceiveChat("Face the player you would like to rent an item too.", ChatType.System);
+                ReceiveChat("Face the player you would like to rent an item too.", MessageType.System);
                 return;
             }
 
             if (Info.RentedItems.Count >= 3)
             {
-                ReceiveChat("Unable to rent more than 3 items at a time.", ChatType.System);
+                ReceiveChat("Unable to rent more than 3 items at a time.", MessageType.System);
                 return;
             }
 
             if (targetPlayer.Info.HasRentedItem)
             {
-                ReceiveChat($"{targetPlayer.Name} is unable to rent anymore items at this time.", ChatType.System);
+                ReceiveChat($"{targetPlayer.Name} is unable to rent anymore items at this time.", MessageType.System);
                 return;
             }
 
             if (!Functions.FacingEachOther(Direction, CurrentLocation, targetPlayer.Direction,
                 targetPlayer.CurrentLocation))
             {
-                ReceiveChat("Face the player you would like to rent an item too.", ChatType.System);
+                ReceiveChat("Face the player you would like to rent an item too.", MessageType.System);
                 return;
             }
 
             if (targetPlayer == this)
             {
-                ReceiveChat("You are unable to rent items to yourself.", ChatType.System);
+                ReceiveChat("You are unable to rent items to yourself.", MessageType.System);
                 return;
             }
 
             if (targetPlayer.Dead)
             {
-                ReceiveChat($"Unable to rent items to {targetPlayer.Name} while dead.", ChatType.System);
+                ReceiveChat($"Unable to rent items to {targetPlayer.Name} while dead.", MessageType.System);
                 return;
             }
 
             if (!Functions.InRange(targetPlayer.CurrentLocation, CurrentLocation, Globals.DataRange)
                 || targetPlayer.CurrentMap != CurrentMap)
             {
-                ReceiveChat($"{targetPlayer.Name} is not within range.", ChatType.System);
+                ReceiveChat($"{targetPlayer.Name} is not within range.", MessageType.System);
                 return;
             }
 
             if (targetPlayer.ItemRentalPartner != null)
             {
-                ReceiveChat($"{targetPlayer.Name} is currently busy, try again soon.", ChatType.System);
+                ReceiveChat($"{targetPlayer.Name} is currently busy, try again soon.", MessageType.System);
                 return;
             }
 
@@ -19632,21 +19632,21 @@ namespace Server.MirObjects
 
             if (item.RentalInformation?.RentalLocked == true)
             {
-                ReceiveChat($"Unable to rent {item.FriendlyName} until {item.RentalInformation.ExpiryDate}", ChatType.System);
+                ReceiveChat($"Unable to rent {item.FriendlyName} until {item.RentalInformation.ExpiryDate}", MessageType.System);
                 Enqueue(packet);
                 return;
             }
 
             if (item.Info.Bind.HasFlag(BindMode.UnableToRent))
             {
-                ReceiveChat($"Unable to rent {item.FriendlyName}", ChatType.System);
+                ReceiveChat($"Unable to rent {item.FriendlyName}", MessageType.System);
                 Enqueue(packet);
                 return;
             }
 
             if (item.RentalInformation != null && item.RentalInformation.BindingFlags.HasFlag(BindMode.UnableToRent))
             {
-                ReceiveChat($"Unable to rent {item.FriendlyName} as it belongs to {item.RentalInformation.OwnerName}", ChatType.System);
+                ReceiveChat($"Unable to rent {item.FriendlyName} as it belongs to {item.RentalInformation.OwnerName}", MessageType.System);
                 Enqueue(packet);
                 return;
             }
@@ -19692,7 +19692,7 @@ namespace Server.MirObjects
 
             if (item.Weight + CurrentBagWeight > MaxBagWeight)
             {
-                ReceiveChat("Item is too heavy to retrieve.", ChatType.System);
+                ReceiveChat("Item is too heavy to retrieve.", MessageType.System);
                 Enqueue(packet);
                 return;
             }
@@ -19804,7 +19804,7 @@ namespace Server.MirObjects
             if (ItemRentalFeeLocked && ItemRentalPartner.ItemRentalItemLocked)
                 ItemRentalPartner.Enqueue(new S.CanConfirmItemRental());
             else if (ItemRentalFeeLocked && !ItemRentalPartner.ItemRentalItemLocked)
-                ItemRentalPartner.ReceiveChat($"{Name} has locked in the rental fee.", ChatType.System);
+                ItemRentalPartner.ReceiveChat($"{Name} has locked in the rental fee.", MessageType.System);
 
             Enqueue(p);
         }
@@ -19825,7 +19825,7 @@ namespace Server.MirObjects
             if (ItemRentalItemLocked && ItemRentalPartner.ItemRentalFeeLocked)
                 Enqueue(new S.CanConfirmItemRental());
             else if (ItemRentalItemLocked && !ItemRentalPartner.ItemRentalFeeLocked)
-                ItemRentalPartner.ReceiveChat($"{Name} has locked in the rental item.", ChatType.System);
+                ItemRentalPartner.ReceiveChat($"{Name} has locked in the rental item.", MessageType.System);
 
 
             Enqueue(p);
@@ -19889,10 +19889,10 @@ namespace Server.MirObjects
 
             if (!ItemRentalPartner.CanGainItem(ItemRentalDepositedItem))
             {
-                ReceiveChat($"{ItemRentalPartner.Name} is unable to receive the item.", ChatType.System);
+                ReceiveChat($"{ItemRentalPartner.Name} is unable to receive the item.", MessageType.System);
                 Enqueue(new S.CancelItemRental());
 
-                ItemRentalPartner.ReceiveChat("Unable to accept the rental item.", ChatType.System);
+                ItemRentalPartner.ReceiveChat("Unable to accept the rental item.", MessageType.System);
                 ItemRentalPartner.Enqueue(new S.CancelItemRental());
 
                 return;
@@ -19900,10 +19900,10 @@ namespace Server.MirObjects
 
             if (!CanGainGold(ItemRentalPartner.ItemRentalFeeAmount))
             {
-                ReceiveChat("You are unable to receive any more gold.", ChatType.System);
+                ReceiveChat("You are unable to receive any more gold.", MessageType.System);
                 Enqueue(new S.CancelItemRental());
 
-                ItemRentalPartner.ReceiveChat($"{Name} is unable to receive any more gold.", ChatType.System);
+                ItemRentalPartner.ReceiveChat($"{Name} is unable to receive any more gold.", MessageType.System);
                 ItemRentalPartner.Enqueue(new S.CancelItemRental());
 
                 return;
@@ -19931,10 +19931,10 @@ namespace Server.MirObjects
 
             ItemRentalPartner.GainItem(item);
             ItemRentalPartner.Info.HasRentedItem = true;
-            ItemRentalPartner.ReceiveChat($"You have rented {item.FriendlyName} from {Name} until {item.RentalInformation.ExpiryDate}", ChatType.System);
+            ItemRentalPartner.ReceiveChat($"You have rented {item.FriendlyName} from {Name} until {item.RentalInformation.ExpiryDate}", MessageType.System);
 
             GainGold(ItemRentalPartner.ItemRentalFeeAmount);
-            ReceiveChat($"Received {ItemRentalPartner.ItemRentalFeeAmount} gold for item rental.", ChatType.System);
+            ReceiveChat($"Received {ItemRentalPartner.ItemRentalFeeAmount} gold for item rental.", MessageType.System);
             ItemRentalPartner.ItemRentalFeeAmount = 0;
 
             Enqueue(new S.ConfirmItemRental());

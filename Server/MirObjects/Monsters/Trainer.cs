@@ -32,7 +32,7 @@ namespace Server.MirObjects.Monsters
         }
 
         public override void Die() { }
-        public override void ReceiveChat(string text, ChatType type) { }
+        public override void ReceiveChat(string text, MessageType type) { }
 
         protected internal Trainer(MonsterInfo info)
             : base(info) { }
@@ -186,7 +186,7 @@ namespace Server.MirObjects.Monsters
             if (_StartTime == 0)
                 timespend = 1000;
             double Dps = _totalDamage / (timespend * 0.001);
-            _currentAttacker.ReceiveChat(string.Format("{1} inflicted {0} Damage, Dps: {2:#.00}.", damage, attacker is MonsterObject ? "Your pets poison" : "Your poison", Dps), ChatType.Trainer);
+            _currentAttacker.ReceiveChat(string.Format("{1} inflicted {0} Damage, Dps: {2:#.00}.", damage, attacker is MonsterObject ? "Your pets poison" : "Your poison", Dps), MessageType.Trainer);
             Poisoned = true;
         }
 
@@ -213,7 +213,7 @@ namespace Server.MirObjects.Monsters
             if (_StartTime == 0)
                 timespend = 1000;
             double Dps = _totalDamage / (timespend * 0.001);
-            _currentAttacker.ReceiveChat(string.Format("Your poison stopped {0} regen, Dps: {1:#.00}.", amount, Dps), ChatType.Trainer);
+            _currentAttacker.ReceiveChat(string.Format("Your poison stopped {0} regen, Dps: {1:#.00}.", amount, Dps), MessageType.Trainer);
         }
 
 
@@ -242,7 +242,7 @@ namespace Server.MirObjects.Monsters
             if (_StartTime == 0)
                 timespend = 1000;
             double Dps = _totalDamage / (timespend * 0.001);
-            _currentAttacker.ReceiveChat(string.Format("{3} inflicted {0} {1} Damage, Dps: {2:#.00}.", damage, output, Dps, Pet? "Your pet": "You"), ChatType.Trainer);
+            _currentAttacker.ReceiveChat(string.Format("{3} inflicted {0} {1} Damage, Dps: {2:#.00}.", damage, output, Dps, Pet? "Your pet": "You"), MessageType.Trainer);
         }
 
         private void ResetStats()
@@ -263,7 +263,7 @@ namespace Server.MirObjects.Monsters
             if (_StartTime == 0)
                 timespend = 1000;
             double Dps = _totalDamage / (timespend * 0.001);
-            _currentAttacker.ReceiveChat(string.Format("{0} Average Damage inflicted on the trainer, Dps: {1:#.00}.", (int)(_totalDamage / _hitCount),Dps), ChatType.Trainer);
+            _currentAttacker.ReceiveChat(string.Format("{0} Average Damage inflicted on the trainer, Dps: {1:#.00}.", (int)(_totalDamage / _hitCount),Dps), MessageType.Trainer);
         }
     }
 }

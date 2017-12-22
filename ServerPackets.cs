@@ -921,26 +921,6 @@ namespace ServerPackets
             writer.Write((byte)Direction);
         }
     }
-    public sealed class Chat : Packet
-    {
-        public override short Index
-        {
-            get { return (short)ServerPacketIds.SM_HEAR; }
-        }
-
-        public string Message = string.Empty;
-        public ChatType Type { get { return (ChatType)wParam; }set { wParam = (short)value; } }
-
-        protected override void ReadPacket(BinaryReader reader)
-        {
-            Message =GetString(reader.ReadBytes((int)reader.BaseStream.Length));
-        }
-
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            writer.Write(System.Text.Encoding.Default.GetBytes(Message));
-        }
-    }
     public sealed class ObjectChat : Packet
     {
         public override short Index
@@ -950,13 +930,13 @@ namespace ServerPackets
 
         public Guid ObjectID;
         public string Text = string.Empty;
-        public ChatType Type;
+        public MessageType Type;
 
         protected override void ReadPacket(BinaryReader reader)
         {
             ObjectID = new Guid(reader.ReadBytes(64));
             Text = reader.ReadString();
-            Type = (ChatType)reader.ReadByte();
+            Type = (MessageType)reader.ReadByte();
         }
 
         protected override void WritePacket(BinaryWriter writer)
@@ -1727,25 +1707,7 @@ namespace ServerPackets
             writer.Write((byte)Lights);
         }
     }
-    public sealed class ChangeAMode : Packet
-    {
-        public override short Index
-        {
-            get { return (short)ServerPacketIds.ChangeAMode; }
-        }
 
-        public AttackMode Mode;
-
-        protected override void ReadPacket(BinaryReader reader)
-        {
-            Mode = (AttackMode)reader.ReadByte();
-        }
-
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            writer.Write((byte)Mode);
-        }
-    }
     public sealed class ChangePMode : Packet
     {
         public override short Index

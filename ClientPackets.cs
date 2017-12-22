@@ -701,15 +701,15 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.ChangeAMode; } }
 
-        public AttackMode Mode;
+        public AttackMode Mode { get { return (AttackMode)wSeries; }set { wParam = (short)value; } }
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            Mode = (AttackMode)reader.ReadByte();
+            //Mode = (AttackMode)reader.ReadByte();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write((byte)Mode);
+            //writer.Write((byte)Mode);
         }
     }
     public sealed class ChangePMode : Packet

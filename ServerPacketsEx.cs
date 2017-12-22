@@ -349,106 +349,7 @@ namespace ServerPacketsEx
             throw new NotImplementedException();
         }
     }
-    public sealed class SysMessage : Packet
-    {
-        public override short Index
-        {
-            get
-            {
-                return ServerMsgIds.SM_SYSMESSAGE;
-            }
-        }
-        public byte []Text;
-        protected override void ReadPacket(BinaryReader reader)
-        {
-            Text = reader.ReadBytes(MAXTEXTMSGLEN);
-        }
 
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            throw new NotImplementedException();
-        }
-    }
-    public sealed class GroupMessage : Packet
-    {
-        public override short Index
-        {
-            get
-            {
-                return ServerMsgIds.SM_GROUPMESSAGE;
-            }
-        }
-        public byte[] Text;
-        protected override void ReadPacket(BinaryReader reader)
-        {
-            Text = reader.ReadBytes(MAXTEXTMSGLEN);
-        }
-
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            throw new NotImplementedException();
-        }
-    }
-    public sealed class CryMessage : Packet
-    {
-        public override short Index
-        {
-            get
-            {
-                return ServerMsgIds.SM_CRY;
-            }
-        }
-        public byte[] Text;
-        protected override void ReadPacket(BinaryReader reader)
-        {
-            Text = reader.ReadBytes(MAXTEXTMSGLEN);
-        }
-
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            throw new NotImplementedException();
-        }
-    }
-    public sealed class WhisperMessage : Packet
-    {
-        public override short Index
-        {
-            get
-            {
-                return ServerMsgIds.SM_WHISPER;
-            }
-        }
-        public byte[] Text;
-        protected override void ReadPacket(BinaryReader reader)
-        {
-            Text = reader.ReadBytes(MAXTEXTMSGLEN);
-        }
-
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            throw new NotImplementedException();
-        }
-    }
-    public sealed class GuildMessage : Packet
-    {
-        public override short Index
-        {
-            get
-            {
-                return ServerMsgIds.SM_GUILDMESSAGE;
-            }
-        }
-        public byte[] Text;
-        protected override void ReadPacket(BinaryReader reader)
-        {
-            Text = reader.ReadBytes(MAXTEXTMSGLEN);
-        }
-
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            throw new NotImplementedException();
-        }
-    }
     public sealed class HearedMessage : Packet
     {
         public override short Index
@@ -458,15 +359,33 @@ namespace ServerPacketsEx
                 return ServerMsgIds.SM_HEAR;
             }
         }
-        public byte[] Text;
+        public string Message;
+        public MessageType Type { get { return (MessageType)wParam; } set { wParam = (short)value; } }
         protected override void ReadPacket(BinaryReader reader)
         {
-            Text = reader.ReadBytes(MAXTEXTMSGLEN);
+            Message = GetString(reader.ReadBytes(MAXTEXTMSGLEN));
         }
 
         protected override void WritePacket(BinaryWriter writer)
         {
             throw new NotImplementedException();
+        }
+    }
+    public sealed class ChangeAMode : Packet
+    {
+        public override short Index
+        {
+            get { return (short)ServerPacketIds.SM_ATTACKMODE; }
+        }
+
+        public AttackMode Mode { get { return (AttackMode)wSeries; }  }
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
         }
     }
 

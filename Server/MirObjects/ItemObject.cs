@@ -444,7 +444,7 @@ namespace Server.MirObjects
             throw new NotSupportedException();
         }
 
-        public override void ReceiveChat(string text, ChatType type)
+        public override void ReceiveChat(string text, MessageType type)
         {
             throw new NotSupportedException();
         }

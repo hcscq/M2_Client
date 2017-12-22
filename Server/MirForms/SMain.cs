@@ -292,7 +292,7 @@ namespace Server
 
             foreach (var player in Envir.Players)
             {
-                player.ReceiveChat(GlobalMessageTextBox.Text, ChatType.Announcement);
+                player.ReceiveChat(GlobalMessageTextBox.Text, MessageType.Announcement);
             }
 
             EnqueueChat(GlobalMessageTextBox.Text);

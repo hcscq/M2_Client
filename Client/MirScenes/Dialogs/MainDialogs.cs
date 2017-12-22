@@ -738,7 +738,7 @@ namespace Client.MirScenes.Dialogs
                             if (parts.Length > 0)
                             {
                                 LastPM = parts[0];
-                                GameScene.Scene.ChatDialog.ReceiveChat(ChatTextBox.Text, ChatType.WhisperOut);
+                                GameScene.Scene.ChatDialog.ReceiveChat(ChatTextBox.Text, MessageType.WhisperOut);
                             }
                             
                         }
@@ -773,66 +773,66 @@ namespace Client.MirScenes.Dialogs
             PositionBar.Location = new Point(x, y);
         }
 
-        public void ReceiveChat(string text, ChatType type)
+        public void ReceiveChat(string text, MessageType type)
         {
             Color foreColour, backColour;
 
             switch (type)
             {
-                case ChatType.Hint:
+                case MessageType.Hint:
                     backColour = Color.White;
                     foreColour = Color.DarkGreen;
                     break;
-                case ChatType.Announcement:
+                case MessageType.Announcement:
                     backColour = Color.Blue;
                     foreColour = Color.White;
                     GameScene.Scene.ChatNoticeDialog.ShowNotice(text);
                     break;
-                case ChatType.Shout:
+                case MessageType.Shout:
                     backColour = Color.Yellow;
                     foreColour = Color.Black;
                     break;
-                case ChatType.Shout2:
+                case MessageType.Shout2:
                     backColour = Color.Green;
                     foreColour = Color.White;
                     break;
-                case ChatType.Shout3:
+                case MessageType.Shout3:
                     backColour = Color.Purple;
                     foreColour = Color.White;
                     break;
-                case ChatType.System:
+                case MessageType.System:
                     backColour = Color.Red;
                     foreColour = Color.White;
                     break;
-                case ChatType.System2:
+                case MessageType.System2:
                     backColour = Color.DarkRed;
                     foreColour = Color.White;
                     break;
-                case ChatType.Group:
+                case MessageType.Group:
                     backColour = Color.White;
                     foreColour = Color.Brown;
                     break;
-                case ChatType.WhisperOut:
+                case MessageType.WhisperOut:
                     foreColour = Color.CornflowerBlue;
                     backColour = Color.White;
                     break;
-                case ChatType.WhisperIn:
+                case MessageType.WhisperIn:
                     foreColour = Color.DarkBlue;
                     backColour = Color.White;
                     break;
-                case ChatType.Guild:
+                case MessageType.Guild:
                     backColour = Color.White;
                     foreColour = Color.Green;
                     break;
-                case ChatType.LevelUp:
+                case MessageType.LevelUp:
                     backColour = Color.FromArgb(255, 225, 185, 250);
                     foreColour = Color.Blue;
                     break;
-                case ChatType.Relationship:
+                case MessageType.Relationship:
                     backColour = Color.Transparent;
                     foreColour = Color.HotPink;
                     break;
-                case ChatType.Mentor:
+                case MessageType.Mentor:
                     backColour = Color.White;
                     foreColour = Color.Purple;
                     break;
@@ -871,24 +871,24 @@ namespace Client.MirScenes.Dialogs
             {
                 switch (FullHistory[i].Type)
                 {
-                    case ChatType.Normal:
+                    case MessageType.Normal:
                         if (Settings.FilterNormalChat) continue;
                         break;
-                    case ChatType.WhisperIn:
-                    case ChatType.WhisperOut:
+                    case MessageType.WhisperIn:
+                    case MessageType.WhisperOut:
                         if (Settings.FilterWhisperChat) continue;
                         break;
-                    case ChatType.Shout:
+                    case MessageType.Shout:
                         if (Settings.FilterShoutChat) continue;
                         break;
-                    case ChatType.System:
-                    case ChatType.System2:
+                    case MessageType.System:
+                    case MessageType.System2:
                         if (Settings.FilterSystemChat) continue;
                         break;
-                    case ChatType.Group:
+                    case MessageType.Group:
                         if (Settings.FilterGroupChat) continue;
                         break;
-                    case ChatType.Guild:
+                    case MessageType.Guild:
                         if (Settings.FilterGuildChat) continue;
                         break;
                 }
@@ -1144,7 +1144,7 @@ namespace Client.MirScenes.Dialogs
         {
             public string Text;
             public Color ForeColour, BackColour;
-            public ChatType Type;
+            public MessageType Type;
         }
     }
     public sealed class ChatControlBar : MirImageControl
@@ -3473,13 +3473,13 @@ namespace Client.MirScenes.Dialogs
 
                 if (GroupDialog.GroupList.Count >= Globals.MaxGroup)
                 {
-                    GameScene.Scene.ChatDialog.ReceiveChat("Your group already has the maximum number of members.", ChatType.System);
+                    GameScene.Scene.ChatDialog.ReceiveChat("Your group already has the maximum number of members.", MessageType.System);
                     return;
                 }
                 if (GroupDialog.GroupList.Count > 0 && GroupDialog.GroupList[0] != MapObject.User.Name)
                 {
 
-                    GameScene.Scene.ChatDialog.ReceiveChat("You are not the leader of your group.", ChatType.System);
+                    GameScene.Scene.ChatDialog.ReceiveChat("You are not the leader of your group.", MessageType.System);
                 }
 
                 Network.Enqueue(new C.AddMember { Name = Name });
@@ -3786,7 +3786,7 @@ namespace Client.MirScenes.Dialogs
             SkillModeOn.Click += (o, e) =>
             {
                 Settings.SkillMode = true;
-                GameScene.Scene.ChatDialog.ReceiveChat("<SkillMode 2>", ChatType.Hint);
+                GameScene.Scene.ChatDialog.ReceiveChat("<SkillMode 2>", MessageType.Hint);
                 ToggleSkillButtons(false);
             };
 
@@ -3803,7 +3803,7 @@ namespace Client.MirScenes.Dialogs
             SkillModeOff.Click += (o, e) =>
             {
                 Settings.SkillMode = false;
-                GameScene.Scene.ChatDialog.ReceiveChat("<SkillMode 1>", ChatType.Hint);
+                GameScene.Scene.ChatDialog.ReceiveChat("<SkillMode 1>", MessageType.Hint);
                 ToggleSkillButtons(true);
             };
 
@@ -3907,7 +3907,7 @@ namespace Client.MirScenes.Dialogs
             HPViewOn.Click += (o, e) =>
             {
                 Settings.HPView = true;
-                GameScene.Scene.ChatDialog.ReceiveChat("<HP/MP Mode 1>", ChatType.Hint);
+                GameScene.Scene.ChatDialog.ReceiveChat("<HP/MP Mode 1>", MessageType.Hint);
             };
 
             HPViewOff = new MirButton
@@ -3922,7 +3922,7 @@ namespace Client.MirScenes.Dialogs
             HPViewOff.Click += (o, e) =>
             {
                 Settings.HPView = false;
-                GameScene.Scene.ChatDialog.ReceiveChat("<HP/MP Mode 2>", ChatType.Hint);
+                GameScene.Scene.ChatDialog.ReceiveChat("<HP/MP Mode 2>", MessageType.Hint);
             };
 
             SoundBar = new MirImageControl

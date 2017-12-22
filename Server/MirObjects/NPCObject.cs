@@ -823,7 +823,7 @@ namespace Server.MirObjects
                 case RefineKey:
                     if (player.Info.CurrentRefine != null)
                     {
-                        player.ReceiveChat("You're already refining an item.", ChatType.System);
+                        player.ReceiveChat("You're already refining an item.", MessageType.System);
                         player.Enqueue(new S.NPCRefine { Rate = (Settings.RefineCost), Refining = true });
                         break;
                     }
@@ -873,7 +873,7 @@ namespace Server.MirObjects
                 case GuildCreateKey:
                     if (player.Info.Level < Settings.Guild_RequiredLevel)
                     {
-                        player.ReceiveChat(String.Format("You have to be at least level {0} to create a guild.", Settings.Guild_RequiredLevel), ChatType.System);
+                        player.ReceiveChat(String.Format("You have to be at least level {0} to create a guild.", Settings.Guild_RequiredLevel), MessageType.System);
                     }
                     if (player.MyGuild == null)
                     {
@@ -881,21 +881,21 @@ namespace Server.MirObjects
                         player.Enqueue(new S.GuildNameRequest());
                     }
                     else
-                        player.ReceiveChat("You are already part of a guild.", ChatType.System);
+                        player.ReceiveChat("You are already part of a guild.", MessageType.System);
                     break;
                 case RequestWarKey:
                     if (player.MyGuild != null)
                     {
                         if (player.MyGuildRank != player.MyGuild.Ranks[0])
                         {
-                            player.ReceiveChat("You must be the leader to request a war.", ChatType.System);
+                            player.ReceiveChat("You must be the leader to request a war.", MessageType.System);
                             return;
                         }
                         player.Enqueue(new S.GuildRequestWar());
                     }
                     else
                     {
-                        player.ReceiveChat("You are not in a guild.", ChatType.System);
+                        player.ReceiveChat("You are not in a guild.", MessageType.System);
                     }
                     break;
                 case SendParcelKey:
@@ -1001,7 +1001,7 @@ namespace Server.MirObjects
             set { throw new NotSupportedException(); }
         }
 
-        public override void ReceiveChat(string text, ChatType type)
+        public override void ReceiveChat(string text, MessageType type)
         {
             throw new NotSupportedException();
         }

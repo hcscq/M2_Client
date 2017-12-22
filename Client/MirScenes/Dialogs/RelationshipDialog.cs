@@ -82,7 +82,7 @@ namespace Client.MirScenes.Dialogs
             {
                 if (LoverName != "")
                 {
-                    GameScene.Scene.ChatDialog.ReceiveChat("You're already married.", ChatType.System);
+                    GameScene.Scene.ChatDialog.ReceiveChat("You're already married.", MessageType.System);
                     return;
                 }
 
@@ -104,7 +104,7 @@ namespace Client.MirScenes.Dialogs
             {
                 if (LoverName == "")
                 {
-                    GameScene.Scene.ChatDialog.ReceiveChat("You're not married.", ChatType.System);
+                    GameScene.Scene.ChatDialog.ReceiveChat("You're not married.", MessageType.System);
                     return;
                 }
 
@@ -126,7 +126,7 @@ namespace Client.MirScenes.Dialogs
             {
                 if (LoverName == "")
                 {
-                    GameScene.Scene.ChatDialog.ReceiveChat("You're not married.", ChatType.System);
+                    GameScene.Scene.ChatDialog.ReceiveChat("You're not married.", MessageType.System);
                     return;
                 }
 
@@ -148,13 +148,13 @@ namespace Client.MirScenes.Dialogs
             {
                 if (LoverName == "")
                 {
-                    GameScene.Scene.ChatDialog.ReceiveChat("You're not married.", ChatType.System);
+                    GameScene.Scene.ChatDialog.ReceiveChat("You're not married.", MessageType.System);
                     return;
                 }
 
                 if (MapName == "")
                 {
-                    GameScene.Scene.ChatDialog.ReceiveChat("Lover is not online", ChatType.System);
+                    GameScene.Scene.ChatDialog.ReceiveChat("Lover is not online", MessageType.System);
                     return;
                 }
                 GameScene.Scene.ChatDialog.ChatTextBox.SetFocus();

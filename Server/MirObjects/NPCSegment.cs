@@ -2901,7 +2901,7 @@ namespace Server.MirObjects
                         break;
 
                     case ActionType.LocalMessage:
-                        ChatType chatType;
+                        MessageType chatType;
                         if (!Enum.TryParse(param[1], true, out chatType)) return;
                         player.ReceiveChat(param[0], chatType);
                         break;
@@ -3519,7 +3519,7 @@ namespace Server.MirObjects
                     }
                 }
                 Map map;
-                ChatType chatType;
+                MessageType chatType;
                 switch (act.Type)
                 {
                     case ActionType.GiveHP:
@@ -3727,7 +3727,7 @@ namespace Server.MirObjects
                 NPCActions act = acts[i];
                 List<string> param = act.Params.Select(t => FindVariable(t)).ToList();
                 Map map;
-                ChatType chatType;
+                MessageType chatType;
                 switch (act.Type)
                 {
                     case ActionType.ClearNameList:

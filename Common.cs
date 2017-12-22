@@ -728,7 +728,7 @@ public enum ObjectType : byte
     Creature = 7
 }
 
-public enum ChatType : byte
+public enum MessageType : byte
 {
     Normal = 0,
     Shout = 1,
@@ -1344,11 +1344,12 @@ public enum ServerPacketIds : short
     SM_DELCHR_FAIL = 524,
     SM_DELCHR_SUCCESS = 523,
     SM_STARTPLAY = 525,
-
+    SM_ATTACKMODE =	658,
 
 
     // For game process
     SM_ACTIONRESULT = 3000,
+
 
     StartGameBanned,
     StartGameDelay,
@@ -1385,7 +1386,7 @@ public enum ServerPacketIds : short
     LogOutSuccess,
     LogOutFailed,
     TimeOfDay,
-    ChangeAMode,
+    //ChangeAMode,
     ChangePMode,
     ObjectItem,
     ObjectGold,
@@ -4658,7 +4659,37 @@ public abstract class Packet
         wTag=reader.ReadInt16();
         wSeries=reader.ReadInt16();
     }
-    public static string GetString(byte[] src) { return System.Text.Encoding.Default.GetString(src).Replace('\0', ' ').Trim(); }
+    public static unsafe string GetString(byte[] src) {
+        char[] tvar = new char[src.Length / 2];
+        fixed (char* str = tvar)
+        {
+            fixed (byte* ptr = src)
+            {
+                byte* pstr = (byte*)str;      //-----------------------2
+                for (int i = 0; i < src.Length; i++)
+                {
+                    pstr[i] = ptr[i];
+                }
+            }
+        }
+        return new string(tvar);//System.Text.Encoding.Default.GetString(src).Replace('\0', ' ').Trim();
+    }
+    public static unsafe byte[] GetBytes(string src)
+    {
+        byte[] data=new byte[src.Length*2];
+        fixed (char* str = src)   //var is string
+        {
+            fixed (byte* ptr = data)    //data is byte[]
+            {
+                byte* bstr = (byte*)str;      //---------------------1
+                for (int i = 0; i < data.Length; i++)
+                {
+                    ptr[i++] = bstr[i];
+                }
+            }
+        }
+        return data;
+    }
     public static Packet ReceivePacket(byte[] rawBytes, out byte[] extra)
     {
         extra = rawBytes;
@@ -5162,7 +5193,7 @@ public abstract class Packet
 
             /*text msg begin*/
             case (short)ServerPacketIds.SM_HEAR:
-                return new S.Chat();
+                return new SEX.HearedMessage();
             /*text msg end*/
             ///////////////////////////////////////////////////////////////////////////
             case (short)ServerPacketIds.Connected:
@@ -5195,6 +5226,8 @@ public abstract class Packet
                 return new S.DeleteCharacter();
             case (short)ServerPacketIds.SM_DELCHR_SUCCESS:
                 return new S.DeleteCharacterSuccess();
+            case (short)ServerPacketIds.SM_ATTACKMODE:
+                return new SEX.ChangeAMode();
             //case (short)ServerPacketIds.CM_SELCHR:
             //    return new S.StartGame();
             case (short)ServerPacketIds.StartGameBanned:

@@ -688,7 +688,7 @@ namespace Client.MirScenes
 
             if(!User.HasClassWeapon && User.Weapon >= 0)
             {
-                ChatDialog.ReceiveChat("You must be wearing a suitable weapon to perform this skill", ChatType.System);
+                ChatDialog.ReceiveChat("You must be wearing a suitable weapon to perform this skill", MessageType.System);
                 return;
             }
 
@@ -737,28 +737,28 @@ namespace Client.MirScenes
                 case Spell.Thrusting:
                     if (CMain.Time < ToggleTime) return;
                     Thrusting = !Thrusting;
-                    ChatDialog.ReceiveChat(Thrusting ? "Use Thrusting." : "Do not use Thrusting.", ChatType.Hint);
+                    ChatDialog.ReceiveChat(Thrusting ? "Use Thrusting." : "Do not use Thrusting.", MessageType.Hint);
                     ToggleTime = CMain.Time + 1000;
                     Network.Enqueue(new C.SpellToggle { Spell = magic.Spell, CanUse = Thrusting });
                     break;
                 case Spell.HalfMoon:
                     if (CMain.Time < ToggleTime) return;
                     HalfMoon = !HalfMoon;
-                    ChatDialog.ReceiveChat(HalfMoon ? "Use Half Moon." : "Do not use Half Moon.", ChatType.Hint);
+                    ChatDialog.ReceiveChat(HalfMoon ? "Use Half Moon." : "Do not use Half Moon.", MessageType.Hint);
                     ToggleTime = CMain.Time + 1000;
                     Network.Enqueue(new C.SpellToggle { Spell = magic.Spell, CanUse = HalfMoon });
                     break;
                 case Spell.CrossHalfMoon:
                     if (CMain.Time < ToggleTime) return;
                     CrossHalfMoon = !CrossHalfMoon;
-                    ChatDialog.ReceiveChat(CrossHalfMoon ? "Use Cross Half Moon." : "Do not use Cross Half Moon.", ChatType.Hint);
+                    ChatDialog.ReceiveChat(CrossHalfMoon ? "Use Cross Half Moon." : "Do not use Cross Half Moon.", MessageType.Hint);
                     ToggleTime = CMain.Time + 1000;
                     Network.Enqueue(new C.SpellToggle { Spell = magic.Spell, CanUse = CrossHalfMoon });
                     break;
                 case Spell.DoubleSlash:
                     if (CMain.Time < ToggleTime) return;
                     DoubleSlash = !DoubleSlash;
-                    ChatDialog.ReceiveChat(DoubleSlash ? "Use Double Slash." : "Do not use Double Slash.", ChatType.Hint);
+                    ChatDialog.ReceiveChat(DoubleSlash ? "Use Double Slash." : "Do not use Double Slash.", MessageType.Hint);
                     ToggleTime = CMain.Time + 1000;
                     Network.Enqueue(new C.SpellToggle { Spell = magic.Spell, CanUse = DoubleSlash });
                     break;
@@ -825,7 +825,7 @@ namespace Client.MirScenes
             }
             else
             {
-                ChatDialog.ReceiveChat("Cannot leave game for " + (LogTime - CMain.Time) / 1000 + " seconds.", ChatType.System);
+                ChatDialog.ReceiveChat("Cannot leave game for " + (LogTime - CMain.Time) / 1000 + " seconds.", MessageType.System);
             }
         }
         public void LogOut()
@@ -843,7 +843,7 @@ namespace Client.MirScenes
             }
             else
             {
-                ChatDialog.ReceiveChat("Cannot leave game for " + (LogTime - CMain.Time) / 1000 + " seconds.", ChatType.System);
+                ChatDialog.ReceiveChat("Cannot leave game for " + (LogTime - CMain.Time) / 1000 + " seconds.", MessageType.System);
             }
         }
 
@@ -1704,7 +1704,10 @@ namespace Client.MirScenes
                 case ServerMsgIds.SM_SENDMYMAGIC:
                     break;
                 case (short)ServerPacketIds.SM_HEAR:
-                    ReceiveChat((S.Chat)p);
+                    ReceiveChat((SEX.HearedMessage)p);
+                    break;
+                case (short)ServerPacketIds.SM_ATTACKMODE:
+                    ChangeAMode((SEX.ChangeAMode)p);
                     break;
                 /*EX process end*/
                 default:
@@ -1815,7 +1818,7 @@ namespace Client.MirScenes
 
             if (Settings.DebugMode)
             {
-                ReceiveChat(new S.Chat { Message = "Displacement", Type = ChatType.System });
+                ReceiveChat(new SEX.HearedMessage { Message = "Displacement", Type = MessageType.System });
             }
 
             MapControl.RemoveObject(User);
@@ -1839,7 +1842,7 @@ namespace Client.MirScenes
 
             User.SetAction();
         }
-        private void ReceiveChat(S.Chat p)
+        private void ReceiveChat(SEX.HearedMessage p)
         {
             ChatDialog.ReceiveChat(p.Message, p.Type);
         }
@@ -2649,29 +2652,29 @@ namespace Client.MirScenes
                     break;
             }
         }
-        private void ChangeAMode(S.ChangeAMode p)
+        private void ChangeAMode(SEX.ChangeAMode p)
         {
             AMode = p.Mode;
 
             switch (p.Mode)
             {
                 case AttackMode.Peace:
-                    ChatDialog.ReceiveChat("[Attack Mode: Peaceful]", ChatType.Hint);
+                    ChatDialog.ReceiveChat("[Attack Mode: Peaceful]", MessageType.Hint);
                     break;
                 case AttackMode.Group:
-                    ChatDialog.ReceiveChat("[Attack Mode: Group]", ChatType.Hint);
+                    ChatDialog.ReceiveChat("[Attack Mode: Group]", MessageType.Hint);
                     break;
                 case AttackMode.Guild:
-                    ChatDialog.ReceiveChat("[Attack Mode: Guild]", ChatType.Hint);
+                    ChatDialog.ReceiveChat("[Attack Mode: Guild]", MessageType.Hint);
                     break;
                 case AttackMode.EnemyGuild:
-                    ChatDialog.ReceiveChat("[Attack Mode: Enemy Guild]", ChatType.Hint);
+                    ChatDialog.ReceiveChat("[Attack Mode: Enemy Guild]", MessageType.Hint);
                     break;
                 case AttackMode.RedBrown:
-                    ChatDialog.ReceiveChat("[Attack Mode: Red+Brown]", ChatType.Hint);
+                    ChatDialog.ReceiveChat("[Attack Mode: Red+Brown]", MessageType.Hint);
                     break;
                 case AttackMode.All:
-                    ChatDialog.ReceiveChat("[Attack Mode: All]", ChatType.Hint);
+                    ChatDialog.ReceiveChat("[Attack Mode: All]", MessageType.Hint);
                     break;
             }
         }
@@ -2682,16 +2685,16 @@ namespace Client.MirScenes
             switch (p.Mode)
             {
                 case PetMode.Both:
-                    ChatDialog.ReceiveChat("[Pet Mode: Attack and Move]", ChatType.Hint);
+                    ChatDialog.ReceiveChat("[Pet Mode: Attack and Move]", MessageType.Hint);
                     break;
                 case PetMode.MoveOnly:
-                    ChatDialog.ReceiveChat("[Pet Mode: Do Not Attack]", ChatType.Hint);
+                    ChatDialog.ReceiveChat("[Pet Mode: Do Not Attack]", MessageType.Hint);
                     break;
                 case PetMode.AttackOnly:
-                    ChatDialog.ReceiveChat("[Pet Mode: Do Not Move]", ChatType.Hint);
+                    ChatDialog.ReceiveChat("[Pet Mode: Do Not Move]", MessageType.Hint);
                     break;
                 case PetMode.None:
-                    ChatDialog.ReceiveChat("[Pet Mode: Do Not Attack or Move]", ChatType.Hint);
+                    ChatDialog.ReceiveChat("[Pet Mode: Do Not Attack or Move]", MessageType.Hint);
                     break;
             }
 
@@ -2987,10 +2990,10 @@ namespace Client.MirScenes
                 switch (item.Info.Type)
                 {
                     case ItemType.Mount:
-                        ChatDialog.ReceiveChat(string.Format("{0} is no longer loyal to you.", item.Info.Name), ChatType.System);
+                        ChatDialog.ReceiveChat(string.Format("{0} is no longer loyal to you.", item.Info.Name), MessageType.System);
                         break;
                     default:
-                        ChatDialog.ReceiveChat(string.Format("{0}'s dura has dropped to 0.", item.Info.Name), ChatType.System);
+                        ChatDialog.ReceiveChat(string.Format("{0}'s dura has dropped to 0.", item.Info.Name), MessageType.System);
                         break;
                 }
                 
@@ -3155,7 +3158,7 @@ namespace Client.MirScenes
             OutputMessage("Level Increased!");
             User.Effects.Add(new Effect(Libraries.Magic2, 1200, 20, 2000, User));
             SoundManager.PlaySound(SoundList.LevelUp);
-            ChatDialog.ReceiveChat("Congratulations! You have leveled up. Your HP and MP have been restored.", ChatType.LevelUp); 
+            ChatDialog.ReceiveChat("Congratulations! You have leveled up. Your HP and MP have been restored.", MessageType.LevelUp); 
         }
         private void ObjectLeveled(S.ObjectLeveled p)
         {
@@ -3949,12 +3952,12 @@ namespace Client.MirScenes
         private void DeleteGroup()
         {
             GroupDialog.GroupList.Clear();
-            ChatDialog.ReceiveChat("You have left the group.", ChatType.Group);
+            ChatDialog.ReceiveChat("You have left the group.", MessageType.Group);
         }
         private void DeleteMember(S.DeleteMember p)
         {
             GroupDialog.GroupList.Remove(p.Name);
-            ChatDialog.ReceiveChat(string.Format("-{0} has left the group.", p.Name), ChatType.Group);
+            ChatDialog.ReceiveChat(string.Format("-{0} has left the group.", p.Name), MessageType.Group);
         }
         private void GroupInvite(S.GroupInvite p)
         {
@@ -3968,7 +3971,7 @@ namespace Client.MirScenes
         private void AddMember(S.AddMember p)
         {
             GroupDialog.GroupList.Add(p.Name);
-            ChatDialog.ReceiveChat(string.Format("-{0} has joined the group.", p.Name), ChatType.Group);
+            ChatDialog.ReceiveChat(string.Format("-{0} has joined the group.", p.Name), MessageType.Group);
         }
         private void Revived()
         {
@@ -4004,26 +4007,26 @@ namespace Client.MirScenes
                     break;
                 case Spell.Thrusting:
                     Thrusting = p.CanUse;
-                    ChatDialog.ReceiveChat(Thrusting ? "Use Thrusting." : "Do not use Thrusting.", ChatType.Hint);
+                    ChatDialog.ReceiveChat(Thrusting ? "Use Thrusting." : "Do not use Thrusting.", MessageType.Hint);
                     break;
                 case Spell.HalfMoon:
                     HalfMoon = p.CanUse;
-                    ChatDialog.ReceiveChat(HalfMoon ? "Use HalfMoon." : "Do not use HalfMoon.", ChatType.Hint);
+                    ChatDialog.ReceiveChat(HalfMoon ? "Use HalfMoon." : "Do not use HalfMoon.", MessageType.Hint);
                     break;
                 case Spell.CrossHalfMoon:
                     CrossHalfMoon = p.CanUse;
-                    ChatDialog.ReceiveChat(CrossHalfMoon ? "Use CrossHalfMoon." : "Do not use CrossHalfMoon.", ChatType.Hint);
+                    ChatDialog.ReceiveChat(CrossHalfMoon ? "Use CrossHalfMoon." : "Do not use CrossHalfMoon.", MessageType.Hint);
                     break;
                 case Spell.DoubleSlash:
                     DoubleSlash = p.CanUse;
-                    ChatDialog.ReceiveChat(DoubleSlash ? "Use DoubleSlash." : "Do not use DoubleSlash.", ChatType.Hint);
+                    ChatDialog.ReceiveChat(DoubleSlash ? "Use DoubleSlash." : "Do not use DoubleSlash.", MessageType.Hint);
                     break;
                 case Spell.FlamingSword:
                     FlamingSword = p.CanUse;
                     if (FlamingSword)
-                        ChatDialog.ReceiveChat("Your weapon is glowed by spirit of fire.", ChatType.Hint);
+                        ChatDialog.ReceiveChat("Your weapon is glowed by spirit of fire.", MessageType.Hint);
                     else
-                        ChatDialog.ReceiveChat("The spirits of fire disappeared.", ChatType.System);
+                        ChatDialog.ReceiveChat("The spirits of fire disappeared.", MessageType.System);
                     break;
             }
         }
@@ -4105,13 +4108,13 @@ namespace Client.MirScenes
                 switch (buff.Values[0])
                 {
                     case 0:
-                        ChatDialog.ReceiveChat("Mentalstate: Agressive.", ChatType.Hint);
+                        ChatDialog.ReceiveChat("Mentalstate: Agressive.", MessageType.Hint);
                         break;
                     case 1:
-                        ChatDialog.ReceiveChat("Mentalstate: Trick shot.", ChatType.Hint);
+                        ChatDialog.ReceiveChat("Mentalstate: Trick shot.", MessageType.Hint);
                         break;
                     case 2:
-                        ChatDialog.ReceiveChat("Mentalstate: Group mode.", ChatType.Hint);
+                        ChatDialog.ReceiveChat("Mentalstate: Group mode.", MessageType.Hint);
                         break;
                 }
 
@@ -4702,7 +4705,7 @@ namespace Client.MirScenes
             {
                 if (inputBox.InputTextBox.Text.Contains('\\'))
                 {
-                    ChatDialog.ReceiveChat("You cannot use the \\ sign in a guildname!", ChatType.System);
+                    ChatDialog.ReceiveChat("You cannot use the \\ sign in a guildname!", MessageType.System);
                     inputBox.InputTextBox.Text = "";
                 }
                 Network.Enqueue(new C.GuildNameReturn { Name = inputBox.InputTextBox.Text });
@@ -4738,20 +4741,20 @@ namespace Client.MirScenes
                     GuildDialog.MemberStatusChange(p.Name, false);
                     break;
                 case 1: // logged on
-                    ChatDialog.ReceiveChat(String.Format("{0} logged on.", p.Name), ChatType.Guild);
+                    ChatDialog.ReceiveChat(String.Format("{0} logged on.", p.Name), MessageType.Guild);
                     GuildDialog.MemberStatusChange(p.Name, true);
                     break;
                 case 2://new member
-                    ChatDialog.ReceiveChat(String.Format("{0} joined guild.", p.Name), ChatType.Guild);
+                    ChatDialog.ReceiveChat(String.Format("{0} joined guild.", p.Name), MessageType.Guild);
                     GuildDialog.MemberCount++;
                     GuildDialog.MembersChanged = true;
                     break;
                 case 3://kicked member
-                    ChatDialog.ReceiveChat(String.Format("{0} got removed from the guild.", p.Name), ChatType.Guild);
+                    ChatDialog.ReceiveChat(String.Format("{0} got removed from the guild.", p.Name), MessageType.Guild);
                     GuildDialog.MembersChanged = true;
                     break;
                 case 4://member left
-                    ChatDialog.ReceiveChat(String.Format("{0} left the guild.", p.Name), ChatType.Guild);
+                    ChatDialog.ReceiveChat(String.Format("{0} left the guild.", p.Name), MessageType.Guild);
                     GuildDialog.MembersChanged = true;
                     break;
                 case 5://rank change (name or different rank)
@@ -4828,11 +4831,11 @@ namespace Client.MirScenes
             switch (p.Type)
             {
                 case 0:
-                    ChatDialog.ReceiveChat(String.Format("{0} donated {1} gold to guild funds.", p.Name, p.Amount), ChatType.Guild);
+                    ChatDialog.ReceiveChat(String.Format("{0} donated {1} gold to guild funds.", p.Name, p.Amount), MessageType.Guild);
                     GuildDialog.Gold += p.Amount;
                     break;
                 case 1:
-                    ChatDialog.ReceiveChat(String.Format("{0} retrieved {1} gold from guild funds.", p.Name, p.Amount), ChatType.Guild);
+                    ChatDialog.ReceiveChat(String.Format("{0} retrieved {1} gold from guild funds.", p.Name, p.Amount), MessageType.Guild);
                     if (GuildDialog.Gold > p.Amount)
                         GuildDialog.Gold -= p.Amount;
                     else
@@ -8434,7 +8437,7 @@ namespace Client.MirScenes
                 if (_autoRun == value) return;
                 _autoRun = value;
                 if (GameScene.Scene != null)
-                    GameScene.Scene.ChatDialog.ReceiveChat(value ? "[AutoRun: On]" : "[AutoRun: Off]", ChatType.Hint);
+                    GameScene.Scene.ChatDialog.ReceiveChat(value ? "[AutoRun: On]" : "[AutoRun: Off]", MessageType.Hint);
             }
 
         }

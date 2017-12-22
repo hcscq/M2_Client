@@ -642,7 +642,7 @@ namespace Server.MirEnvir
                             Broadcast(new S.Chat
                                 {
                                     Message = string.Format("Online Players: {0}", Players.Count),
-                                    Type = ChatType.Hint
+                                    Type = MessageType.Hint
                                 });
                         }
 
@@ -2810,7 +2810,7 @@ namespace Server.MirEnvir
             return null;
         }
 
-        public void MessageAccount(AccountInfo account, string message, ChatType type)
+        public void MessageAccount(AccountInfo account, string message, MessageType type)
         {
             if (account == null) return;
             if (account.Characters == null) return;
@@ -2888,7 +2888,7 @@ namespace Server.MirEnvir
                         if (rentingPlayer.Player == null)
                             continue;
 
-                        rentingPlayer.Player.ReceiveChat($"{item.Info.FriendlyName} has just expired from your inventory.", ChatType.Hint);
+                        rentingPlayer.Player.ReceiveChat($"{item.Info.FriendlyName} has just expired from your inventory.", MessageType.Hint);
                         rentingPlayer.Player.Enqueue(new S.DeleteItem { UniqueID = item.UniqueID, Count = item.Count });
                         rentingPlayer.Player.RefreshStats();
                     }
@@ -2910,7 +2910,7 @@ namespace Server.MirEnvir
                         if (rentingPlayer.Player == null)
                             continue;
 
-                        rentingPlayer.Player.ReceiveChat($"{item.Info.FriendlyName} has just expired from your inventory.", ChatType.Hint);
+                        rentingPlayer.Player.ReceiveChat($"{item.Info.FriendlyName} has just expired from your inventory.", MessageType.Hint);
                         rentingPlayer.Player.Enqueue(new S.DeleteItem { UniqueID = item.UniqueID, Count = item.Count });
                         rentingPlayer.Player.RefreshStats();
                     }

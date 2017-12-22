@@ -1310,17 +1310,17 @@ namespace Server.MirNetwork
             {
                 Player.AllowMarriage = !Player.AllowMarriage;
                 if (Player.AllowMarriage)
-                    Player.ReceiveChat("You're now allowing marriage requests.", ChatType.Hint);
+                    Player.ReceiveChat("You're now allowing marriage requests.", MessageType.Hint);
                 else
-                    Player.ReceiveChat("You're now blocking marriage requests.", ChatType.Hint);
+                    Player.ReceiveChat("You're now blocking marriage requests.", MessageType.Hint);
             }
             else
             {
                 Player.AllowLoverRecall = !Player.AllowLoverRecall;
                 if (Player.AllowLoverRecall)
-                    Player.ReceiveChat("You're now allowing recall from lover.", ChatType.Hint);
+                    Player.ReceiveChat("You're now allowing recall from lover.", MessageType.Hint);
                 else
-                    Player.ReceiveChat("You're now blocking recall from lover.", ChatType.Hint);
+                    Player.ReceiveChat("You're now blocking recall from lover.", MessageType.Hint);
             }
         }
 
@@ -1358,9 +1358,9 @@ namespace Server.MirNetwork
 
                 Player.AllowMentor = !Player.AllowMentor;
                 if (Player.AllowMentor)
-                    Player.ReceiveChat("You're now allowing mentor requests.", ChatType.Hint);
+                    Player.ReceiveChat("You're now allowing mentor requests.", MessageType.Hint);
                 else
-                    Player.ReceiveChat("You're now blocking mentor requests.", ChatType.Hint);
+                    Player.ReceiveChat("You're now blocking mentor requests.", MessageType.Hint);
         }
 
         private void CancelMentor(C.CancelMentor p)
@@ -1460,7 +1460,7 @@ namespace Server.MirNetwork
                 return;
             }
 
-            Player.ReceiveChat("Reincarnation failed", ChatType.System);
+            Player.ReceiveChat("Reincarnation failed", MessageType.System);
         }
 
         private void CancelReincarnation()

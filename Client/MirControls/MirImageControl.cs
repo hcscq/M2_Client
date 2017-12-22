@@ -141,7 +141,7 @@ namespace Client.MirControls
                 return base.Size;
             }
         }
-
+        //DrawControl2
         public override Size TrueSize
         {
             get

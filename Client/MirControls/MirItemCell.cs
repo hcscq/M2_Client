@@ -200,7 +200,7 @@ namespace Client.MirControls
                             {
                                 if (FreeSpace() == 0)
                                 {
-                                    GameScene.Scene.ChatDialog.ReceiveChat("No room to split stack.", ChatType.System);
+                                    GameScene.Scene.ChatDialog.ReceiveChat("No room to split stack.", MessageType.System);
                                     return;
                                 }
 
@@ -763,7 +763,7 @@ namespace Client.MirControls
 
                                 if (GameScene.SelectedCell.Item.Weight + MapObject.User.CurrentBagWeight > MapObject.User.MaxBagWeight)
                                 {
-                                    GameScene.Scene.ChatDialog.ReceiveChat("Too heavy to get back.", ChatType.System);
+                                    GameScene.Scene.ChatDialog.ReceiveChat("Too heavy to get back.", MessageType.System);
                                     GameScene.SelectedCell = null;
                                     return;
                                 }
@@ -810,12 +810,12 @@ namespace Client.MirControls
                             case MirGridType.GuildStorage:
                                 if (Item != null)
                                 {
-                                    GameScene.Scene.ChatDialog.ReceiveChat("You cannot swap items.", ChatType.System);
+                                    GameScene.Scene.ChatDialog.ReceiveChat("You cannot swap items.", MessageType.System);
                                     return;
                                 }
                                 if (!GuildDialog.MyOptions.HasFlag(RankOptions.CanRetrieveItem))
                                 {
-                                    GameScene.Scene.ChatDialog.ReceiveChat("Insufficient rights to retrieve items.", ChatType.System);
+                                    GameScene.Scene.ChatDialog.ReceiveChat("Insufficient rights to retrieve items.", MessageType.System);
                                     return;
                                 }
                                 Network.Enqueue(new C.GuildStorageItemChange { Type = 1, From = GameScene.SelectedCell.ItemSlot, To = ItemSlot });
@@ -841,7 +841,7 @@ namespace Client.MirControls
 
                                 if (GameScene.SelectedCell.Item.Weight + MapObject.User.CurrentBagWeight > MapObject.User.MaxBagWeight)
                                 {
-                                    GameScene.Scene.ChatDialog.ReceiveChat("Too heavy to get back.", ChatType.System);
+                                    GameScene.Scene.ChatDialog.ReceiveChat("Too heavy to get back.", MessageType.System);
                                     GameScene.SelectedCell = null;
                                     return;
                                 }
@@ -914,7 +914,7 @@ namespace Client.MirControls
 
                                 if (GameScene.SelectedCell.Item.Weight + MapObject.User.CurrentBagWeight > MapObject.User.MaxBagWeight)
                                 {
-                                    GameScene.Scene.ChatDialog.ReceiveChat("Too heavy to get back.", ChatType.System);
+                                    GameScene.Scene.ChatDialog.ReceiveChat("Too heavy to get back.", MessageType.System);
                                     GameScene.SelectedCell = null;
                                     return;
                                 }
@@ -1116,7 +1116,7 @@ namespace Client.MirControls
                                 {                                    
                                     if (!GuildDialog.MyOptions.HasFlag(RankOptions.CanStoreItem))
                                     {
-                                        GameScene.Scene.ChatDialog.ReceiveChat("Insufficient rights to store items.", ChatType.System);
+                                        GameScene.Scene.ChatDialog.ReceiveChat("Insufficient rights to store items.", MessageType.System);
                                         return;
                                     }
                                        
@@ -1137,12 +1137,12 @@ namespace Client.MirControls
                                 {
                                     if (Item != null)
                                     {
-                                        GameScene.Scene.ChatDialog.ReceiveChat("You cannot swap items.", ChatType.System);
+                                        GameScene.Scene.ChatDialog.ReceiveChat("You cannot swap items.", MessageType.System);
                                         return;
                                     }
                                     if (!GuildDialog.MyOptions.HasFlag(RankOptions.CanStoreItem))
                                     {
-                                        GameScene.Scene.ChatDialog.ReceiveChat("Insufficient rights to store items.", ChatType.System);
+                                        GameScene.Scene.ChatDialog.ReceiveChat("Insufficient rights to store items.", MessageType.System);
                                         return;
                                     }
                                     if (ItemArray[ItemSlot] == null)
@@ -1425,13 +1425,13 @@ namespace Client.MirControls
                         {
                             if (Item != null)
                             {
-                                GameScene.Scene.ChatDialog.ReceiveChat("You cannot swap items.", ChatType.System);
+                                GameScene.Scene.ChatDialog.ReceiveChat("You cannot swap items.", MessageType.System);
                                 return;
                             }
 
                             if (GameScene.SelectedCell.Item.Info.Bind.HasFlag(BindMode.DontTrade))
                             {
-                                GameScene.Scene.ChatDialog.ReceiveChat("You cannot mail this item.", ChatType.System);
+                                GameScene.Scene.ChatDialog.ReceiveChat("You cannot mail this item.", MessageType.System);
                                 return;
                             }
 
@@ -1562,14 +1562,14 @@ namespace Client.MirControls
                 case MirGender.Male:
                     if (!Item.Info.RequiredGender.HasFlag(RequiredGender.Male))
                     {
-                        GameScene.Scene.ChatDialog.ReceiveChat("You are not Female.", ChatType.System);
+                        GameScene.Scene.ChatDialog.ReceiveChat("You are not Female.", MessageType.System);
                         return false;
                     }
                     break;
                 case MirGender.Female:
                     if (!Item.Info.RequiredGender.HasFlag(RequiredGender.Female))
                     {
-                        GameScene.Scene.ChatDialog.ReceiveChat("You are not Male.", ChatType.System);
+                        GameScene.Scene.ChatDialog.ReceiveChat("You are not Male.", MessageType.System);
                         return false;
                     }
                     break;
@@ -1580,35 +1580,35 @@ namespace Client.MirControls
                 case MirClass.Warrior:
                     if (!Item.Info.RequiredClass.HasFlag(RequiredClass.Warrior))
                     {
-                        GameScene.Scene.ChatDialog.ReceiveChat("Warriors cannot use this item.", ChatType.System);
+                        GameScene.Scene.ChatDialog.ReceiveChat("Warriors cannot use this item.", MessageType.System);
                         return false;
                     }
                     break;
                 case MirClass.Wizard:
                     if (!Item.Info.RequiredClass.HasFlag(RequiredClass.Wizard))
                     {
-                        GameScene.Scene.ChatDialog.ReceiveChat("Wizards cannot use this item.", ChatType.System);
+                        GameScene.Scene.ChatDialog.ReceiveChat("Wizards cannot use this item.", MessageType.System);
                         return false;
                     }
                     break;
                 case MirClass.Taoist:
                     if (!Item.Info.RequiredClass.HasFlag(RequiredClass.Taoist))
                     {
-                        GameScene.Scene.ChatDialog.ReceiveChat("Taoists cannot use this item.", ChatType.System);
+                        GameScene.Scene.ChatDialog.ReceiveChat("Taoists cannot use this item.", MessageType.System);
                         return false;
                     }
                     break;
                 case MirClass.Assassin:
                     if (!Item.Info.RequiredClass.HasFlag(RequiredClass.Assassin))
                     {
-                        GameScene.Scene.ChatDialog.ReceiveChat("Assassins cannot use this item.", ChatType.System);
+                        GameScene.Scene.ChatDialog.ReceiveChat("Assassins cannot use this item.", MessageType.System);
                         return false;
                     }
                     break;
                 case MirClass.Archer:
                     if (!Item.Info.RequiredClass.HasFlag(RequiredClass.Archer))
                     {
-                        GameScene.Scene.ChatDialog.ReceiveChat("Archers cannot use this item.", ChatType.System);
+                        GameScene.Scene.ChatDialog.ReceiveChat("Archers cannot use this item.", MessageType.System);
                         return false;
                     }
                     break;
@@ -1619,42 +1619,42 @@ namespace Client.MirControls
                 case RequiredType.Level:
                     if (MapObject.User.Level < Item.Info.RequiredValue)
                     {
-                        GameScene.Scene.ChatDialog.ReceiveChat("You are not a high enough level.", ChatType.System);
+                        GameScene.Scene.ChatDialog.ReceiveChat("You are not a high enough level.", MessageType.System);
                         return false;
                     }
                     break;
                 case RequiredType.AC:
                     if (MapObject.User.MaxAC < Item.Info.RequiredValue)
                     {
-                        GameScene.Scene.ChatDialog.ReceiveChat("You do not have enough AC.", ChatType.System);
+                        GameScene.Scene.ChatDialog.ReceiveChat("You do not have enough AC.", MessageType.System);
                         return false;
                     }
                     break;
                 case RequiredType.MAC:
                     if (MapObject.User.MaxMAC < Item.Info.RequiredValue)
                     {
-                        GameScene.Scene.ChatDialog.ReceiveChat("You do not have enough MAC.", ChatType.System);
+                        GameScene.Scene.ChatDialog.ReceiveChat("You do not have enough MAC.", MessageType.System);
                         return false;
                     }
                     break;
                 case RequiredType.DC:
                     if (MapObject.User.MaxDC < Item.Info.RequiredValue)
                     {
-                        GameScene.Scene.ChatDialog.ReceiveChat("You do not have enough DC.", ChatType.System);
+                        GameScene.Scene.ChatDialog.ReceiveChat("You do not have enough DC.", MessageType.System);
                         return false;
                     }
                     break;
                 case RequiredType.MC:
                     if (MapObject.User.MaxMC < Item.Info.RequiredValue)
                     {
-                        GameScene.Scene.ChatDialog.ReceiveChat("You do not have enough MC.", ChatType.System);
+                        GameScene.Scene.ChatDialog.ReceiveChat("You do not have enough MC.", MessageType.System);
                         return false;
                     }
                     break;
                 case RequiredType.SC:
                     if (MapObject.User.MaxSC < Item.Info.RequiredValue)
                     {
-                        GameScene.Scene.ChatDialog.ReceiveChat("You do not have enough SC.", ChatType.System);
+                        GameScene.Scene.ChatDialog.ReceiveChat("You do not have enough SC.", MessageType.System);
                         return false;
                     }
                     break;
@@ -1669,7 +1669,7 @@ namespace Client.MirControls
                 case ItemType.Reins:
                     if (MapObject.User.Equipment[(int)EquipmentSlot.Mount] == null)
                     {
-                        GameScene.Scene.ChatDialog.ReceiveChat("You do not have a mount equipped.", ChatType.System);
+                        GameScene.Scene.ChatDialog.ReceiveChat("You do not have a mount equipped.", MessageType.System);
                         return false;
                     }
                     break;
@@ -1681,7 +1681,7 @@ namespace Client.MirControls
                     if (MapObject.User.Equipment[(int)EquipmentSlot.Weapon] == null || 
                         (MapObject.User.Equipment[(int)EquipmentSlot.Weapon].Info.Shape != 49 && MapObject.User.Equipment[(int)EquipmentSlot.Weapon].Info.Shape != 50))
                     {
-                        GameScene.Scene.ChatDialog.ReceiveChat("You do not have a fishing rod equipped.", ChatType.System);
+                        GameScene.Scene.ChatDialog.ReceiveChat("You do not have a fishing rod equipped.", MessageType.System);
                         return false;
                     }
                     break;
@@ -1700,14 +1700,14 @@ namespace Client.MirControls
                 case MirGender.Male:
                     if (!i.Info.RequiredGender.HasFlag(RequiredGender.Male))
                     {
-                        GameScene.Scene.ChatDialog.ReceiveChat("You are not Female.", ChatType.System);
+                        GameScene.Scene.ChatDialog.ReceiveChat("You are not Female.", MessageType.System);
                         return false;
                     }
                     break;
                 case MirGender.Female:
                     if (!i.Info.RequiredGender.HasFlag(RequiredGender.Female))
                     {
-                        GameScene.Scene.ChatDialog.ReceiveChat("You are not Male.", ChatType.System);
+                        GameScene.Scene.ChatDialog.ReceiveChat("You are not Male.", MessageType.System);
                         return false;
                     }
                     break;
@@ -1718,35 +1718,35 @@ namespace Client.MirControls
                 case MirClass.Warrior:
                     if (!i.Info.RequiredClass.HasFlag(RequiredClass.Warrior))
                     {
-                        GameScene.Scene.ChatDialog.ReceiveChat("Warriors cannot use this item.", ChatType.System);
+                        GameScene.Scene.ChatDialog.ReceiveChat("Warriors cannot use this item.", MessageType.System);
                         return false;
                     }
                     break;
                 case MirClass.Wizard:
                     if (!i.Info.RequiredClass.HasFlag(RequiredClass.Wizard))
                     {
-                        GameScene.Scene.ChatDialog.ReceiveChat("Wizards cannot use this item.", ChatType.System);
+                        GameScene.Scene.ChatDialog.ReceiveChat("Wizards cannot use this item.", MessageType.System);
                         return false;
                     }
                     break;
                 case MirClass.Taoist:
                     if (!i.Info.RequiredClass.HasFlag(RequiredClass.Taoist))
                     {
-                        GameScene.Scene.ChatDialog.ReceiveChat("Taoists cannot use this item.", ChatType.System);
+                        GameScene.Scene.ChatDialog.ReceiveChat("Taoists cannot use this item.", MessageType.System);
                         return false;
                     }
                     break;
                 case MirClass.Assassin:
                     if (!i.Info.RequiredClass.HasFlag(RequiredClass.Assassin))
                     {
-                        GameScene.Scene.ChatDialog.ReceiveChat("Assassins cannot use this item.", ChatType.System);
+                        GameScene.Scene.ChatDialog.ReceiveChat("Assassins cannot use this item.", MessageType.System);
                         return false;
                     }
                     break;
                 case MirClass.Archer:
                     if (!i.Info.RequiredClass.HasFlag(RequiredClass.Archer))
                     {
-                        GameScene.Scene.ChatDialog.ReceiveChat("Archers cannot use this item.", ChatType.System);
+                        GameScene.Scene.ChatDialog.ReceiveChat("Archers cannot use this item.", MessageType.System);
                         return false;
                     }
                     break;
@@ -1757,42 +1757,42 @@ namespace Client.MirControls
                 case RequiredType.Level:
                     if (MapObject.User.Level < i.Info.RequiredValue)
                     {
-                        GameScene.Scene.ChatDialog.ReceiveChat("You are not a high enough level.", ChatType.System);
+                        GameScene.Scene.ChatDialog.ReceiveChat("You are not a high enough level.", MessageType.System);
                         return false;
                     }
                     break;
                 case RequiredType.AC:
                     if (MapObject.User.MaxAC < i.Info.RequiredValue)
                     {
-                        GameScene.Scene.ChatDialog.ReceiveChat("You do not have enough AC.", ChatType.System);
+                        GameScene.Scene.ChatDialog.ReceiveChat("You do not have enough AC.", MessageType.System);
                         return false;
                     }
                     break;
                 case RequiredType.MAC:
                     if (MapObject.User.MaxMAC < i.Info.RequiredValue)
                     {
-                        GameScene.Scene.ChatDialog.ReceiveChat("You do not have enough MAC.", ChatType.System);
+                        GameScene.Scene.ChatDialog.ReceiveChat("You do not have enough MAC.", MessageType.System);
                         return false;
                     }
                     break;
                 case RequiredType.DC:
                     if (MapObject.User.MaxDC < i.Info.RequiredValue)
                     {
-                        GameScene.Scene.ChatDialog.ReceiveChat("You do not have enough DC.", ChatType.System);
+                        GameScene.Scene.ChatDialog.ReceiveChat("You do not have enough DC.", MessageType.System);
                         return false;
                     }
                     break;
                 case RequiredType.MC:
                     if (MapObject.User.MaxMC < i.Info.RequiredValue)
                     {
-                        GameScene.Scene.ChatDialog.ReceiveChat("You do not have enough MC.", ChatType.System);
+                        GameScene.Scene.ChatDialog.ReceiveChat("You do not have enough MC.", MessageType.System);
                         return false;
                     }
                     break;
                 case RequiredType.SC:
                     if (MapObject.User.MaxSC < i.Info.RequiredValue)
                     {
-                        GameScene.Scene.ChatDialog.ReceiveChat("You do not have enough SC.", ChatType.System);
+                        GameScene.Scene.ChatDialog.ReceiveChat("You do not have enough SC.", MessageType.System);
                         return false;
                     }
                     break;
@@ -1802,7 +1802,7 @@ namespace Client.MirControls
             {
                 if (i.Weight - (Item != null ? Item.Weight : 0) + MapObject.User.CurrentHandWeight > MapObject.User.MaxHandWeight)
                 {
-                    GameScene.Scene.ChatDialog.ReceiveChat("It is too heavy to Hold.", ChatType.System);
+                    GameScene.Scene.ChatDialog.ReceiveChat("It is too heavy to Hold.", MessageType.System);
                     return false;
                 }
             }
@@ -1810,7 +1810,7 @@ namespace Client.MirControls
             {
                 if (i.Weight - (Item != null ? Item.Weight : 0) + MapObject.User.CurrentWearWeight > MapObject.User.MaxWearWeight)
                 {
-                    GameScene.Scene.ChatDialog.ReceiveChat("It is too heavy to wear.", ChatType.System);
+                    GameScene.Scene.ChatDialog.ReceiveChat("It is too heavy to wear.", MessageType.System);
                     return false;
                 }
             }

@@ -815,7 +815,7 @@ namespace Server.MirObjects
 
             foreach (var player in Envir.Players)
             {
-                player.ReceiveChat($"{Name} has dropped {item.FriendlyName}.", ChatType.System2);
+                player.ReceiveChat($"{Name} has dropped {item.FriendlyName}.", MessageType.System2);
             }
 
             return ob.Drop(Settings.DropRange);
@@ -2292,7 +2292,7 @@ namespace Server.MirObjects
                 };
         }
 
-        public override void ReceiveChat(string text, ChatType type)
+        public override void ReceiveChat(string text, MessageType type)
         {
             throw new NotSupportedException();
         }

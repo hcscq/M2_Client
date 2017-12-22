@@ -404,7 +404,7 @@ namespace Server.MirObjects
         public abstract bool IsFriendlyTarget(PlayerObject ally);
         public abstract bool IsFriendlyTarget(MonsterObject ally);
 
-        public abstract void ReceiveChat(string text, ChatType type);
+        public abstract void ReceiveChat(string text, MessageType type);
 
         public abstract Packet GetInfo();
 

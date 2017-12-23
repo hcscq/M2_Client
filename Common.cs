@@ -1598,7 +1598,9 @@ public enum ClientPacketIds : short
     CM_WALK            =   3011,
     CM_RUN             =   3013,
     CM_HIT             =   3014,
-    CM_SAY             =   3030,  
+    CM_ATTACKMODE	   =   3015,
+    CM_SAY             =   3030,
+      
     MoveItem,
     StoreItem,
     TakeBackItem,
@@ -1620,7 +1622,7 @@ public enum ClientPacketIds : short
     DropGold,
     PickUp,
     Inspect,
-    ChangeAMode,
+    //ChangeAMode,
     ChangePMode,
     ChangeTrade,
     //Attack,
@@ -4659,23 +4661,20 @@ public abstract class Packet
         wTag=reader.ReadInt16();
         wSeries=reader.ReadInt16();
     }
-    public static unsafe string GetString(byte[] src) {
-        char[] tvar = new char[src.Length / 2];
-        fixed (char* str = tvar)
+    public static unsafe string GetString(byte[] src)
+    {
+        //return System.Text.Encoding.Default.GetString(src).Replace('\0', ' ').Trim();
+
+        fixed (byte* ptr = src)
         {
-            fixed (byte* ptr = src)
-            {
-                byte* pstr = (byte*)str;      //-----------------------2
-                for (int i = 0; i < src.Length; i++)
-                {
-                    pstr[i] = ptr[i];
-                }
-            }
+            int i = 0;
+            while (ptr[i++]!='\0'&&i<src.Length) ;
+            return (new string((sbyte*)ptr, 0, i-1, System.Text.Encoding.Default));//.Replace('\0', ' ');//.Trim();
         }
-        return new string(tvar);//System.Text.Encoding.Default.GetString(src).Replace('\0', ' ').Trim();
     }
     public static unsafe byte[] GetBytes(string src)
     {
+        return System.Text.Encoding.Default.GetBytes(src);
         byte[] data=new byte[src.Length*2];
         fixed (char* str = src)   //var is string
         {
@@ -4684,7 +4683,7 @@ public abstract class Packet
                 byte* bstr = (byte*)str;      //---------------------1
                 for (int i = 0; i < data.Length; i++)
                 {
-                    ptr[i++] = bstr[i];
+                    ptr[i] = bstr[i];
                 }
             }
         }
@@ -4736,9 +4735,6 @@ public abstract class Packet
 
         if (rawBytes[1] == '+' )//&& rawBytes.Length == MSGSIZE.ACTIONRESULT)
         {
-
-            //public const string MSG_GOOD = "+GOOD/";
-            //public const string MSG_FAIL = "+FAIL/";
             while (length <= rawBytes.Length && rawBytes[length++] != '!') ;
             using (MemoryStream stream = new MemoryStream(rawBytes, 2, length-3))
             using (BinaryReader reader = new BinaryReader(stream))
@@ -4955,7 +4951,7 @@ public abstract class Packet
                 return new C.PickUp();
             case (short)ClientPacketIds.Inspect:
                 return new C.Inspect();
-            case (short)ClientPacketIds.ChangeAMode:
+            case (short)ClientPacketIds.CM_ATTACKMODE:
                 return new C.ChangeAMode();
             case (short)ClientPacketIds.ChangePMode:
                 return new C.ChangePMode();

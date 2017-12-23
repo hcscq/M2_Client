@@ -274,9 +274,9 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.CM_TURN; } }
 
-        public MirDirection Direction { get { return (MirDirection)wParam; } set { wParam = (short)value; } }
-        public short X { get { return wTag; }set { wTag = value; } }
-        public short Y { get { return (short)nRecog; } set { nRecog = (nRecog &0xff00) | value; } }
+        public MirDirection Direction { get { return (MirDirection)wTag; } set { wTag = (short)value; } }
+        public short X { get { return (short)(nRecog&0x0000ffff); }set { nRecog =(int)(nRecog&0xffff0000)|value; } }
+        public short Y { get { return (short)nRecog; } set { nRecog = (nRecog &0x0000ffff) | value<<16; } }
         protected override void ReadPacket(BinaryReader reader)
         {
             Direction = (MirDirection)reader.ReadByte();
@@ -290,7 +290,7 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.CM_WALK; } }
 
-        public MirDirection Direction { get { return (MirDirection)wParam; } set { wParam = (short)value; } }
+        public MirDirection Direction { get { return (MirDirection)wTag; } set { wTag = (short)value; } }
         protected override void ReadPacket(BinaryReader reader)
         {
             //Direction = (MirDirection)reader.ReadByte();
@@ -304,7 +304,7 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.CM_RUN; } }
 
-        public MirDirection Direction { get { return (MirDirection)wParam; } set { wParam = (short)value; } }
+        public MirDirection Direction { get { return (MirDirection)wTag; } set { wTag = (short)value; } }
         protected override void ReadPacket(BinaryReader reader)
         {
             //Direction = (MirDirection)reader.ReadByte();
@@ -321,11 +321,11 @@ namespace ClientPackets
         public string Message = string.Empty;
         protected override void ReadPacket(BinaryReader reader)
         {
-            Message = System.Text.Encoding.Default.GetString(reader.ReadBytes((int)reader.BaseStream.Length));
+            Message = GetString(reader.ReadBytes(MAXTEXTMSGLEN));
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(System.Text.Encoding.Default.GetBytes(Message));
+            writer.Write(GetBytes(Message));
         }
     }
     public sealed class MoveItem : Packet
@@ -699,9 +699,9 @@ namespace ClientPackets
     }
     public sealed class ChangeAMode : Packet
     {
-        public override short Index { get { return (short)ClientPacketIds.ChangeAMode; } }
+        public override short Index { get { return (short)ClientPacketIds.CM_ATTACKMODE; } }
 
-        public AttackMode Mode { get { return (AttackMode)wSeries; }set { wParam = (short)value; } }
+        public AttackMode Mode { get { return (AttackMode)wSeries; }set { wSeries = (short)value; } }
 
         protected override void ReadPacket(BinaryReader reader)
         {

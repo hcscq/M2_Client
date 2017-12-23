@@ -190,10 +190,11 @@ namespace Client.MirScenes
             MoveTime = CMain.Time;
 
             KeyDown += GameScene_KeyDown;
+            Settings.DevMode = true;
 
             MainDialog = new MainDialog { Parent = this };
 
-            Settings.DevMode = true;
+
 
             ChatDialog = new ChatDialog { Parent = this,Border = true, BorderColour = Color.Red };
             ChatControl = new ChatControlBar { Parent = this };

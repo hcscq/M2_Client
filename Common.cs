@@ -1347,7 +1347,9 @@ public enum ServerPacketIds : short
     SM_ATTACKMODE =	658,
 
 
-    // For game process
+    // For game process 
+    SM_ADDITEM=200,
+    SM_BAGITEMS = 201,
     SM_ACTIONRESULT = 3000,
 
 
@@ -1594,6 +1596,8 @@ public enum ClientPacketIds : short
     CM_LOGOUT          =   104,
 
     // For game process
+    CM_QUERYUSERNAME   =    80,
+    CM_QUERYBAGITEMS   =    81,
     CM_TURN            =   3010,
     CM_WALK            =   3011,
     CM_RUN             =   3013,

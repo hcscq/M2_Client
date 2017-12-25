@@ -120,6 +120,32 @@ namespace ServerPacketsEx
             }
         }
     }
+    public sealed class SM_BAGITEMS : Packet
+    {
+        public override short Index
+        {
+            get
+            {
+                return (short)ServerPacketIds.SM_BAGITEMS;
+            }
+        }
+        public UserItem[] Inventory;
+        public short Count { get { return wParam; } }
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            Inventory = new UserItem[Count];
+            for (int i = 0; i < Inventory.Length; i++)
+            {
+                if (reader.ReadBoolean()) continue;// { reader.ReadBytes(204); continue; }
+                Inventory[i] = new UserItem(reader);
+            }
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            throw new NotImplementedException();
+        }
+    }
     public sealed class MapLogon : Packet
     {
         public override short Index

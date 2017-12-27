@@ -601,16 +601,16 @@ namespace LibraryEditor
             toolStripProgressBar.Value = 0;
             toolStripProgressBar.Maximum = _col.Count;
 
-            for (int i = 0; i < (_col.Count); i++)
+            for (int i = _col[0]; i < (_col[0] + _col.Count); i++)
             {
-                _exportImage = _library.GetMImage(_col[i]);
+                _exportImage = _library.GetMImage(i);
                 if (_exportImage.Image == null)
                 {
-                    blank.Save(_folder + _col[i].ToString() + ".bmp", ImageFormat.Bmp);
+                    blank.Save(_folder + i.ToString() + ".bmp", ImageFormat.Bmp);
                 }
                 else
                 {
-                    _exportImage.Image.Save(_folder + _col[i].ToString() + ".bmp", ImageFormat.Bmp);
+                    _exportImage.Image.Save(_folder + i.ToString() + ".bmp", ImageFormat.Bmp);
                 }
 
                 toolStripProgressBar.Value++;
@@ -618,7 +618,7 @@ namespace LibraryEditor
                 if (!Directory.Exists(_folder + "/Placements/"))
                     Directory.CreateDirectory(_folder + "/Placements/");
 
-                File.WriteAllLines(_folder + "/Placements/" + _col[i].ToString() + ".txt", new string[] { _exportImage.X.ToString(), _exportImage.Y.ToString() });
+                File.WriteAllLines(_folder + "/Placements/" + i.ToString() + ".txt", new string[] { _exportImage.X.ToString(), _exportImage.Y.ToString() });
             }
 
             toolStripProgressBar.Value = 0;

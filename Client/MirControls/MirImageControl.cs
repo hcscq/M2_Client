@@ -168,7 +168,12 @@ namespace Client.MirControls
 
             if (DrawImage && Library != null)
             {
-                if (GrayScale) DXManager.SetGrayscale(1F, Color.White);
+                bool oldGray = DXManager.GrayScale;
+
+                if (GrayScale)
+                {
+                    DXManager.SetGrayscale(true);
+                }
 
                 if (Blending)
                     Library.DrawBlend(Index, DisplayLocation, ForeColour, false, BlendingRate);
@@ -176,7 +181,7 @@ namespace Client.MirControls
                     Library.Draw(Index, DisplayLocation, ForeColour, false, Opacity);
 
 
-                if (GrayScale) DXManager.SetNormal(1F, Color.White);
+                if (GrayScale) DXManager.SetGrayscale(oldGray);
             }
         }
 

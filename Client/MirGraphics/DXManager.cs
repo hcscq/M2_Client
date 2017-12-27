@@ -41,6 +41,8 @@ namespace Client.MirGraphics
         public static PixelShader MagicPixelShader;
         public static PixelShader ShadowPixelShader;
 
+        public static bool GrayScale;
+
         public static Point[] LightSizes =
         {
             new Point(125,95),
@@ -55,7 +57,23 @@ namespace Client.MirGraphics
             new Point(845,642),
             new Point(925,703)
         };
+        public static void SetGrayscale(bool value)
+        {
+            GrayScale = value;
 
+            if (value == true)
+            {
+                if (Device.PixelShader == GrayScalePixelShader) return;
+                Sprite.Flush();
+                Device.PixelShader = GrayScalePixelShader;
+            }
+            else
+            {
+                if (Device.PixelShader == null) return;
+                Sprite.Flush();
+                Device.PixelShader = null;
+            }
+        }
         public static void Create()
         {
             Parameters = new PresentParameters

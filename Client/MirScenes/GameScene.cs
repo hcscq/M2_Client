@@ -1710,6 +1710,9 @@ namespace Client.MirScenes
                 case (short)ServerPacketIds.SM_ATTACKMODE:
                     ChangeAMode((SEX.ChangeAMode)p);
                     break;
+                case (short)ServerPacketIds.SM_BAGITEMS:
+
+                    break;
                 /*EX process end*/
                 default:
                     base.ProcessPacket(p);
@@ -1745,6 +1748,10 @@ namespace Client.MirScenes
         private void UseItems(SEX.UseItems P)
         {
             User.Equipment = P.Equipment;
+        }
+        private void BagItems(SEX.BagItems P)
+        {
+            User.QuestInventory = P.Inventory;
         }
         private void Logon(SEX.MapLogon P)
         {

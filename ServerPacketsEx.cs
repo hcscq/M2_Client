@@ -120,7 +120,7 @@ namespace ServerPacketsEx
             }
         }
     }
-    public sealed class SM_BAGITEMS : Packet
+    public sealed class BagItems : Packet
     {
         public override short Index
         {
@@ -130,13 +130,13 @@ namespace ServerPacketsEx
             }
         }
         public UserItem[] Inventory;
-        public short Count { get { return wParam; } }
+        public short Count { get { return wSeries; } }
         protected override void ReadPacket(BinaryReader reader)
         {
             Inventory = new UserItem[Count];
             for (int i = 0; i < Inventory.Length; i++)
             {
-                if (reader.ReadBoolean()) continue;// { reader.ReadBytes(204); continue; }
+                
                 Inventory[i] = new UserItem(reader);
             }
         }

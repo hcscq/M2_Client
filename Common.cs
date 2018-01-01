@@ -2765,7 +2765,8 @@ public class ItemInfo
         Image = (ushort)reader.ReadUInt32();
         reader.ReadUInt32();//source
         Price = reader.ReadUInt32();
-        if(Type==(ItemType)'G')
+        StackSize = reader.ReadUInt32();
+        if (Type==(ItemType)'G')
         return;
         HP = reader.ReadUInt16();
         MP = reader.ReadUInt16();
@@ -2784,7 +2785,6 @@ public class ItemInfo
         reader.ReadBytes(10);//Water-Earth 
         RequiredType = (RequiredType)reader.ReadUInt16();
         RequiredValue =(byte)reader.ReadUInt16();
-        StackSize = reader.ReadUInt32();
         reader.ReadUInt32();//dwFeature
         return;
 
@@ -3175,9 +3175,9 @@ public class UserItem
     }
     public UserItem(BinaryReader reader, int version = int.MaxValue, int Customversion = int.MaxValue)
     {
-        string aaa = Packet.GetString(reader.ReadBytes(Packet.GUIDLEN));
-        UniqueID = new Guid(aaa);
+        UniqueID = new Guid(Packet.GetString(reader.ReadBytes(Packet.GUIDLEN)));
         CurrentDura = reader.ReadUInt16();
+        MaxDura = reader.ReadUInt16();
         Count = reader.ReadUInt16();
 
         Info = new ItemInfo(reader);

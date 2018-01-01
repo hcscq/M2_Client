@@ -764,6 +764,16 @@ namespace ClientPackets
             //writer.Write((byte)Spell);
         }
     }
+    public sealed class QueryBagItem : Packet
+    {
+        public override short Index { get { return (short)ClientPacketIds.CM_QUERYBAGITEMS; } }
+        protected override void ReadPacket(BinaryReader reader)
+        {
+        }
+        protected override void WritePacket(BinaryWriter writer)
+        {
+        }
+    }
     public sealed class RangeAttack : Packet //ArcherTest
     {
         public override short Index { get { return (short)ClientPacketIds.RangeAttack; } }

@@ -1502,7 +1502,7 @@ namespace Client.MirScenes.Dialogs
                 Location = new Point(336,59),//new Point(329, 29),
                 Library = Libraries.Prguse3,
                 Parent = this,
-                TakeSizeMode=UsedSize.HoverIndex,
+                TakeSizeMode=UsedSize.Index,
                 PressedIndex = 234,//362,
                 Sound = SoundList.ButtonA,
 

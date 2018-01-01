@@ -784,9 +784,12 @@ public enum ItemType : byte
     Reel = 32,
     Fish = 33,
     Quest = 34,
-	Awakening = 35,
+    Awakening = 35,
     Pets = 36,
     Transform = 37,
+    A = 65,
+    B=66,
+    General = 71,
 }
 
 public enum MirGridType : byte
@@ -2699,7 +2702,7 @@ public class ItemInfo
     public uint Price, StackSize = 1;
 
     public byte MinAC, MaxAC, MinMAC, MaxMAC, MinDC, MaxDC, MinMC, MaxMC, MinSC, MaxSC, Accuracy, Agility;
-    public short HP, MP;
+    public ushort HP, MP;
     public byte AttackSpeed, Luck;
     public byte BagWeight, HandWeight, WearWeight;
 
@@ -2747,23 +2750,27 @@ public class ItemInfo
     }
     public ItemInfo(BinaryReader reader, int version = int.MaxValue, int Customversion = int.MaxValue)
     {
-        Name = System.Text.Encoding.Default.GetString(reader.ReadBytes(20));
-        PrefixName= System.Text.Encoding.Default.GetString(reader.ReadBytes(20));
-        Type = (ItemType) reader.ReadByte();
-        Shape = reader.ReadSByte();//version >= 30 ? reader.ReadInt16() : reader.ReadSByte();
-        Weight = reader.ReadByte();
-        reader.ReadByte();//AniCount
-        reader.ReadByte();//source
-        NeedIdentify= reader.ReadBoolean();
-        Index = reader.ReadUInt16();
-        Image = reader.ReadUInt16();
-        Durability = reader.ReadUInt16();
+        Type = (ItemType)reader.ReadByte();
+        
+        reader.ReadByte();//btAniCount
 
-        HP = reader.ReadInt16();
-        MP = reader.ReadInt16();
+        Index = reader.ReadUInt16();
+
+        Name = Packet.GetString(reader.ReadBytes(20));
+        //PrefixName= Packet.GetString(reader.ReadBytes(20));
+        reader.ReadUInt16();//wStdMode
+        Shape = (short)reader.ReadUInt16();//version >= 30 ? reader.ReadInt16() : reader.ReadSByte();
+        Weight = (byte)reader.ReadUInt16();
+        Durability = reader.ReadUInt16();
+        Image = (ushort)reader.ReadUInt32();
+        reader.ReadUInt32();//source
+        Price = reader.ReadUInt32();
+        if(Type==(ItemType)'G')
+        return;
+        HP = reader.ReadUInt16();
+        MP = reader.ReadUInt16();
         AttackSpeed = reader.ReadByte();
         Luck = reader.ReadByte();
-
         MinAC = reader.ReadByte();
         MaxAC = reader.ReadByte();
         MinMAC = reader.ReadByte();
@@ -2774,14 +2781,14 @@ public class ItemInfo
         MaxMC = reader.ReadByte();
         MinSC = reader.ReadByte();
         MaxSC = reader.ReadByte();
-
-        RequiredType = (RequiredType)reader.ReadByte();
-        RequiredValue = reader.ReadByte();
-        Price = reader.ReadUInt32();
-
+        reader.ReadBytes(10);//Water-Earth 
+        RequiredType = (RequiredType)reader.ReadUInt16();
+        RequiredValue =(byte)reader.ReadUInt16();
+        StackSize = reader.ReadUInt32();
+        reader.ReadUInt32();//dwFeature
         return;
 
-
+        NeedIdentify = reader.ReadBoolean();
         if (version >= 40) Grade = (ItemGrade)reader.ReadByte();
         RequiredType = (RequiredType) reader.ReadByte();
         RequiredClass = (RequiredClass) reader.ReadByte();
@@ -2807,8 +2814,8 @@ public class ItemInfo
         }
         else
         {
-            HP = reader.ReadInt16();
-            MP = reader.ReadInt16();
+            HP = reader.ReadUInt16();
+            MP = reader.ReadUInt16();
         }
         Accuracy = reader.ReadByte();
         Agility = reader.ReadByte();
@@ -3011,8 +3018,8 @@ public class ItemInfo
         if (!byte.TryParse(data[20], out info.MaxSC)) return null;
         if (!byte.TryParse(data[21], out info.Accuracy)) return null;
         if (!byte.TryParse(data[22], out info.Agility)) return null;
-        if (!short.TryParse(data[23], out info.HP)) return null;
-        if (!short.TryParse(data[24], out info.MP)) return null;
+        if (!ushort.TryParse(data[23], out info.HP)) return null;
+        if (!ushort.TryParse(data[24], out info.MP)) return null;
 
         if (!byte.TryParse(data[25], out info.AttackSpeed)) return null;
         if (!byte.TryParse(data[26], out info.Luck)) return null;
@@ -3103,15 +3110,15 @@ public class UserItem
 {
     public Guid UniqueID;
     sbyte STDType;
-    byte[] MakeDate;  
+    //byte[] MakeDate;  
     public ushort ItemIndex;
 
     public ItemInfo Info;
     public ushort CurrentDura, MaxDura;
-    public ushort Count = 1, GemCount = 0;
+    public ushort Count = 1, GemCount = 0,HP, MP;
 
     public byte AC, MAC, DC, MC, SC, Accuracy, 
-        Agility, HP, MP, Strong, MagicResist, PoisonResist, 
+        Agility,  Strong, MagicResist, PoisonResist, 
         HealthRecovery, ManaRecovery, PoisonRecovery, 
         CriticalRate, CriticalDamage, Freezing, PoisonAttack;
     public sbyte AttackSpeed, Luck;
@@ -3168,56 +3175,56 @@ public class UserItem
     }
     public UserItem(BinaryReader reader, int version = int.MaxValue, int Customversion = int.MaxValue)
     {
-        STDType = reader.ReadSByte();
-        MakeDate = reader.ReadBytes(6);
-        UniqueID = new Guid(new string(reader.ReadChars(Packet.GUIDLEN)));
-        ItemIndex = reader.ReadUInt16();
-
+        string aaa = Packet.GetString(reader.ReadBytes(Packet.GUIDLEN));
+        UniqueID = new Guid(aaa);
         CurrentDura = reader.ReadUInt16();
-        MaxDura = reader.ReadUInt16();
-
         Count = reader.ReadUInt16();
 
+        Info = new ItemInfo(reader);
+        if (Info.Type == (ItemType)'G')
+            return;
         AC = reader.ReadByte();
-        MAC = reader.ReadByte();
-        DC = reader.ReadByte();
-        MC = reader.ReadByte();
-        SC = reader.ReadByte();
+        MAC= reader.ReadByte(); 
+        DC= reader.ReadByte();
+        MC= reader.ReadByte();
+        SC= reader.ReadByte();
+        Accuracy= reader.ReadByte();
+        Agility= reader.ReadByte();
+        HP= reader.ReadByte(); 
+        MP= reader.ReadByte();
+        Strong= reader.ReadByte();
+        MagicResist= reader.ReadByte(); 
+        PoisonResist= reader.ReadByte(); 
+        HealthRecovery= reader.ReadByte(); 
+        ManaRecovery= reader.ReadByte(); 
+        PoisonRecovery= reader.ReadByte();
+        CriticalRate= reader.ReadByte(); 
+        CriticalDamage= reader.ReadByte();
+        Freezing= reader.ReadByte();
+        PoisonAttack= reader.ReadByte();
+        RefinedValue= (RefinedValue)reader.ReadByte(); 
+        RefineAdded= reader.ReadByte();
+        reader.ReadByte();//switchs
+        Guid.TryParse(Packet.GetString(reader.ReadBytes(Packet.GUIDLEN)), out SoulBoundId);
+        AttackSpeed = reader.ReadSByte();
+        Luck= reader.ReadSByte();
+        //MaxDura = reader.ReadUInt16();
+        //STDType = reader.ReadSByte();
+        Info.PrefixName = Packet.GetString(reader.ReadBytes(20));
+        
+        ItemIndex = 0;
+        return;
 
-        Accuracy = reader.ReadByte();
-        Agility = reader.ReadByte();
-        HP = reader.ReadByte();
-        MP = reader.ReadByte();
-
-        Strong = reader.ReadByte();
-        MagicResist = reader.ReadByte();
-        PoisonResist = reader.ReadByte();
-        HealthRecovery = reader.ReadByte();
-        ManaRecovery = reader.ReadByte();
-        PoisonRecovery = reader.ReadByte();
-        CriticalRate = reader.ReadByte();
-        CriticalDamage = reader.ReadByte();
-        Freezing = reader.ReadByte();
-        PoisonAttack = reader.ReadByte();
-        RefinedValue = (RefinedValue)reader.ReadByte();
-        RefineAdded = reader.ReadByte();
 
         byte Bools = reader.ReadByte();
         Identified = (Bools & 0x04) == 0x04;
         Cursed = (Bools & 0x02) == 0x02;
 
         if (version <= 19) return;
-        Guid.TryParse(new string(reader.ReadChars(Packet.GUIDLEN)),out SoulBoundId);
-       // SoulBoundId =new Guid(new string(reader.ReadChars(Packet.GUIDLEN)));
 
-
-
-        AttackSpeed = reader.ReadSByte();
-        Luck = reader.ReadSByte();
         /*Version 7.5 prefix*/
         reader.ReadBytes(20);
   
-        Info = new ItemInfo(reader);
         return;
 
         if (version <= 31) return;
@@ -4583,12 +4590,12 @@ class EnDecode
         int nLen =nSrcLen<=0? pszSrc.Length:nSrcLen;//memlen((const char *)pszSrc) - 1;
         int nDestPos = offsetDest, nBitPos = 2;
         int nMadeBit = 0;
-        int ch, chCode, tmp = 0;
+        byte ch, chCode, tmp = 0;
 
         for (int i = offsetSrc; i < nLen; i++)
         {
             if ((pszSrc[i] - 0x3c) >= 0)
-                ch = pszSrc[i] - 0x3c;
+                ch = (byte)(pszSrc[i] - 0x3c);
             else
             {
                 nDestPos = 0;
@@ -4599,7 +4606,7 @@ class EnDecode
 
             if ((nMadeBit + 6) >= 8)
             {
-                chCode = (tmp | ((ch & 0x3f) >> (6 - nBitPos)));
+                chCode =( byte)(tmp | ((ch & 0x3f) >> (6 - nBitPos)));
                 //New model begin LOWORD HIBYTE LOWORD LOBYTE
                 //chCode=chCode^(HIBYTE(LOWORD(0x0C08BA52E))+LOBYTE(LOWORD(0x0C08BA52E)));
                 //chCode=chCode^LOBYTE(LOWORD(0x408D4D));
@@ -4620,7 +4627,7 @@ class EnDecode
                 }
             }
 
-            tmp = ((ch << nBitPos) & Decode6BitMask[nBitPos - 2]);
+            tmp = (byte)((ch << nBitPos) & Decode6BitMask[nBitPos - 2]);
 
             nMadeBit += (8 - nBitPos);
         }
@@ -4672,7 +4679,7 @@ public abstract class Packet
         fixed (byte* ptr = src)
         {
             int i = 0;
-            while (ptr[i++]!='\0'&&i<src.Length) ;
+            while (ptr[i++]!='\0'&&i<=src.Length) ;
             return (new string((sbyte*)ptr, 0, i-1, System.Text.Encoding.Default));//.Replace('\0', ' ');//.Trim();
         }
     }
@@ -5216,7 +5223,6 @@ public abstract class Packet
             //    return new S.LoginBanned();
 
             case (short)ServerPacketIds.SM_QUERYCHR:
-
                 return new S.LoginSuccess();
             //case (short)ServerPacketIds.NewCharacter:
             //    return new S.NewCharacter();
@@ -5228,6 +5234,8 @@ public abstract class Packet
                 return new S.DeleteCharacterSuccess();
             case (short)ServerPacketIds.SM_ATTACKMODE:
                 return new SEX.ChangeAMode();
+            case (short)ServerPacketIds.SM_BAGITEMS:
+                return new SEX.BagItems();
             //case (short)ServerPacketIds.CM_SELCHR:
             //    return new S.StartGame();
             case (short)ServerPacketIds.StartGameBanned:

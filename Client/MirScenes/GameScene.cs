@@ -1711,7 +1711,7 @@ namespace Client.MirScenes
                     ChangeAMode((SEX.ChangeAMode)p);
                     break;
                 case (short)ServerPacketIds.SM_BAGITEMS:
-
+                    BagItems((SEX.BagItems)p);
                     break;
                 /*EX process end*/
                 default:
@@ -1748,10 +1748,12 @@ namespace Client.MirScenes
         private void UseItems(SEX.UseItems P)
         {
             User.Equipment = P.Equipment;
+            Network.Enqueue(new C.QueryBagItem());
         }
         private void BagItems(SEX.BagItems P)
         {
-            User.QuestInventory = P.Inventory;
+            User.Inventory = P.Inventory;
+            InventoryDialog.RefreshInventory();
         }
         private void Logon(SEX.MapLogon P)
         {

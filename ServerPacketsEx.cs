@@ -133,8 +133,8 @@ namespace ServerPacketsEx
         public short Count { get { return wSeries; } }
         protected override void ReadPacket(BinaryReader reader)
         {
-            Inventory = new UserItem[Count];
-            for (int i = 0; i < Inventory.Length; i++)
+            Inventory = new UserItem[46];
+            for (int i = 0; i < Count; i++)
             {
                 
                 Inventory[i] = new UserItem(reader);

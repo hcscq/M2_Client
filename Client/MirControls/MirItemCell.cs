@@ -694,12 +694,13 @@ namespace Client.MirControls
                                         return;
                                     }
                                 }
-
-                                Network.Enqueue(new C.MoveItem { Grid = GridType, From = GameScene.SelectedCell.ItemSlot, To = ItemSlot });
-
-                                Locked = true;
-                                GameScene.SelectedCell.Locked = true;
+                                UserItem i = GameScene.SelectedCell.Item;
+                                GameScene.SelectedCell.Item = Item;
+                                Item = i;
                                 GameScene.SelectedCell = null;
+                                //Network.Enqueue(new C.MoveItem { Grid = GridType, From = GameScene.SelectedCell.ItemSlot, To = ItemSlot });
+                                //Locked = true;
+                                //GameScene.SelectedCell.Locked = true;
                                 return;
                             #endregion
                             #region From Equipment

@@ -633,18 +633,21 @@ namespace ClientPackets
     }
     public sealed class DropItem : Packet
     {
-        public override short Index { get { return (short)ClientPacketIds.DropItem; } }
+        public override short Index { get { return (short)ClientPacketIds.CM_DROPITEM; } }
 
+        public ItemType StdType;
         public Guid UniqueID;
         public uint Count;
 
         protected override void ReadPacket(BinaryReader reader)
         {
+            StdType = (ItemType)reader.ReadByte();
             UniqueID = new Guid(reader.ReadBytes(Packet.GUIDLEN));
             Count = reader.ReadUInt32();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
+            writer.Write((byte)StdType);
             writer.Write(UniqueID.ToByteArray());
             writer.Write(Count);
         }

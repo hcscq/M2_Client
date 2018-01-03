@@ -1713,6 +1713,9 @@ namespace Client.MirScenes
                 case (short)ServerPacketIds.SM_BAGITEMS:
                     BagItems((SEX.BagItems)p);
                     break;
+                case (short)ServerPacketIds.SM_DROPITEM:
+                    DropItem((SEX.DropItem)p);
+                    break;
                 /*EX process end*/
                 default:
                     base.ProcessPacket(p);
@@ -1732,28 +1735,42 @@ namespace Client.MirScenes
             //static char pszUPwr[] = "PWR";
             MapControl.NextAction = 0;
         }
-        public void SendMagic(SEX.SendMagic P)
+        public void SendMagic(SEX.SendMagic p)
         {
-            User.LoadMagic(P);
+            User.LoadMagic(p);
         }
-        public void SubAbility(SEX.Subability P)
+        public void SubAbility(SEX.Subability p)
         {
-            User.LoadSubAbility(P);
+            User.LoadSubAbility(p);
         }
-        public void Ability(SEX.Ablity P)
+        public void Ability(SEX.Ablity p)
         {
-            User.LoadAbility(P);
+            User.LoadAbility(p);
             
         }
-        private void UseItems(SEX.UseItems P)
+        private void UseItems(SEX.UseItems p)
         {
-            User.Equipment = P.Equipment;
+            User.Equipment = p.Equipment;
             Network.Enqueue(new C.QueryBagItem());
         }
-        private void BagItems(SEX.BagItems P)
+        private void BagItems(SEX.BagItems p)
         {
-            User.Inventory = P.Inventory;
+            User.Inventory = p.Inventory;
             InventoryDialog.RefreshInventory();
+        }
+        private void DropItem(SEX.DropItem p)
+        {
+            MirItemCell cell = InventoryDialog.GetCell(p.UniqueID) ?? BeltDialog.GetCell(p.UniqueID);
+
+            if (cell == null) return;
+
+            cell.Locked = false;
+
+            if (!p.Success) return;
+
+            cell.Item = null;
+
+            User.RefreshStats();
         }
         private void Logon(SEX.MapLogon P)
         {
@@ -9312,7 +9329,7 @@ namespace Client.MirScenes
 
                     messageBox.YesButton.Click += (o, a) =>
                     {
-                        Network.Enqueue(new C.DropItem { UniqueID = cell.Item.UniqueID, Count = 1 });
+                        Network.Enqueue(new C.DropItem { UniqueID = cell.Item.UniqueID, Count = 1,StdType= cell.Item.Info.Type });
 
                         cell.Locked = true;
                     };
@@ -9328,7 +9345,8 @@ namespace Client.MirScenes
                         Network.Enqueue(new C.DropItem
                         {
                             UniqueID = cell.Item.UniqueID,
-                            Count = amountBox.Amount
+                            Count = amountBox.Amount,
+                            StdType = cell.Item.Info.Type
                         });
 
                         cell.Locked = true;

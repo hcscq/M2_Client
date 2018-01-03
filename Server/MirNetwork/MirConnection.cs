@@ -302,7 +302,7 @@ namespace Server.MirNetwork
                 case (short)ClientPacketIds.UseItem:
                     UseItem((C.UseItem) p);
                     break;
-                case (short)ClientPacketIds.DropItem:
+                case (short)ClientPacketIds.CM_DROPITEM:
                     DropItem((C.DropItem) p);
                     break;
                 case (short)ClientPacketIds.DropGold:

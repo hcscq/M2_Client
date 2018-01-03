@@ -146,6 +146,28 @@ namespace ServerPacketsEx
             throw new NotImplementedException();
         }
     }
+    public sealed class DropItem : Packet
+    {
+        public override short Index
+        {
+            get
+            {
+                return (short)ServerPacketIds.SM_DROPITEM;
+            }
+        }
+        public Guid UniqueID;
+        public bool Success { get { return nRecog > 0; } }
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            UniqueID = new Guid(Packet.GetString(reader.ReadBytes(GUIDLEN)));
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            throw new NotImplementedException();
+        }
+    }
     public sealed class MapLogon : Packet
     {
         public override short Index

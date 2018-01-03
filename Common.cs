@@ -1353,6 +1353,7 @@ public enum ServerPacketIds : short
     // For game process 
     SM_ADDITEM=200,
     SM_BAGITEMS = 201,
+    SM_DROPITEM=600,
     SM_ACTIONRESULT = 3000,
 
 
@@ -1601,6 +1602,10 @@ public enum ClientPacketIds : short
     // For game process
     CM_QUERYUSERNAME   =    80,
     CM_QUERYBAGITEMS   =    81,
+    CM_DROPITEM        =   1000,
+    CM_PICKUP          =   1001,
+    CM_TAKEONITEM	   =   1003,
+    CM_TAKEOFFITEM     =   1004,
     CM_TURN            =   3010,
     CM_WALK            =   3011,
     CM_RUN             =   3013,
@@ -1616,8 +1621,7 @@ public enum ClientPacketIds : short
     RemoveItem,
     RemoveSlotItem,
     SplitItem,
-    UseItem,
-    DropItem,
+    UseItem,    
     DepositRefineItem,
     RetrieveRefineItem,
     RefineCancel,
@@ -4938,7 +4942,7 @@ public abstract class Packet
                 return new C.SplitItem();
             case (short)ClientPacketIds.UseItem:
                 return new C.UseItem();
-            case (short)ClientPacketIds.DropItem:
+            case (short)ClientPacketIds.CM_DROPITEM:
                 return new C.DropItem();
             case (short)ClientPacketIds.DepositRefineItem:
                 return new C.DepositRefineItem();
@@ -5236,6 +5240,8 @@ public abstract class Packet
                 return new SEX.ChangeAMode();
             case (short)ServerPacketIds.SM_BAGITEMS:
                 return new SEX.BagItems();
+            case (short)ServerPacketIds.SM_DROPITEM:
+                return new SEX.DropItem();
             //case (short)ServerPacketIds.CM_SELCHR:
             //    return new S.StartGame();
             case (short)ServerPacketIds.StartGameBanned:

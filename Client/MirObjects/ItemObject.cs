@@ -6,12 +6,14 @@ using System.Text;
 using Client.MirGraphics;
 using Client.MirScenes;
 using S = ServerPackets;
+using SEX = ServerPacketsEx;
 using System.Text.RegularExpressions;
 
 namespace Client.MirObjects
 {
     class ItemObject : MapObject
     {
+        public int Id;
         public override ObjectType Race{
             get { return ObjectType.Item; }
         }
@@ -29,8 +31,9 @@ namespace Client.MirObjects
         }
 
 
-        public void Load(S.ObjectItem info)
+        public void Load(SEX.ItemShow info)
         {
+            Id = info.Id;
             Name = info.Name;
             NameColour = info.NameColour;
 

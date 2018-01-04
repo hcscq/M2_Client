@@ -1354,7 +1354,10 @@ public enum ServerPacketIds : short
     SM_ADDITEM=200,
     SM_BAGITEMS = 201,
     SM_DROPITEM=600,
+    SM_ITEMSHOW  =  610,
+    SM_ITEMHIDE  =  611,
     SM_ACTIONRESULT = 3000,
+
 
 
     StartGameBanned,
@@ -4657,6 +4660,7 @@ public abstract class Packet
     public short wSeries;
     public const short GUIDLEN = 36;
     public const short CHARNAMELEN = 14;
+    public const short ITEMNAELEN  = 40;
     public const short MAXTEXTMSGLEN = 2048;
     public void WriteBaseBytes(BinaryWriter writer)
     {
@@ -5242,6 +5246,10 @@ public abstract class Packet
                 return new SEX.BagItems();
             case (short)ServerPacketIds.SM_DROPITEM:
                 return new SEX.DropItem();
+            case (short)ServerPacketIds.SM_ITEMSHOW:
+                return new SEX.ItemShow();
+            case (short)ServerPacketIds.SM_ITEMHIDE:
+                return new SEX.ItemHide();
             //case (short)ServerPacketIds.CM_SELCHR:
             //    return new S.StartGame();
             case (short)ServerPacketIds.StartGameBanned:

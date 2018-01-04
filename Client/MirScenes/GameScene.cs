@@ -1716,6 +1716,11 @@ namespace Client.MirScenes
                 case (short)ServerPacketIds.SM_DROPITEM:
                     DropItem((SEX.DropItem)p);
                     break;
+                case (short)ServerPacketIds.SM_ITEMSHOW:
+                    ItemShow((SEX.ItemShow)p);
+                    break;
+                case (short)ServerPacketIds.SM_ITEMHIDE:
+                    break;
                 /*EX process end*/
                 default:
                     base.ProcessPacket(p);
@@ -1771,6 +1776,27 @@ namespace Client.MirScenes
             cell.Item = null;
 
             User.RefreshStats();
+        }
+        private void ItemShow(SEX.ItemShow p)
+        {
+            ItemObject ob = new ItemObject(Guid.Empty);
+            ob.Load(p);
+            /*
+            string[] Warnings = new string[] {"HeroNecklace","AdamantineNecklace","8TrigramWheel","HangMaWheel","BaekTaGlove","SpiritReformer","BokMaWheel","BoundlessRing","ThunderRing","TaeGukRing","OmaSpiritRing","NobleRing"};
+            if (Warnings.Contains(p.Name))
+            {
+                ChatDialog.ReceiveChat(string.Format("{0} at {1}", p.Name, p.Location), ChatType.Hint);
+            }
+            */
+        }
+        private void ItemHide(SEX.ItemHide p)
+        {
+            for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
+            {
+                MapObject ob = MapControl.Objects[i];
+                if (ob. != p.ObjectID) continue;
+                ob.Remove();
+            }
         }
         private void Logon(SEX.MapLogon P)
         {
@@ -2726,18 +2752,6 @@ namespace Client.MirScenes
             }
 
             MainDialog.PModeLabel.Visible = true;
-        }
-        private void ObjectItem(S.ObjectItem p)
-        {
-            ItemObject ob = new ItemObject(p.ObjectID);
-            ob.Load(p);
-            /*
-            string[] Warnings = new string[] {"HeroNecklace","AdamantineNecklace","8TrigramWheel","HangMaWheel","BaekTaGlove","SpiritReformer","BokMaWheel","BoundlessRing","ThunderRing","TaeGukRing","OmaSpiritRing","NobleRing"};
-            if (Warnings.Contains(p.Name))
-            {
-                ChatDialog.ReceiveChat(string.Format("{0} at {1}", p.Name, p.Location), ChatType.Hint);
-            }
-            */
         }
         private void ObjectGold(S.ObjectGold p)
         {

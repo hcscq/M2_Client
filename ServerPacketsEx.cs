@@ -15,7 +15,7 @@ namespace ServerPacketsEx
                 return (short)ServerPacketIds.SM_ACTIONRESULT;
             }
         }
-        public byte[] ResultMsg; 
+        public byte[] ResultMsg;
 
         protected override void ReadPacket(BinaryReader reader)
         {
@@ -32,7 +32,7 @@ namespace ServerPacketsEx
         {
             get
             {
-               return ServerMsgIds.SM_NEWMAP;
+                return ServerMsgIds.SM_NEWMAP;
             }
         }
         public byte[] MapFileName;
@@ -76,7 +76,7 @@ namespace ServerPacketsEx
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            
+
         }
     }
     public sealed class UseItems : Packet
@@ -88,7 +88,7 @@ namespace ServerPacketsEx
 
         public Guid ObjectID;
 
-        public UserItem[]  Equipment;
+        public UserItem[] Equipment;
 
         protected override void ReadPacket(BinaryReader reader)
         {
@@ -136,7 +136,7 @@ namespace ServerPacketsEx
             Inventory = new UserItem[46];
             for (int i = 0; i < Count; i++)
             {
-                
+
                 Inventory[i] = new UserItem(reader);
             }
         }
@@ -161,6 +161,58 @@ namespace ServerPacketsEx
         protected override void ReadPacket(BinaryReader reader)
         {
             UniqueID = new Guid(Packet.GetString(reader.ReadBytes(GUIDLEN)));
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public sealed class ItemShow : Packet
+    {
+        public override short Index
+        {
+            get
+            {
+                return (short)ServerPacketIds.SM_ITEMSHOW;
+            }
+        }
+        //AddRefMsg(RM_ITEMSHOW, xpMapItem->wLooks,(int)xpMapItem,          nX,                         nY,                         xpMapItem->szName);
+        //fnMakeDe(&DefMsg,      SM_ITEMSHOW,       lpProcessMsg->lParam1,(WORD)lpProcessMsg->lParam2, (WORD)lpProcessMsg->lParam3, lpProcessMsg->wParam);
+        //fnMakeDefMe(lptdm, wIdent,     int nRecog,            WORD wParam,                 WORD wTag,                   WORD wSeries,int nlen=0)
+        //public Guid ObjectID;
+        public string Name = string.Empty;
+        public Color NameColour;
+        public Point Location { get { return new Point(wParam, wTag); } }
+        public ushort Image { get { return (ushort)wSeries; } }
+        public int Id { get { return nRecog; } }
+        //public ItemGrade grade;
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            Name = Packet.GetString(reader.ReadBytes(ITEMNAELEN));
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public sealed class ItemHide : Packet
+    {
+        public override short Index
+        {
+            get
+            {
+                return (short)ServerPacketIds.SM_ITEMHIDE;
+            }
+        }
+        public int Id { get { return nRecog; } }
+        public Point Location { get { return new Point(wParam, wTag); } }
+        //AddRefMsg(    RM_ITEMHIDE, 0,         (int)pMapItem,  m_nCurrX,      m_nCurrY,        NULL);
+        //AddRefMsg(WORD wIdent,    WORD wParam, DWORD lParam1, DWORD lParam2, DWORD lParam3, char *pszData)
+        //fnMakeDefMe(lptdm, wIdent,     int nRecog,            WORD wParam,                 WORD wTag,                   WORD wSeries,int nlen=0)
+        protected override void ReadPacket(BinaryReader reader)
+        {
         }
 
         protected override void WritePacket(BinaryWriter writer)

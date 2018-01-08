@@ -490,7 +490,7 @@ namespace ServerPackets
             get { return (short)ServerPacketIds.UserInformation; }
         }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public Guid RealId;
         public string Name = string.Empty;
         public string GuildName = string.Empty;
@@ -523,7 +523,7 @@ namespace ServerPackets
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             RealId =new Guid(reader.ReadBytes(64));
             Name = reader.ReadString();
             GuildName = reader.ReadString();
@@ -594,7 +594,7 @@ namespace ServerPackets
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(RealId.ToByteArray());
             writer.Write(Name);
             writer.Write(GuildName);
@@ -705,7 +705,7 @@ namespace ServerPackets
             get { return (short)ServerPacketIds.ObjectPlayer; }
         }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public string Name = string.Empty;
         public string GuildName = string.Empty;
         public string GuildRankName = string.Empty;
@@ -740,7 +740,7 @@ namespace ServerPackets
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             Name = reader.ReadString();
             GuildName = reader.ReadString();
             GuildRankName = reader.ReadString();
@@ -782,7 +782,7 @@ namespace ServerPackets
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(Name);
             writer.Write(GuildName);
             writer.Write(GuildRankName);
@@ -830,16 +830,16 @@ namespace ServerPackets
             get { return (short)ServerPacketIds.ObjectRemove; }
         }
 
-        public Guid ObjectID;
+        public int ObjectID;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
         }
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
         }
 
     }
@@ -850,20 +850,20 @@ namespace ServerPackets
             get { return (short)ServerPacketIds.ObjectTurn; }
         }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public Point Location;
         public MirDirection Direction;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             Location = new Point(reader.ReadInt32(), reader.ReadInt32());
             Direction = (MirDirection)reader.ReadByte();
         }
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(Location.X);
             writer.Write(Location.Y);
             writer.Write((byte)Direction);
@@ -876,20 +876,20 @@ namespace ServerPackets
             get { return (short)ServerPacketIds.ObjectWalk; }
         }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public Point Location;
         public MirDirection Direction;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             Location = new Point(reader.ReadInt32(), reader.ReadInt32());
             Direction = (MirDirection)reader.ReadByte();
         }
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(Location.X);
             writer.Write(Location.Y);
             writer.Write((byte)Direction);
@@ -902,20 +902,20 @@ namespace ServerPackets
             get { return (short)ServerPacketIds.ObjectRun; }
         }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public Point Location;
         public MirDirection Direction;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             Location = new Point(reader.ReadInt32(), reader.ReadInt32());
             Direction = (MirDirection)reader.ReadByte();
         }
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(Location.X);
             writer.Write(Location.Y);
             writer.Write((byte)Direction);
@@ -928,20 +928,20 @@ namespace ServerPackets
             get { return (short)ServerPacketIds.ObjectChat; }
         }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public string Text = string.Empty;
         public MessageType Type;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             Text = reader.ReadString();
             Type = (MessageType)reader.ReadByte();
         }
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(Text);
             writer.Write((byte)Type);
         }
@@ -1401,14 +1401,14 @@ namespace ServerPackets
             get { return (short)ServerPacketIds.PlayerUpdate; }
         }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public byte Light;
 		public short Weapon, WeaponEffect, Armour;
 		public byte WingEffect;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID = reader.ReadInt32();//new Guid(reader.ReadBytes(64));
 
             Light = reader.ReadByte();
             Weapon = reader.ReadInt16();
@@ -1419,7 +1419,7 @@ namespace ServerPackets
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
 
             writer.Write(Light);
             writer.Write(Weapon);
@@ -1734,7 +1734,7 @@ namespace ServerPackets
             get { return (short)ServerPacketIds.ObjectItem; }
         }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public string Name = string.Empty;
         public Color NameColour;
         public Point Location;
@@ -1744,7 +1744,7 @@ namespace ServerPackets
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             Name = reader.ReadString();
             NameColour = Color.FromArgb(reader.ReadInt32());
             Location = new Point(reader.ReadInt32(), reader.ReadInt32());
@@ -1754,7 +1754,7 @@ namespace ServerPackets
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(Name);
             writer.Write(NameColour.ToArgb());
             writer.Write(Location.X);
@@ -1770,21 +1770,21 @@ namespace ServerPackets
             get { return (short)ServerPacketIds.ObjectGold; }
         }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public uint Gold;
         public Point Location;
 
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             Gold = reader.ReadUInt32();
             Location = new Point(reader.ReadInt32(), reader.ReadInt32());
         }
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(Gold);
             writer.Write(Location.X);
             writer.Write(Location.Y);
@@ -1893,7 +1893,7 @@ namespace ServerPackets
             get { return (short)ServerPacketIds.ObjectMonster; }
         }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public string Name = string.Empty;
         public Color NameColour;
         public Point Location;
@@ -1909,7 +1909,7 @@ namespace ServerPackets
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID = reader.ReadInt32();//new Guid(reader.ReadBytes(64));
             Name = reader.ReadString();
             NameColour = Color.FromArgb(reader.ReadInt32());
             Location = new Point(reader.ReadInt32(), reader.ReadInt32());
@@ -1930,7 +1930,7 @@ namespace ServerPackets
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(Name);
             writer.Write(NameColour.ToArgb());
             writer.Write(Location.X);
@@ -1958,7 +1958,7 @@ namespace ServerPackets
             get { return (short)ServerPacketIds.ObjectAttack; }
         }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public Point Location;
         public MirDirection Direction;
         public Spell Spell;
@@ -1967,7 +1967,7 @@ namespace ServerPackets
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID = reader.ReadInt32();//new Guid(reader.ReadBytes(64));
             Location = new Point(reader.ReadInt32(), reader.ReadInt32());
             Direction = (MirDirection)reader.ReadByte();
             Spell = (Spell)reader.ReadByte();
@@ -1977,7 +1977,7 @@ namespace ServerPackets
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(Location.X);
             writer.Write(Location.Y);
             writer.Write((byte)Direction);
@@ -2012,14 +2012,14 @@ namespace ServerPackets
             get { return (short)ServerPacketIds.ObjectStruck; }
         }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public uint AttackerID;
         public Point Location;
         public MirDirection Direction;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID = reader.ReadInt32();//new Guid(reader.ReadBytes(64));
             AttackerID = reader.ReadUInt32();
             Location = new Point(reader.ReadInt32(), reader.ReadInt32());
             Direction = (MirDirection)reader.ReadByte();
@@ -2027,7 +2027,7 @@ namespace ServerPackets
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(AttackerID);
             writer.Write(Location.X);
             writer.Write(Location.Y);
@@ -2039,7 +2039,7 @@ namespace ServerPackets
     {
         public int Damage;
         public DamageType Type;
-        public Guid ObjectID;
+        public int ObjectID;
 
         public override short Index
         {
@@ -2050,14 +2050,14 @@ namespace ServerPackets
         {
             Damage = reader.ReadInt32();
             Type = (DamageType)reader.ReadByte();
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID = reader.ReadInt32();//new Guid(reader.ReadBytes(64));
         }
 
         protected override void WritePacket(BinaryWriter writer)
         {
             writer.Write(Damage);
             writer.Write((byte)Type);
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
         }
     }
 
@@ -2156,14 +2156,14 @@ namespace ServerPackets
             get { return (short)ServerPacketIds.ObjectDied; }
         }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public Point Location;
         public MirDirection Direction;
         public byte Type;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID = reader.ReadInt32();//new Guid(reader.ReadBytes(64));
             Location = new Point(reader.ReadInt32(), reader.ReadInt32());
             Direction = (MirDirection)reader.ReadByte();
             Type = reader.ReadByte();
@@ -2171,7 +2171,7 @@ namespace ServerPackets
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(Location.X);
             writer.Write(Location.Y);
             writer.Write((byte)Direction);
@@ -2204,18 +2204,18 @@ namespace ServerPackets
             get { return (short)ServerPacketIds.ObjectColourChanged; }
         }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public Color NameColour;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             NameColour = Color.FromArgb(reader.ReadInt32());
         }
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(NameColour.ToArgb());
         }
     }
@@ -2226,18 +2226,18 @@ namespace ServerPackets
             get { return (short)ServerPacketIds.ObjectGuildNameChanged; }
         }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public string GuildName;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             GuildName = reader.ReadString();
         }
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(GuildName);
         }
     }
@@ -2291,16 +2291,16 @@ namespace ServerPackets
             get { return (short)ServerPacketIds.ObjectLeveled; }
         }
 
-        public Guid ObjectID;
+        public int ObjectID;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
         }
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
         }
     }
     public sealed class ObjectHarvest : Packet
@@ -2310,20 +2310,20 @@ namespace ServerPackets
             get { return (short)ServerPacketIds.ObjectHarvest; }
         }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public Point Location;
         public MirDirection Direction;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             Location = new Point(reader.ReadInt32(), reader.ReadInt32());
             Direction = (MirDirection)reader.ReadByte();
         }
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(Location.X);
             writer.Write(Location.Y);
             writer.Write((byte)Direction);
@@ -2336,20 +2336,20 @@ namespace ServerPackets
             get { return (short)ServerPacketIds.ObjectHarvested; }
         }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public Point Location;
         public MirDirection Direction;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             Location = new Point(reader.ReadInt32(), reader.ReadInt32());
             Direction = (MirDirection)reader.ReadByte();
         }
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(Location.X);
             writer.Write(Location.Y);
             writer.Write((byte)Direction);
@@ -2363,7 +2363,7 @@ namespace ServerPackets
             get { return (short)ServerPacketIds.ObjectNpc; }
         }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public string Name = string.Empty;
 
         public Color NameColour;
@@ -2375,7 +2375,7 @@ namespace ServerPackets
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             Name = reader.ReadString();
             NameColour = Color.FromArgb(reader.ReadInt32());
             Image = reader.ReadUInt16();
@@ -2390,7 +2390,7 @@ namespace ServerPackets
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(Name);
             writer.Write(NameColour.ToArgb());
             writer.Write(Image);
@@ -2432,30 +2432,30 @@ namespace ServerPackets
     {
         public override short Index { get { return (short)ServerPacketIds.ObjectHide; } }
 
-        public Guid ObjectID;
+        public int ObjectID;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
         }
     }
     public sealed class ObjectShow : Packet
     {
         public override short Index { get { return (short)ServerPacketIds.ObjectShow; } }
 
-        public Guid ObjectID;
+        public int ObjectID;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
         }
     }
     public sealed class Poisoned : Packet
@@ -2477,17 +2477,17 @@ namespace ServerPackets
     {
         public override short Index { get { return (short)ServerPacketIds.ObjectPoisoned; } }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public PoisonType Poison;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             Poison = (PoisonType)reader.ReadUInt16();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write((ushort)Poison);
         }
     }
@@ -2537,17 +2537,17 @@ namespace ServerPackets
     {
         public override short Index { get { return (short)ServerPacketIds.ObjectTeleportOut; } }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public byte Type;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             Type = reader.ReadByte();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(Type);
         }
     }
@@ -2555,17 +2555,17 @@ namespace ServerPackets
     {
         public override short Index { get { return (short)ServerPacketIds.ObjectTeleportIn; } }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public byte Type;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             Type = reader.ReadByte();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(Type);
         }
     }
@@ -2909,7 +2909,7 @@ namespace ServerPackets
     {
         public override short Index { get { return (short)ServerPacketIds.ObjectMagic; } }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public Point Location;
         public MirDirection Direction;
 
@@ -2922,7 +2922,7 @@ namespace ServerPackets
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             Location = new Point(reader.ReadInt32(), reader.ReadInt32());
             Direction = (MirDirection)reader.ReadByte();
 
@@ -2935,7 +2935,7 @@ namespace ServerPackets
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(Location.X);
             writer.Write(Location.Y);
             writer.Write((byte)Direction);
@@ -2956,25 +2956,25 @@ namespace ServerPackets
     {
         public override short Index { get { return (short)ServerPacketIds.ObjectEffect; } }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public SpellEffect Effect;
-        public Guid EffectType;
+        public int EffectType;
         public uint DelayTime = 0;
         public uint Time = 0;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             Effect = (SpellEffect)reader.ReadByte();
-            EffectType =new Guid(reader.ReadBytes(64));
+            EffectType =reader.ReadInt32();
             DelayTime = reader.ReadUInt32();
             Time = reader.ReadUInt32();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write((byte)Effect);
-            writer.Write(EffectType.ToByteArray());
+            writer.Write(EffectType);
             writer.Write(DelayTime);
             writer.Write(Time);
         }
@@ -3033,20 +3033,20 @@ namespace ServerPackets
             get { return (short)ServerPacketIds.ObjectPushed; }
         }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public Point Location;
         public MirDirection Direction;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             Location = new Point(reader.ReadInt32(), reader.ReadInt32());
             Direction = (MirDirection)reader.ReadByte();
         }
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(Location.X);
             writer.Write(Location.Y);
             writer.Write((byte)Direction);
@@ -3056,17 +3056,17 @@ namespace ServerPackets
     {
         public override short Index { get { return (short)ServerPacketIds.ObjectName; } }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public string Name = string.Empty;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             Name = reader.ReadString();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(Name);
         }
     }
@@ -3183,17 +3183,17 @@ namespace ServerPackets
     public sealed class ObjectRevived : Packet
     {
         public override short Index { get { return (short)ServerPacketIds.ObjectRevived; } }
-        public Guid ObjectID;
+        public int ObjectID;
         public bool Effect;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             Effect = reader.ReadBoolean();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(Effect);
         }
     }
@@ -3217,18 +3217,18 @@ namespace ServerPackets
     public sealed class ObjectHealth : Packet
     {
         public override short Index { get { return (short)ServerPacketIds.ObjectHealth; } }
-        public Guid ObjectID;
+        public int ObjectID;
         public byte Percent, Expire;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             Percent = reader.ReadByte();
             Expire = reader.ReadByte();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(Percent);
             writer.Write(Expire);
         }
@@ -3262,7 +3262,7 @@ namespace ServerPackets
             get { return (short)ServerPacketIds.ObjectRangeAttack; }
         }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public Point Location;
         public MirDirection Direction;
         public uint TargetID;
@@ -3272,7 +3272,7 @@ namespace ServerPackets
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             Location = new Point(reader.ReadInt32(), reader.ReadInt32());
             Direction = (MirDirection)reader.ReadByte();
             TargetID = reader.ReadUInt32();
@@ -3283,7 +3283,7 @@ namespace ServerPackets
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(Location.X);
             writer.Write(Location.Y);
             writer.Write((byte)Direction);
@@ -3300,7 +3300,7 @@ namespace ServerPackets
 
         public BuffType Type;
         public string Caster = string.Empty;
-        public Guid ObjectID;
+        public int ObjectID;
         public bool Visible;
         public long Expire;
         public int[] Values;
@@ -3311,7 +3311,7 @@ namespace ServerPackets
             Type = (BuffType)reader.ReadByte();
             Caster = reader.ReadString();
             Visible = reader.ReadBoolean();
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             Expire = reader.ReadInt64();
 
             Values = new int[reader.ReadInt32()];
@@ -3327,7 +3327,7 @@ namespace ServerPackets
             writer.Write((byte)Type);
             writer.Write(Caster);
             writer.Write(Visible);
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(Expire);
 
             writer.Write(Values.Length);
@@ -3344,33 +3344,33 @@ namespace ServerPackets
         public override short Index { get { return (short)ServerPacketIds.RemoveBuff; } }
 
         public BuffType Type;
-        public Guid ObjectID;
+        public int ObjectID;
 
         protected override void ReadPacket(BinaryReader reader)
         {
             Type = (BuffType)reader.ReadByte();
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
         }
         protected override void WritePacket(BinaryWriter writer)
         {
             writer.Write((byte)Type);
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
         }
     }
     public sealed class ObjectHidden : Packet
     {
         public override short Index { get { return (short)ServerPacketIds.ObjectHidden; } }
-        public Guid ObjectID;
+        public int ObjectID;
         public bool Hidden;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             Hidden = reader.ReadBoolean();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(Hidden);
         }
     }
@@ -3394,7 +3394,7 @@ namespace ServerPackets
             get { return (short)ServerPacketIds.ObjectSpell; }
         }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public Point Location;
         public Spell Spell;
         public MirDirection Direction;
@@ -3402,7 +3402,7 @@ namespace ServerPackets
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             Location = new Point(reader.ReadInt32(), reader.ReadInt32());
             Spell = (Spell)reader.ReadByte();
             Direction = (MirDirection)reader.ReadByte();
@@ -3411,7 +3411,7 @@ namespace ServerPackets
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(Location.X);
             writer.Write(Location.Y);
             writer.Write((byte)Spell);
@@ -3450,21 +3450,21 @@ namespace ServerPackets
             get { return (short)ServerPacketIds.ObjectDash; }
         }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public Point Location;
         public MirDirection Direction;
 
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             Location = new Point(reader.ReadInt32(), reader.ReadInt32());
             Direction = (MirDirection)reader.ReadByte();
         }
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(Location.X);
             writer.Write(Location.Y);
             writer.Write((byte)Direction);
@@ -3501,21 +3501,21 @@ namespace ServerPackets
             get { return (short)ServerPacketIds.ObjectDashFail; }
         }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public Point Location;
         public MirDirection Direction;
 
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             Location = new Point(reader.ReadInt32(), reader.ReadInt32());
             Direction = (MirDirection)reader.ReadByte();
         }
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(Location.X);
             writer.Write(Location.Y);
             writer.Write((byte)Direction);
@@ -3525,15 +3525,15 @@ namespace ServerPackets
     {
         public override short Index { get { return (short)ServerPacketIds.RemoveDelayedExplosion; } }
 
-        public Guid ObjectID;
+        public int ObjectID;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
         }
     }
 
@@ -3661,21 +3661,21 @@ namespace ServerPackets
     public sealed class ObjectSitDown : Packet
     {
         public override short Index { get { return (short)ServerPacketIds.ObjectSitDown; } }
-        public Guid ObjectID;
+        public int ObjectID;
         public Point Location;
         public MirDirection Direction;
         public bool Sitting;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             Location = new Point(reader.ReadInt32(), reader.ReadInt32());
             Direction = (MirDirection)reader.ReadByte();
             Sitting = reader.ReadBoolean();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(Location.X);
             writer.Write(Location.Y);
             writer.Write((byte)Direction);
@@ -4001,14 +4001,14 @@ namespace ServerPackets
     {
         public override short Index { get { return (short)ServerPacketIds.DefaultNPC; } }
 
-        public Guid ObjectID;
+        public int ObjectID;
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
         }
     }
 
@@ -4016,15 +4016,15 @@ namespace ServerPackets
     {
         public override short Index { get { return (short)ServerPacketIds.NPCUpdate; } }
 
-        public Guid NPCID;
+        public int NPCID;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            NPCID =new Guid(reader.ReadBytes(64));
+            NPCID = reader.ReadInt32();//new Guid(reader.ReadBytes(64));
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(NPCID.ToByteArray());
+            writer.Write(NPCID);
         }
     }
 
@@ -4033,19 +4033,19 @@ namespace ServerPackets
     {
         public override short Index { get { return (short)ServerPacketIds.NPCImageUpdate; } }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public ushort Image;
         public Color Colour;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID =new Guid(reader.ReadBytes(64));
+            ObjectID = reader.ReadInt32();//new Guid(reader.ReadBytes(64));
             Image = reader.ReadUInt16();
             Colour = Color.FromArgb(reader.ReadInt32());
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(Image);
             writer.Write(Colour.ToArgb());
         }
@@ -4054,19 +4054,19 @@ namespace ServerPackets
     {
         public override short Index { get { return (short)ServerPacketIds.MountUpdate; } }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public short MountType;
         public bool RidingMount;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID =new Guid(reader.ReadBytes(64));
+            ObjectID = reader.ReadInt32();//new Guid(reader.ReadBytes(64));
             MountType = reader.ReadInt16();
             RidingMount = reader.ReadBoolean();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(MountType);
             writer.Write(RidingMount);
         }
@@ -4076,17 +4076,17 @@ namespace ServerPackets
     {
         public override short Index { get { return (short)ServerPacketIds.TransformUpdate; } }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public short TransformType;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID =new Guid(reader.ReadBytes(64));
+            ObjectID = reader.ReadInt32();//new Guid(reader.ReadBytes(64));
             TransformType = reader.ReadInt16();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(TransformType);
         }
     }
@@ -4127,7 +4127,7 @@ namespace ServerPackets
     {
         public override short Index { get { return (short)ServerPacketIds.FishingUpdate; } }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public bool Fishing;
         public int ProgressPercent;
         public int ChancePercent;
@@ -4136,7 +4136,7 @@ namespace ServerPackets
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID =new Guid(reader.ReadBytes(64));
+            ObjectID = reader.ReadInt32();//new Guid(reader.ReadBytes(64));
             Fishing = reader.ReadBoolean();
             ProgressPercent = reader.ReadInt32();
             ChancePercent = reader.ReadInt32();
@@ -4145,7 +4145,7 @@ namespace ServerPackets
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(Fishing);
             writer.Write(ProgressPercent);
             writer.Write(ChancePercent);
@@ -4427,7 +4427,7 @@ namespace ServerPackets
             get { return (short)ServerPacketIds.ObjectBackStep; }
         }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public Point Location;
         public MirDirection Direction;
         public int Distance;
@@ -4435,7 +4435,7 @@ namespace ServerPackets
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             Location = new Point(reader.ReadInt32(), reader.ReadInt32());
             Direction = (MirDirection)reader.ReadByte();
             Distance = reader.ReadInt16();
@@ -4443,7 +4443,7 @@ namespace ServerPackets
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(Location.X);
             writer.Write(Location.Y);
             writer.Write((byte)Direction);
@@ -4482,7 +4482,7 @@ namespace ServerPackets
             get { return (short)ServerPacketIds.ObjectDashAttack; }
         }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public Point Location;
         public MirDirection Direction;
         public int Distance;
@@ -4490,7 +4490,7 @@ namespace ServerPackets
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             Location = new Point(reader.ReadInt32(), reader.ReadInt32());
             Direction = (MirDirection)reader.ReadByte();
             Distance = reader.ReadInt16();
@@ -4498,7 +4498,7 @@ namespace ServerPackets
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(Location.X);
             writer.Write(Location.Y);
             writer.Write((byte)Direction);
@@ -4584,19 +4584,19 @@ namespace ServerPackets
     {
         public override short Index { get { return (short)ServerPacketIds.SetConcentration; } }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public bool Enabled;
         public bool Interrupted;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             Enabled = reader.ReadBoolean();
             Interrupted = reader.ReadBoolean();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(Enabled);
             writer.Write(Interrupted);
         }
@@ -4605,19 +4605,19 @@ namespace ServerPackets
     {
         public override short Index { get { return (short)ServerPacketIds.SetObjectConcentration; } }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public bool Enabled;
         public bool Interrupted;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             Enabled = reader.ReadBoolean();
             Interrupted = reader.ReadBoolean();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(Enabled);
             writer.Write(Interrupted);
         }
@@ -4626,7 +4626,7 @@ namespace ServerPackets
     {
         public override short Index { get { return (short)ServerPacketIds.SetElemental; } }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public bool Enabled;
         public uint Value;
         public uint ElementType;
@@ -4634,7 +4634,7 @@ namespace ServerPackets
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             Enabled = reader.ReadBoolean();
             Value = reader.ReadUInt32();
             ElementType = reader.ReadUInt32();
@@ -4642,7 +4642,7 @@ namespace ServerPackets
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(Enabled);
             writer.Write(Value);
             writer.Write(ElementType);
@@ -4653,7 +4653,7 @@ namespace ServerPackets
     {
         public override short Index { get { return (short)ServerPacketIds.SetObjectElemental; } }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public bool Enabled;
         public bool Casted;
         public uint Value;
@@ -4662,7 +4662,7 @@ namespace ServerPackets
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             Enabled = reader.ReadBoolean();
             Casted = reader.ReadBoolean();
             Value = reader.ReadUInt32();
@@ -4671,7 +4671,7 @@ namespace ServerPackets
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(Enabled);
             writer.Write(Casted);
             writer.Write(Value);
@@ -4687,20 +4687,20 @@ namespace ServerPackets
             get { return (short)ServerPacketIds.ObjectDeco; }
         }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public Point Location;
         public ushort Image;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             Location = new Point(reader.ReadInt32(), reader.ReadInt32());
             Image = reader.ReadUInt16();
         }
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(Location.X);
             writer.Write(Location.Y);
             writer.Write(Image);
@@ -4709,17 +4709,17 @@ namespace ServerPackets
     public sealed class ObjectSneaking : Packet
     {
         public override short Index { get { return (short)ServerPacketIds.ObjectSneaking; } }
-        public Guid ObjectID;
+        public int ObjectID;
         public bool SneakingActive;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             SneakingActive = reader.ReadBoolean();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(SneakingActive);
         }
     }
@@ -4728,17 +4728,17 @@ namespace ServerPackets
     {
         public override short Index { get { return (short)ServerPacketIds.ObjectLevelEffects; } }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public LevelEffects LevelEffects;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             LevelEffects = (LevelEffects)reader.ReadByte();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write((byte)LevelEffects);
         }
     }
@@ -4747,19 +4747,19 @@ namespace ServerPackets
     {
         public override short Index { get { return (short)ServerPacketIds.SetBindingShot; } }
 
-        public Guid ObjectID;
+        public int ObjectID;
         public bool Enabled;
         public long Value;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
             Enabled = reader.ReadBoolean();
             Value = reader.ReadInt64();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
             writer.Write(Enabled);
             writer.Write(Value);
         }
@@ -5136,16 +5136,16 @@ namespace ServerPackets
             get { return (short)ServerPacketIds.IntelligentCreaturePickup; }
         }
 
-        public Guid ObjectID;
+        public int ObjectID;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(reader.ReadBytes(64));
+            ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
         }
 
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(ObjectID.ToByteArray());
+            writer.Write(ObjectID);
         }
     }
 

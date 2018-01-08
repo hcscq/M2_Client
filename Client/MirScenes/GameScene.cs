@@ -155,9 +155,9 @@ namespace Client.MirScenes
         public LightSetting Lights;
 
         public static long NPCTime;
-        public static Guid NPCID;
+        public static int NPCID;
         public static float NPCRate;
-        public static Guid DefaultNPCID;
+        public static int DefaultNPCID;
 
 
         public long ToggleTime;
@@ -1779,7 +1779,7 @@ namespace Client.MirScenes
         }
         private void ItemShow(SEX.ItemShow p)
         {
-            ItemObject ob = new ItemObject(Guid.Empty);
+            ItemObject ob = new ItemObject(p.Index);
             ob.Load(p);
             /*
             string[] Warnings = new string[] {"HeroNecklace","AdamantineNecklace","8TrigramWheel","HangMaWheel","BaekTaGlove","SpiritReformer","BokMaWheel","BoundlessRing","ThunderRing","TaeGukRing","OmaSpiritRing","NobleRing"};
@@ -1794,7 +1794,7 @@ namespace Client.MirScenes
             for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
             {
                 MapObject ob = MapControl.Objects[i];
-                if (ob. != p.ObjectID) continue;
+                if (ob.ObjectID != p.Index) continue;
                 ob.Remove();
             }
         }
@@ -1904,66 +1904,66 @@ namespace Client.MirScenes
             PlayerObject player = new PlayerObject(p.ObjectID);
             player.Load(p);
         }
-        private void ObjectRemove(S.ObjectRemove p)
-        {
-            if (p.ObjectID == User.ObjectID) return;
+        //private void ObjectRemove(S.ObjectRemove p)
+        //{
+        //    if (p.ObjectID == User.ObjectID) return;
 
-            for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
-            {
-                MapObject ob = MapControl.Objects[i];
-                if (ob.ObjectID != p.ObjectID) continue;
-                ob.Remove();
-            }
-        }
-        private void ObjectTurn(S.ObjectTurn p)
-        {
-            if (p.ObjectID == User.ObjectID) return;
+        //    for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
+        //    {
+        //        MapObject ob = MapControl.Objects[i];
+        //        if (ob.ObjectID != p.ObjectID) continue;
+        //        ob.Remove();
+        //    }
+        //}
+        //private void ObjectTurn(S.ObjectTurn p)
+        //{
+        //    if (p.ObjectID == User.ObjectID) return;
 
-            for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
-            {
-                MapObject ob = MapControl.Objects[i];
-                if (ob.ObjectID != p.ObjectID) continue;
-                ob.ActionFeed.Add(new QueuedAction { Action = MirAction.Standing, Direction = p.Direction, Location = p.Location });
-                return;
-            }
-        }
-        private void ObjectWalk(S.ObjectWalk p)
-        {
-            if (p.ObjectID == User.ObjectID) return;
+        //    for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
+        //    {
+        //        MapObject ob = MapControl.Objects[i];
+        //        if (ob.ObjectID != p.ObjectID) continue;
+        //        ob.ActionFeed.Add(new QueuedAction { Action = MirAction.Standing, Direction = p.Direction, Location = p.Location });
+        //        return;
+        //    }
+        //}
+        //private void ObjectWalk(S.ObjectWalk p)
+        //{
+        //    if (p.ObjectID == User.ObjectID) return;
 
-            for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
-            {
-                MapObject ob = MapControl.Objects[i];
-                if (ob.ObjectID != p.ObjectID) continue;
-                ob.ActionFeed.Add(new QueuedAction { Action = MirAction.Walking, Direction = p.Direction, Location = p.Location });
-                return;
-            }
-        }
-        private void ObjectRun(S.ObjectRun p)
-        {
-            if (p.ObjectID == User.ObjectID) return;
+        //    for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
+        //    {
+        //        MapObject ob = MapControl.Objects[i];
+        //        if (ob.ObjectID != p.ObjectID) continue;
+        //        ob.ActionFeed.Add(new QueuedAction { Action = MirAction.Walking, Direction = p.Direction, Location = p.Location });
+        //        return;
+        //    }
+        //}
+        //private void ObjectRun(S.ObjectRun p)
+        //{
+        //    if (p.ObjectID == User.ObjectID) return;
 
-            for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
-            {
-                MapObject ob = MapControl.Objects[i];
-                if (ob.ObjectID != p.ObjectID) continue;
-                ob.ActionFeed.Add(new QueuedAction { Action = MirAction.Running, Direction = p.Direction, Location = p.Location });
-                return;
-            }
-        }
-        private void ObjectChat(S.ObjectChat p)
-        {
-            ChatDialog.ReceiveChat(p.Text, p.Type);
+        //    for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
+        //    {
+        //        MapObject ob = MapControl.Objects[i];
+        //        if (ob.ObjectID != p.ObjectID) continue;
+        //        ob.ActionFeed.Add(new QueuedAction { Action = MirAction.Running, Direction = p.Direction, Location = p.Location });
+        //        return;
+        //    }
+        //}
+        //private void ObjectChat(S.ObjectChat p)
+        //{
+        //    ChatDialog.ReceiveChat(p.Text, p.Type);
 
-            for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
-            {
-                MapObject ob = MapControl.Objects[i];
-                if (ob.ObjectID != p.ObjectID) continue;
-                ob.Chat(p.Text);
-                return;
-            }
+        //    for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
+        //    {
+        //        MapObject ob = MapControl.Objects[i];
+        //        if (ob.ObjectID != p.ObjectID) continue;
+        //        ob.Chat(p.Text);
+        //        return;
+        //    }
 
-        }
+        //}
         private void MoveItem(S.MoveItem p)
         {
             MirItemCell toCell, fromCell;
@@ -3774,7 +3774,7 @@ namespace Client.MirScenes
                         for (int j = MapControl.Objects.Count - 1; j >= 0; j--)
                         {
                             MapObject ob2 = MapControl.Objects[j];
-                            if (ob2.ObjectID == p.EffectType)
+                            if (ob2.ObjectID == p.ObjectID)
                             {
                                 ob2.Effects.Add(new Effect(Libraries.Magic2, 2411, 19, 1900, ob2));
                                 break;
@@ -8390,8 +8390,8 @@ namespace Client.MirScenes
                 Lights = 0;
 
                 NPCTime = 0;
-                NPCID = Guid.Empty;
-                DefaultNPCID = Guid.Empty;
+                NPCID = 0;
+                DefaultNPCID = 0;
 
                 for (int i = 0; i < OutputLines.Length; i++)
                     if (OutputLines[i] != null && OutputLines[i].IsDisposed)
@@ -8616,7 +8616,7 @@ namespace Client.MirScenes
             }
         }
 
-        public static MapObject GetObject(Guid targetID)
+        public static MapObject GetObject(int targetID)
         {
             for (int i = 0; i < Objects.Count; i++)
             {
@@ -9434,7 +9434,7 @@ namespace Client.MirScenes
                             if (CMain.Time > GameScene.AttackTime)
                             {
                                 User.QueuedAction = new QueuedAction { Action = MirAction.AttackRange1, Direction = Functions.DirectionFromPoint(User.CurrentLocation, MapObject.TargetObject.CurrentLocation), Location = User.CurrentLocation, Params = new List<object>() };
-                                User.QueuedAction.Params.Add(MapObject.TargetObject != null ? MapObject.TargetObject.ObjectID : Guid.Empty);
+                                User.QueuedAction.Params.Add(MapObject.TargetObject != null ? MapObject.TargetObject.ObjectID : 0);
                                 User.QueuedAction.Params.Add(MapObject.TargetObject.CurrentLocation);
 
                                 // MapObject.TargetObject = null; //stop constant attack when close up
@@ -9540,7 +9540,7 @@ namespace Client.MirScenes
                                     }
 
                                     User.QueuedAction = new QueuedAction { Action = MirAction.AttackRange1, Direction = MouseDirection(), Location = User.CurrentLocation, Params = new List<object>() };
-                                    User.QueuedAction.Params.Add(target != null ? target.ObjectID : Guid.Empty);
+                                    User.QueuedAction.Params.Add(target != null ? target.ObjectID : 0);
                                     User.QueuedAction.Params.Add(Functions.PointMove(User.CurrentLocation, MouseDirection(), 9));
                                     return;
                                 }
@@ -10200,7 +10200,7 @@ namespace Client.MirScenes
         public BuffType Type;
         public string Caster;
         public bool Visible;
-        public Guid ObjectID;
+        public int ObjectID;
         public long Expire;
         public int[] Values;
         public bool Infinite;

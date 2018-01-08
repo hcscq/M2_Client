@@ -68,7 +68,7 @@ namespace Client.MirObjects
 
         public Color OldNameColor;
 
-        public MonsterObject(Guid objectID)
+        public MonsterObject(int objectID)
             : base(objectID)
         {
         }

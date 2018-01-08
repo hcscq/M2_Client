@@ -258,7 +258,7 @@ namespace Client.MirObjects
                 base.Draw();
         }
 
-        public static int GetOwnerEffectID(Guid objectID)
+        public static int GetOwnerEffectID(int objectID)
         {
             for (int i = 0; i < effectlist.Count; i++)
             {
@@ -360,7 +360,7 @@ namespace Client.MirObjects
             base.Draw();
         }
 
-        public static int GetOwnerEffectID(Guid objectID)
+        public static int GetOwnerEffectID(int objectID)
         {
             for (int i = 0; i < effectlist.Count; i++)
             {

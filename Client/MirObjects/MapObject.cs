@@ -22,7 +22,8 @@ namespace Client.MirObjects
         public abstract ObjectType Race { get; }
         public abstract bool Blocking { get; }
 
-        public Guid ObjectID;
+        //public Guid ObjectID;
+        public int ObjectID;
         public string Name = string.Empty;
         public Point CurrentLocation, MapLocation;
         public MirDirection Direction;
@@ -73,7 +74,7 @@ namespace Client.MirObjects
             get { return new Point(0, 0); }
         }
 
-        protected MapObject(Guid objectID)
+        protected MapObject(int objectID)
         {
             ObjectID = objectID;
 
@@ -100,7 +101,7 @@ namespace Client.MirObjects
 
             if (ObjectID != GameScene.NPCID) return;
 
-            GameScene.NPCID = Guid.Empty;
+            GameScene.NPCID = 0;
             GameScene.Scene.NPCDialog.Hide();
         }
 

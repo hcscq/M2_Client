@@ -2364,6 +2364,7 @@ namespace ServerPackets
         }
 
         public int ObjectID;
+        public Guid Guid;
         public string Name = string.Empty;
 
         public Color NameColour;
@@ -2376,6 +2377,7 @@ namespace ServerPackets
         protected override void ReadPacket(BinaryReader reader)
         {
             ObjectID=reader.ReadInt32();//ObjectID = new Guid(reader.ReadBytes(64));
+            Guid  = new Guid(reader.ReadBytes(GUIDLEN));
             Name = reader.ReadString();
             NameColour = Color.FromArgb(reader.ReadInt32());
             Image = reader.ReadUInt16();
@@ -2391,6 +2393,7 @@ namespace ServerPackets
         protected override void WritePacket(BinaryWriter writer)
         {
             writer.Write(ObjectID);
+            writer.Write(Guid.ToByteArray());
             writer.Write(Name);
             writer.Write(NameColour.ToArgb());
             writer.Write(Image);
@@ -2848,7 +2851,7 @@ namespace ServerPackets
         public override short Index { get { return (short)ServerPacketIds.Magic; } }
 
         public Spell Spell;
-        public Guid TargetID;
+        public int TargetID;
         public Point Target;
         public bool Cast;
         public byte Level;
@@ -2856,7 +2859,7 @@ namespace ServerPackets
         protected override void ReadPacket(BinaryReader reader)
         {
             Spell = (Spell)reader.ReadByte();
-            TargetID =new Guid(reader.ReadBytes(Packet.GUIDLEN));
+            TargetID =reader.ReadInt32();
             Target = new Point(reader.ReadInt32(), reader.ReadInt32());
             Cast = reader.ReadBoolean();
             Level = reader.ReadByte();
@@ -2864,7 +2867,7 @@ namespace ServerPackets
         protected override void WritePacket(BinaryWriter writer)
         {
             writer.Write((byte)Spell);
-            writer.Write(TargetID.ToByteArray());
+            writer.Write(TargetID);
             writer.Write(Target.X);
             writer.Write(Target.Y);
             writer.Write(Cast);
@@ -2983,19 +2986,19 @@ namespace ServerPackets
     {
         public override short Index { get { return (short)ServerPacketIds.RangeAttack; } }
 
-        public Guid TargetID;
+        public int TargetID;
         public Point Target;
         public Spell Spell;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            TargetID =new Guid(reader.ReadBytes(Packet.GUIDLEN));
+            TargetID =reader.ReadInt32();
             Target = new Point(reader.ReadInt32(), reader.ReadInt32());
             Spell = (Spell)reader.ReadByte();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(TargetID.ToByteArray());
+            writer.Write(TargetID);
             writer.Write(Target.X);
             writer.Write(Target.Y);
             writer.Write((byte)Spell);

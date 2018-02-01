@@ -1800,13 +1800,13 @@ namespace Client.MirScenes
         }
         private void Logon(SEX.MapLogon P)
         {
-            User = new UserObject(Guid.Empty);
+            User = new UserObject(P.CharID,P.nObjectId);
             User.Direction = P.btDirection;
             User.Light = P.btLight;
             User.Gender = (MirGender)P.btGender;
             User.Weapon = P.btWeapon;
             User.Hair = P.btHair;
-            User.ObjectID = P.CharID;
+            User.Guid = P.CharID;
             User.CurrentLocation = new Point(P.nCurrX,P.nCUrrY);
             User.MapLocation = new Point(P.nCurrX, P.nCUrrY);
             MapControl.AddObject(User);
@@ -1854,7 +1854,7 @@ namespace Client.MirScenes
 
         private void UserInformation(S.UserInformation p)
         {
-            User = new UserObject(p.ObjectID);
+            User = new UserObject(Guid.Empty,p.ObjectID);
             User.Load(p);
             MainDialog.PModeLabel.Visible = User.Class == MirClass.Wizard || User.Class == MirClass.Taoist;
             Gold = p.Gold;
@@ -4908,7 +4908,7 @@ namespace Client.MirScenes
                     toCell.Locked = false;
                     toCell.Item = p.Item.Item;
                     Bind(toCell.Item);
-                    if (p.User != User.Id) return;
+                    if (p.User != User.Guid) return;
                     fromCell = p.From < User.BeltIdx ? BeltDialog.Grid[p.From] : InventoryDialog.Grid[p.From - User.BeltIdx];
                     fromCell.Locked = false;
                     if (fromCell != null)
@@ -4921,7 +4921,7 @@ namespace Client.MirScenes
                     if (fromCell == null) return;
                     fromCell.Locked = false;
 
-                    if (p.User != User.Id)
+                    if (p.User != User.Guid)
                     {
                         fromCell.Item = null;
                         return;
@@ -9877,7 +9877,7 @@ namespace Client.MirScenes
 
             User.QueuedAction = new QueuedAction { Action = MirAction.Spell, Direction = dir, Location = User.CurrentLocation, Params = new List<object>() };
             User.QueuedAction.Params.Add(magic.Spell);
-            User.QueuedAction.Params.Add(target != null ? target.ObjectID : Guid.Empty);
+            User.QueuedAction.Params.Add(target != null ? target.ObjectID : 0);
             User.QueuedAction.Params.Add(location);
             User.QueuedAction.Params.Add(magic.Level);
         }
@@ -10138,7 +10138,7 @@ namespace Client.MirScenes
         {
             M2CellInfo[ob.MapLocation.X, ob.MapLocation.Y].AddObject(ob);
         }
-        public MapObject FindObject(Guid ObjectID, int x, int y)
+        public MapObject FindObject(int ObjectID, int x, int y)
         {
             return M2CellInfo[x, y].FindObject(ObjectID);
         }

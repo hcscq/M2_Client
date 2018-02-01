@@ -291,7 +291,7 @@ namespace Client.MirControls
 
             CharacterDialog dialog = GameScene.Scene.CharacterDialog;
 
-            if ((Item.SoulBoundId != Guid.Empty)  && (MapObject.User.Id != Item.SoulBoundId))
+            if ((Item.SoulBoundId != Guid.Empty)  && (MapObject.User.Guid != Item.SoulBoundId))
                 return;
             switch (Item.Info.Type)
             {

@@ -48,7 +48,7 @@ namespace Client.MirObjects
             if (CellObjects.Count == 0) CellObjects = null;
             else Sort();
         }
-        public MapObject FindObject(Guid ObjectID)
+        public MapObject FindObject(int ObjectID)
         {
             return CellObjects.Find(
                 delegate(MapObject mo)

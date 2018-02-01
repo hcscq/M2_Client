@@ -33,7 +33,8 @@ namespace Client.MirScenes.Dialogs
 
         public int StartIndex = 0;
 
-        public Guid CurrentNPCID = Guid.Empty;
+
+        public int CurrentNPCID = 0;//Guid.Empty;
 
         public QuestListDialog()
         {
@@ -1176,8 +1177,8 @@ namespace Client.MirScenes.Dialogs
 
             //add quest title at the beginning
             CurrentLines.Insert(0, Quest.QuestInfo.Name);
-
-            if (Quest.Taken && !Quest.QuestInfo.SameFinishNPC && Quest.QuestInfo.CompletionDescription.Count > 0 && GameScene.Scene.QuestListDialog.CurrentNPCID == Quest.QuestInfo.FinishNPCIndex)
+            NPCObject NPCObj = MapControl.GetObject(GameScene.Scene.QuestListDialog.CurrentNPCID) as NPCObject;
+            if (NPCObj!=null&&Quest.Taken && !Quest.QuestInfo.SameFinishNPC && Quest.QuestInfo.CompletionDescription.Count > 0 && NPCObj.Guid == Quest.QuestInfo.FinishNPCIndex)
             {
                 foreach (var line in Quest.QuestInfo.CompletionDescription)
                 {

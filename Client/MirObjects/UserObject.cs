@@ -11,7 +11,7 @@ namespace Client.MirObjects
 {
     public class UserObject : PlayerObject
     {
-        public Guid Id;
+        public Guid Guid;
 
         public ushort HP, MaxHP, MP, MaxMP;
 
@@ -70,7 +70,7 @@ namespace Client.MirObjects
         public MirDirection NextMagicDirection;
         public QueuedAction QueuedAction;
 
-        public UserObject(Guid objectID) : base(objectID)
+        public UserObject(Guid guid,int objectID) : base(objectID)
         {
         }
         public void LoadMagic(SEX.SendMagic clientMagics)
@@ -119,7 +119,7 @@ namespace Client.MirObjects
         }
         public void Load(S.UserInformation info)
         {
-            Id = info.RealId;
+            Guid = info.RealId;
             Name = info.Name;
             Settings.LoadTrackedQuests(info.Name);
             NameColour = info.NameColour;

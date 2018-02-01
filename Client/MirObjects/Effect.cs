@@ -426,7 +426,7 @@ namespace Client.MirObjects
             effectlist.Add(this);
         }
 
-        public static int GetOwnerEffectID(Guid objectID, string effectName = "null")
+        public static int GetOwnerEffectID(int objectID, string effectName = "null")
         {
             for (int i = 0; i < effectlist.Count; i++)
             {

@@ -3352,6 +3352,7 @@ namespace Client.MirScenes.Dialogs
     public sealed class InspectDialog : MirImageControl
     {
         public static UserItem[] Items = new UserItem[14];
+        public static Guid Guid;
         public static int InspectID;
 
         public string Name;

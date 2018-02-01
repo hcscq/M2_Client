@@ -239,9 +239,11 @@ namespace ServerPacketsEx
         public byte btHair;
         public byte btWeapon;
         public Guid CharID;
+        public int nObjectId;
         protected override void ReadPacket(BinaryReader reader)
         {
             CharID = new Guid(new string(reader.ReadChars(Packet.GUIDLEN)));
+            nObjectId = reader.ReadInt32();
             btGender=reader.ReadByte();
             btWear=reader.ReadByte();
             btHair=reader.ReadByte();

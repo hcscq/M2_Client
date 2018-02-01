@@ -20,7 +20,7 @@ namespace Client.MirObjects
         {
             get { return true; }
         }
-
+        public Guid Guid;
         public FrameSet Frames;
         public Frame Frame;
 
@@ -55,6 +55,7 @@ namespace Client.MirObjects
         public void Load(S.ObjectNPC info)
         {
             Name = info.Name;
+            Guid = info.Guid;
             NameColour = info.NameColour;
             CurrentLocation = info.Location;
             Direction = info.Direction;
@@ -62,7 +63,7 @@ namespace Client.MirObjects
             MapLocation = info.Location;
             GameScene.Scene.MapControl.AddObject(this);
 
-            Quests = GameScene.QuestInfoList.Where(c => c.NPCIndex == ObjectID).ToList();
+            Quests = GameScene.QuestInfoList.Where(c => c.NPCIndex == Guid).ToList();
 
             Image = info.Image;
             Colour = info.Colour;
@@ -673,11 +674,11 @@ namespace Client.MirObjects
 
             foreach (ClientQuestProgress q in User.CurrentQuests.Where(q => !User.CompletedQuests.Contains(q.QuestInfo.Index)))
             {
-                if (q.QuestInfo.FinishNPCIndex == ObjectID)
+                if (q.QuestInfo.FinishNPCIndex == Guid)
                 {
                     quests.Add(q);
                 }
-                else if (q.QuestInfo.NPCIndex == ObjectID && q.QuestInfo.SameFinishNPC)
+                else if (q.QuestInfo.NPCIndex == Guid && q.QuestInfo.SameFinishNPC)
                 {
                     quests.Add(q);
 

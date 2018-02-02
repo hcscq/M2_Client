@@ -13,7 +13,6 @@ namespace Client.MirObjects
 {
     class ItemObject : MapObject
     {
-        public int Id;
         public override ObjectType Race{
             get { return ObjectType.Item; }
         }
@@ -33,7 +32,7 @@ namespace Client.MirObjects
 
         public void Load(SEX.ItemShow info)
         {
-            Id = info.Id;
+            
             Name = info.Name;
             NameColour = info.NameColour;
 

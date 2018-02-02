@@ -1779,7 +1779,7 @@ namespace Client.MirScenes
         }
         private void ItemShow(SEX.ItemShow p)
         {
-            ItemObject ob = new ItemObject(p.Index);
+            ItemObject ob = new ItemObject(p.ObjectID);
             ob.Load(p);
             /*
             string[] Warnings = new string[] {"HeroNecklace","AdamantineNecklace","8TrigramWheel","HangMaWheel","BaekTaGlove","SpiritReformer","BokMaWheel","BoundlessRing","ThunderRing","TaeGukRing","OmaSpiritRing","NobleRing"};
@@ -1794,7 +1794,7 @@ namespace Client.MirScenes
             for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
             {
                 MapObject ob = MapControl.Objects[i];
-                if (ob.ObjectID != p.Index) continue;
+                if (ob.ObjectID != p.ObjectID) continue;
                 ob.Remove();
             }
         }

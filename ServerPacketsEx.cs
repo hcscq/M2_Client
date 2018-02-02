@@ -185,7 +185,7 @@ namespace ServerPacketsEx
         public Color NameColour;
         public Point Location { get { return new Point(wParam, wTag); } }
         public ushort Image { get { return (ushort)wSeries; } }
-        public int Id { get { return nRecog; } }
+        public int ObjectID { get { return nRecog; } }
         //public ItemGrade grade;
         protected override void ReadPacket(BinaryReader reader)
         {
@@ -206,7 +206,7 @@ namespace ServerPacketsEx
                 return (short)ServerPacketIds.SM_ITEMHIDE;
             }
         }
-        public int Id { get { return nRecog; } }
+        public int ObjectID { get { return nRecog; } }
         public Point Location { get { return new Point(wParam, wTag); } }
         //AddRefMsg(    RM_ITEMHIDE, 0,         (int)pMapItem,  m_nCurrX,      m_nCurrY,        NULL);
         //AddRefMsg(WORD wIdent,    WORD wParam, DWORD lParam1, DWORD lParam2, DWORD lParam3, char *pszData)

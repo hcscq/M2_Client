@@ -239,11 +239,11 @@ namespace ServerPacketsEx
         public byte btHair;
         public byte btWeapon;
         public Guid CharID;
-        public int nObjectId;
+        public int nObjectId { get { return nRecog; } }
         protected override void ReadPacket(BinaryReader reader)
         {
             CharID = new Guid(new string(reader.ReadChars(Packet.GUIDLEN)));
-            nObjectId = reader.ReadInt32();
+            //nObjectId = reader.ReadInt32();
             btGender=reader.ReadByte();
             btWear=reader.ReadByte();
             btHair=reader.ReadByte();
@@ -273,6 +273,60 @@ namespace ServerPacketsEx
         {
 
         }
+    }//SM_OBJDISAPPEAR
+    public sealed class HumDisappear : Packet
+    {
+        public override short Index
+        {
+            get
+            {
+                return (short)ServerPacketIds.SM_HUMDISAPPEAR;
+            }
+        }
+        public int ObjectID { get { return nRecog; } }
+        protected override void ReadPacket(BinaryReader reader)
+        {
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public sealed class HumShow : Packet
+    {
+        public override short Index
+        {
+            get
+            {
+                return (short)ServerPacketIds.SM_HUMSHOW;
+            }
+        }
+        public int ObjectID { get { return nRecog; } }
+        public long Feature;
+        public long Status;
+        public byte btHorse;
+        public short dwHairColor;
+        public short dwWearColor;
+        public string CharName;
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            Feature = reader.ReadInt64();
+            Status = reader.ReadInt64();
+            if (reader.ReadBoolean())
+            {
+                btHorse = reader.ReadByte();
+                dwHairColor = reader.ReadInt16();
+                dwWearColor = reader.ReadInt16();
+            }
+            if (reader.ReadBoolean())
+                CharName =GetString(reader.ReadBytes(CHARNAMELEN));
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            throw new NotImplementedException();
+        }
     }
     public sealed class Turn : Packet
     {
@@ -292,6 +346,74 @@ namespace ServerPacketsEx
         protected override void ReadPacket(BinaryReader reader)
         {
             Feature= reader.ReadInt64();
+            Status = reader.ReadInt64();
+            if (reader.ReadBoolean())
+            {
+                btHorse = reader.ReadByte();
+                dwHairColor = reader.ReadInt16();
+                dwWearColor = reader.ReadInt16();
+            }
+            if (reader.ReadBoolean())
+                CharName = reader.ReadBytes(CHARNAMELEN);
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public sealed class Walk : Packet
+    {
+        public override short Index
+        {
+            get
+            {
+                return (short)ServerPacketIds.SM_WALK;
+            }
+        }
+        public long Feature;
+        public long Status;
+        public byte btHorse;
+        public short dwHairColor;
+        public short dwWearColor;
+        public byte[] CharName;
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            Feature = reader.ReadInt64();
+            Status = reader.ReadInt64();
+            if (reader.ReadBoolean())
+            {
+                btHorse = reader.ReadByte();
+                dwHairColor = reader.ReadInt16();
+                dwWearColor = reader.ReadInt16();
+            }
+            if (reader.ReadBoolean())
+                CharName = reader.ReadBytes(CHARNAMELEN);
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public sealed class Run : Packet
+    {
+        public override short Index
+        {
+            get
+            {
+                return (short)ServerPacketIds.SM_RUN;
+            }
+        }
+        public long Feature;
+        public long Status;
+        public byte btHorse;
+        public short dwHairColor;
+        public short dwWearColor;
+        public byte[] CharName;
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            Feature = reader.ReadInt64();
             Status = reader.ReadInt64();
             if (reader.ReadBoolean())
             {

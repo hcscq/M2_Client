@@ -1323,6 +1323,17 @@ public enum ServerPacketIds : short
     Disconnect,
     KeepAlive,
 
+    SM_RUSH = 6,
+    SM_FIREHIT = 8,
+    SM_BACKSTEP = 9,
+    SM_TURN = 10,
+    SM_WALK = 11,
+    SM_SITDOWN = 12,
+    SM_RUN = 13,
+    SM_HIT = 14,
+    SM_HUMDISAPPEAR=29,
+    SM_HUMSHOW =30,
+
     SM_HEAR = 40,
     SM_SYSMESSAGE = 100,
     SM_GROUPMESSAGE = 101,
@@ -1347,15 +1358,15 @@ public enum ServerPacketIds : short
     SM_DELCHR_FAIL = 524,
     SM_DELCHR_SUCCESS = 523,
     SM_STARTPLAY = 525,
-    SM_ATTACKMODE =	658,
+    SM_ATTACKMODE = 658,
 
 
     // For game process 
-    SM_ADDITEM=200,
+    SM_ADDITEM = 200,
     SM_BAGITEMS = 201,
-    SM_DROPITEM=600,
-    SM_ITEMSHOW  =  610,
-    SM_ITEMHIDE  =  611,
+    SM_DROPITEM = 600,
+    SM_ITEMSHOW = 610,
+    SM_ITEMHIDE = 611,
     SM_ACTIONRESULT = 3000,
 
 
@@ -5242,6 +5253,10 @@ public abstract class Packet
                 return new S.DeleteCharacterSuccess();
             case (short)ServerPacketIds.SM_ATTACKMODE:
                 return new SEX.ChangeAMode();
+            case (short)ServerPacketIds.SM_HUMDISAPPEAR:
+                return new SEX.HumDisappear();
+            case (short)ServerPacketIds.SM_HUMSHOW:
+                return new SEX.HumShow();
             case (short)ServerPacketIds.SM_BAGITEMS:
                 return new SEX.BagItems();
             case (short)ServerPacketIds.SM_DROPITEM:

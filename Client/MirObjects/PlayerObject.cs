@@ -10,6 +10,7 @@ using Client.MirSounds;
 using Client.MirControls;
 using S = ServerPackets;
 using C = ClientPackets;
+using SEX = ServerPacketsEx;
 using Client.MirScenes.Dialogs;
 
 namespace Client.MirObjects
@@ -114,7 +115,10 @@ namespace Client.MirObjects
         {
             Frames = FrameSet.Players;
         }
-
+        public void Load(SEX.HumShow info)
+        {
+            Name = info.CharName;
+        }
         public void Load(S.ObjectPlayer info)
         {
             Name = info.Name;

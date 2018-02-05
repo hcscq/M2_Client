@@ -1721,6 +1721,12 @@ namespace Client.MirScenes
                     break;
                 case (short)ServerPacketIds.SM_ITEMHIDE:
                     break;
+                case (short)ServerPacketIds.SM_HUMDISAPPEAR:
+                    HumDisappear((SEX.HumDisappear)p);
+                    break;
+                case (short)ServerPacketIds.SM_HUMSHOW:
+                    HumShow((SEX.HumShow)p);
+                    break;
                 /*EX process end*/
                 default:
                     base.ProcessPacket(p);
@@ -1899,10 +1905,63 @@ namespace Client.MirScenes
         {
             ChatDialog.ReceiveChat(p.Message, p.Type);
         }
+        private void HumShow(SEX.HumShow p)
+        {           
+            PlayerObject player = new PlayerObject(p.ObjectID);
+            player.Load(p);
+            throw new Exception("Not Finished.");
+        }
+        private void HumDisappear(SEX.HumDisappear p)
+        {
+            if (p.ObjectID == User.ObjectID) return;
+
+            for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
+            {
+                MapObject ob = MapControl.Objects[i];
+                if (ob.ObjectID != p.ObjectID) continue;
+                ob.Remove();
+            }
+        }
         private void ObjectPlayer(S.ObjectPlayer p)
         {
             PlayerObject player = new PlayerObject(p.ObjectID);
             player.Load(p);
+        }
+        private void ObjectTurn(S.ObjectTurn p)
+        {
+            if (p.ObjectID == User.ObjectID) return;
+
+            for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
+            {
+                MapObject ob = MapControl.Objects[i];
+                if (ob.ObjectID != p.ObjectID) continue;
+                ob.ActionFeed.Add(new QueuedAction { Action = MirAction.Standing, Direction = p.Direction, Location = p.Location });
+                return;
+            }
+        }
+        private void ObjectWalk(S.ObjectWalk p)
+        {
+            if (p.ObjectID == User.ObjectID) return;
+
+            for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
+            {
+                MapObject ob = MapControl.Objects[i];
+                if (ob.ObjectID != p.ObjectID) continue;
+                ob.ActionFeed.Add(new QueuedAction { Action = MirAction.Walking, Direction = p.Direction, Location = p.Location });
+                return;
+            }
+        }
+        private void ObjectRun(S.ObjectRun p)
+        {
+            if (p.ObjectID == User.ObjectID) return;
+
+            for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
+            {
+                MapObject ob = MapControl.Objects[i];
+                if (ob.ObjectID != p.ObjectID) continue;
+                ob.ActionFeed.Add(new QueuedAction { Action = MirAction.Running, Direction = p.Direction, Location = p.Location });
+                return;
+            }
         }
         //private void ObjectRemove(S.ObjectRemove p)
         //{

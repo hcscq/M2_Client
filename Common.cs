@@ -3193,7 +3193,7 @@ public class UserItem
     }
     public UserItem(BinaryReader reader, int version = int.MaxValue, int Customversion = int.MaxValue)
     {
-        UniqueID = new Guid(Packet.GetString(reader.ReadBytes(Packet.GUIDLEN)));
+        UniqueID = new Guid((reader.ReadBytes(Packet.GUIDLEN)));
         CurrentDura = reader.ReadUInt16();
         MaxDura = reader.ReadUInt16();
         Count = reader.ReadUInt16();
@@ -3223,7 +3223,7 @@ public class UserItem
         RefinedValue= (RefinedValue)reader.ReadByte(); 
         RefineAdded= reader.ReadByte();
         reader.ReadByte();//switchs
-        Guid.TryParse(Packet.GetString(reader.ReadBytes(Packet.GUIDLEN)), out SoulBoundId);
+        SoulBoundId=new Guid((reader.ReadBytes(Packet.GUIDLEN)));
         AttackSpeed = reader.ReadSByte();
         Luck= reader.ReadSByte();
         //MaxDura = reader.ReadUInt16();
@@ -4669,7 +4669,7 @@ public abstract class Packet
     public short wParam;
     public short wTag;
     public short wSeries;
-    public const short GUIDLEN = 36;
+    public const short GUIDLEN = 16;//36;
     public const short CHARNAMELEN = 14;
     public const short ITEMNAELEN  = 40;
     public const short MAXTEXTMSGLEN = 2048;

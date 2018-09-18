@@ -92,7 +92,7 @@ namespace ServerPacketsEx
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ObjectID = new Guid(new string(reader.ReadChars(GUIDLEN)));
+            ObjectID = new Guid((reader.ReadBytes(GUIDLEN)));
 
             Equipment = new UserItem[10];
             for (int i = 0; i < Equipment.Length; i++)
@@ -160,7 +160,7 @@ namespace ServerPacketsEx
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            UniqueID = new Guid(Packet.GetString(reader.ReadBytes(GUIDLEN)));
+            UniqueID = new Guid((reader.ReadBytes(GUIDLEN)));
         }
 
         protected override void WritePacket(BinaryWriter writer)
@@ -242,7 +242,9 @@ namespace ServerPacketsEx
         public int nObjectId { get { return nRecog; } }
         protected override void ReadPacket(BinaryReader reader)
         {
-            CharID = new Guid(new string(reader.ReadChars(Packet.GUIDLEN)));
+            //CharID = new Guid(reader.ReadBytes(16));
+            
+            CharID = new Guid(reader.ReadBytes(Packet.GUIDLEN));
             //nObjectId = reader.ReadInt32();
             btGender=reader.ReadByte();
             btWear=reader.ReadByte();

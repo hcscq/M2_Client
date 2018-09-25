@@ -514,7 +514,7 @@ namespace Client.MirScenes
                         if (CMain.Time > PickUpTime)
                         {
                             PickUpTime = CMain.Time + 200;
-                            Network.Enqueue(new C.PickUp());
+                            Network.Enqueue(new C.PickUp() {X=(short)User.CurrentLocation.X,Y=(short)User.CurrentLocation.Y });
                         }
                         break;
                     case KeybindOptions.Belt1:
@@ -9639,7 +9639,7 @@ namespace Client.MirScenes
                             if (CMain.Time > GameScene.PickUpTime)
                             {
                                 GameScene.PickUpTime = CMain.Time + 200;
-                                Network.Enqueue(new C.PickUp());
+                                Network.Enqueue(new C.PickUp() { X = (short)User.CurrentLocation.X, Y = (short)User.CurrentLocation.Y });
                             }
                             return;
                         }

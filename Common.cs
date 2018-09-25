@@ -1626,7 +1626,8 @@ public enum ClientPacketIds : short
     CM_HIT             =   3014,
     CM_ATTACKMODE	   =   3015,
     CM_SAY             =   3030,
-      
+
+
     MoveItem,
     StoreItem,
     TakeBackItem,

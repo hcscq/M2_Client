@@ -669,7 +669,10 @@ namespace ClientPackets
     }
     public sealed class PickUp : Packet
     {
-        public override short Index { get { return (short)ClientPacketIds.PickUp; } }
+        public override short Index { get { return (short)ClientPacketIds.CM_PICKUP; } }
+
+        public short X { get { return wParam; } set { wParam = value; } }
+        public short Y { get { return wTag; } set { wTag = value; } }
 
         protected override void ReadPacket(BinaryReader reader)
         {

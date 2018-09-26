@@ -1727,6 +1727,9 @@ namespace Client.MirScenes
                 case (short)ServerPacketIds.SM_HUMSHOW:
                     HumShow((SEX.HumShow)p);
                     break;
+                case (short)ServerPacketIds.SM_ADDITEM:
+                    GainedItem((SEX.AddItem)p);
+                    break;
                 /*EX process end*/
                 default:
                     base.ProcessPacket(p);
@@ -2817,7 +2820,7 @@ namespace Client.MirScenes
             ItemObject ob = new ItemObject(p.ObjectID);
             ob.Load(p);
         }
-        private void GainedItem(S.GainedItem p)
+        private void GainedItem(SEX.AddItem p)
         {
             Bind(p.Item);
             AddItem(p.Item);

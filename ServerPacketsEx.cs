@@ -614,5 +614,20 @@ namespace ServerPacketsEx
         {
         }
     }
+    public sealed class AddItem : Packet
+    {
+        public override short Index
+        {
+            get { return (short)ServerPacketIds.SM_ADDITEM; }
+        }
+        public UserItem Item;
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            Item = new UserItem(reader);
+        }
+        protected override void WritePacket(BinaryWriter writer)
+        {
+        }
+    }
 
 }

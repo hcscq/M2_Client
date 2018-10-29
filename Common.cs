@@ -1280,6 +1280,7 @@ public class ServerMsgIds
     public const short SM_WALK = 11;
     public const short SM_SITDOWN = 12;
     public const short SM_RUN = 13;
+    public const short SM_WEIGHTCHANGED = 622;
 
 }
 public class ClientMsgIds

@@ -628,6 +628,43 @@ namespace ServerPacketsEx
         protected override void WritePacket(BinaryWriter writer)
         {
         }
-    }
+    }//SM_WEIGHTCHANGED
+    public sealed class WeightChanged : Packet
+    {
+        public override short Index
+        {
+            get { return (short)ServerPacketIds.SM_WEIGHTCHANGED; }
+        }
+        public short Weight { get { return wParam; } set { wParam = value; } }
 
+        public short WearWeight { get { return wTag; } set { wTag = value; } }
+
+        public short HandWeight { get { return wSeries; } set { wSeries=value; } }
+
+        //fnMakeDefMessage(&DefMsg, SM_WEIGHTCHANGED, m_WAbility.Weight, m_WAbility.WearWeight, m_WAbility.HandWeight, 0); 
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            
+        }
+        protected override void WritePacket(BinaryWriter writer)
+        {
+        }
+    }//SM_GOLDCHANGED
+    public sealed class GoldChanged : Packet
+    {
+        public override short Index
+        {
+            get { return (short)ServerPacketIds.SM_GOLDCHANGED; }
+        }
+        public int GoldAmount { get { return nRecog; }set { nRecog = value; } }
+
+        //fnMakeDefMessage(&DefMsg, SM_WEIGHTCHANGED, m_WAbility.Weight, m_WAbility.WearWeight, m_WAbility.HandWeight, 0); 
+        protected override void ReadPacket(BinaryReader reader)
+        {
+
+        }
+        protected override void WritePacket(BinaryWriter writer)
+        {
+        }
+    }
 }

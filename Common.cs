@@ -1368,6 +1368,8 @@ public enum ServerPacketIds : short
     SM_DROPITEM = 600,
     SM_ITEMSHOW = 610,
     SM_ITEMHIDE = 611,
+    SM_WEIGHTCHANGED=622,
+    SM_GOLDCHANGED=653,
     SM_ACTIONRESULT = 3000,
 
 
@@ -5267,6 +5269,10 @@ public abstract class Packet
                 return new SEX.ItemShow();
             case (short)ServerPacketIds.SM_ITEMHIDE:
                 return new SEX.ItemHide();
+            case (short)ServerPacketIds.SM_WEIGHTCHANGED:
+                return new SEX.WeightChanged();
+            case (short)ServerPacketIds.SM_GOLDCHANGED:
+                return new SEX.GoldChanged();
             //case (short)ServerPacketIds.CM_SELCHR:
             //    return new S.StartGame();
             case (short)ServerPacketIds.StartGameBanned:

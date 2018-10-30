@@ -1730,6 +1730,12 @@ namespace Client.MirScenes
                 case (short)ServerPacketIds.SM_ADDITEM:
                     GainedItem((SEX.AddItem)p);
                     break;
+                case (short)ServerPacketIds.SM_WEIGHTCHANGED:
+                    WeightChanged((SEX.WeightChanged)p);
+                    break;
+                case (short)ServerPacketIds.SM_GOLDCHANGED:
+                    GoldChanged((SEX.GoldChanged)p);
+                    break;
                 /*EX process end*/
                 default:
                     base.ProcessPacket(p);
@@ -1806,6 +1812,18 @@ namespace Client.MirScenes
                 if (ob.ObjectID != p.ObjectID) continue;
                 ob.Remove();
             }
+        }
+        private void WeightChanged(SEX.WeightChanged p)
+        {
+            User.CurrentBagWeight = (ushort)p.Weight;
+            User.CurrentHandWeight = (ushort)p.HandWeight;
+            User.CurrentWearWeight = (ushort)p.WearWeight;
+        }
+        private void GoldChanged(SEX.GoldChanged p)
+        {
+            Gold = (uint)p.GoldAmount;
+            SoundManager.PlaySound(SoundList.Gold);
+            //OutputMessage(string.Format("You gained {0:###,###,###} Gold.", p.Gold));
         }
         private void Logon(SEX.MapLogon P)
         {

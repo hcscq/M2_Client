@@ -5269,6 +5269,8 @@ public abstract class Packet
                 return new SEX.ItemShow();
             case (short)ServerPacketIds.SM_ITEMHIDE:
                 return new SEX.ItemHide();
+            case (short)ServerPacketIds.SM_ADDITEM:
+                return new SEX.AddItem();
             case (short)ServerPacketIds.SM_WEIGHTCHANGED:
                 return new SEX.WeightChanged();
             case (short)ServerPacketIds.SM_GOLDCHANGED:

@@ -1720,6 +1720,7 @@ namespace Client.MirScenes
                     ItemShow((SEX.ItemShow)p);
                     break;
                 case (short)ServerPacketIds.SM_ITEMHIDE:
+                    ItemHide((SEX.ItemHide)p);
                     break;
                 case (short)ServerPacketIds.SM_HUMDISAPPEAR:
                     HumDisappear((SEX.HumDisappear)p);

@@ -129,11 +129,11 @@ namespace ServerPacketsEx
                 return (short)ServerPacketIds.SM_BAGITEMS;
             }
         }
-        public UserItem[] Inventory;
+        public UserItem[] Inventory= new UserItem[46];
         public short Count { get { return wSeries; } }
         protected override void ReadPacket(BinaryReader reader)
         {
-            Inventory = new UserItem[46];
+            //Inventory = new UserItem[46];
             for (int i = 0; i < Count; i++)
             {
 

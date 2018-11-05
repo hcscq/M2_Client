@@ -314,6 +314,50 @@ namespace ClientPackets
             //writer.Write((byte)Direction);
         }
     }
+    #region Items
+    public sealed class EquipItem : Packet
+    {
+        public override short Index { get { return (short)ClientPacketIds.CM_TAKEONITEM; } }
+
+        public MirGridType Grid;
+        public Guid UniqueID;
+        public short To { get { return wParam; }set { wParam = value; } }
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            Grid = (MirGridType)reader.ReadByte();
+            UniqueID = new Guid(reader.ReadBytes(Packet.GUIDLEN));
+            To = reader.ReadInt16();
+        }
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write((byte)Grid);
+            writer.Write(UniqueID.ToByteArray());
+            writer.Write(To);
+        }
+    }
+    public sealed class RemoveItem : Packet
+    {
+        public override short Index { get { return (short)ClientPacketIds.CM_TAKEOFFITEM; } }
+
+        public MirGridType Grid;
+        public Guid UniqueID;
+        public short To { get { return wParam; } set { wParam = value; } }
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            Grid = (MirGridType)reader.ReadByte();
+            UniqueID = new Guid(reader.ReadBytes(Packet.GUIDLEN));
+            To = reader.ReadInt16();
+        }
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write((byte)Grid);
+            writer.Write(UniqueID.ToByteArray());
+            writer.Write(To);
+        }
+    }
+    #endregion
     public sealed class Chat : Packet
     {
         public override short Index { get { return (short)ClientPacketIds.CM_SAY; } }
@@ -530,48 +574,7 @@ namespace ClientPackets
             writer.Write(IDTo.ToByteArray());
         }
     }
-    public sealed class EquipItem : Packet
-    {
-        public override short Index { get { return (short)ClientPacketIds.EquipItem; } }
 
-        public MirGridType Grid;
-        public Guid UniqueID;
-        public int To;
-
-        protected override void ReadPacket(BinaryReader reader)
-        {
-            Grid = (MirGridType)reader.ReadByte();
-            UniqueID = new Guid(reader.ReadBytes(Packet.GUIDLEN));
-            To = reader.ReadInt32();
-        }
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            writer.Write((byte)Grid);
-            writer.Write(UniqueID.ToByteArray());
-            writer.Write(To);
-        }
-    }
-    public sealed class RemoveItem : Packet
-    {
-        public override short Index { get { return (short)ClientPacketIds.RemoveItem; } }
-
-        public MirGridType Grid;
-        public Guid UniqueID;
-        public int To;
-
-        protected override void ReadPacket(BinaryReader reader)
-        {
-            Grid = (MirGridType)reader.ReadByte();
-            UniqueID = new Guid(reader.ReadBytes(Packet.GUIDLEN));
-            To = reader.ReadInt32();
-        }
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            writer.Write((byte)Grid);
-            writer.Write(UniqueID.ToByteArray());
-            writer.Write(To);
-        }
-    }
     public sealed class RemoveSlotItem : Packet
     {
         public override short Index { get { return (short)ClientPacketIds.RemoveSlotItem; } }

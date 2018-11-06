@@ -319,21 +319,21 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.CM_TAKEONITEM; } }
 
-        public MirGridType Grid;
+        //public MirGridType Grid;
         public Guid UniqueID;
         public short To { get { return wParam; }set { wParam = value; } }
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            Grid = (MirGridType)reader.ReadByte();
+            //Grid = (MirGridType)reader.ReadByte();
             UniqueID = new Guid(reader.ReadBytes(Packet.GUIDLEN));
-            To = reader.ReadInt16();
+            //To = reader.ReadInt16();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write((byte)Grid);
+            //writer.Write((byte)Grid);
             writer.Write(UniqueID.ToByteArray());
-            writer.Write(To);
+            //writer.Write(To);
         }
     }
     public sealed class RemoveItem : Packet

@@ -265,7 +265,9 @@ namespace ServerPacketsEx
                 return ServerMsgIds.SM_CHARSTATUSCHANGED;
             }
         }
-
+        public int ObjectID { get { return nRecog; }set { nRecog = value; } }
+        public short HitSpeed { get { return wSeries; } set { wSeries = value; } }
+        public int CharStatus { get { return wParam>>8 | wTag; } set { wParam = (short)value;wTag = (short)(value>>8); } }
         protected override void ReadPacket(BinaryReader reader)
         {
            
@@ -507,7 +509,7 @@ namespace ServerPacketsEx
             throw new NotImplementedException();
         }
     }
-    public sealed class Subability : Packet
+    public sealed class SubAbility : Packet
     {
         public override short Index
         {
@@ -516,13 +518,13 @@ namespace ServerPacketsEx
                 return ServerMsgIds.SM_SUBABILITY;
             }
         }
-        public byte m_btAntiMagic { get { return (byte)nRecog; } }
-        public byte m_btHitPoint { get { return (byte)wParam; } }
-        public byte m_btSpeedPoint { get { return (byte)(wParam>>8); } }
-        public byte m_btAntiPoison { get { return (byte)wTag; } }
-        public byte m_btPoisonRecover { get { return (byte)(wTag>>8); } }
-        public byte m_btHealthRecover { get { return (byte)wSeries; } }
-        public byte m_btSpellRecover { get { return (byte)(wSeries>>8); } }
+        public byte AntiMagic { get { return (byte)nRecog; } }
+        public byte HitPoint { get { return (byte)wParam; } }
+        public byte SpeedPoint { get { return (byte)(wParam>>8); } }
+        public byte AntiPoison { get { return (byte)wTag; } }
+        public byte PoisonRecover { get { return (byte)(wTag>>8); } }
+        public byte HealthRecover { get { return (byte)wSeries; } }
+        public byte SpellRecover { get { return (byte)(wSeries>>8); } }
         protected override void ReadPacket(BinaryReader reader)
         {
             
@@ -665,6 +667,66 @@ namespace ServerPacketsEx
         }
         protected override void WritePacket(BinaryWriter writer)
         {
+        }
+    }
+    public sealed class ChangeLight : Packet
+    {
+        public override short Index
+        {
+            get { return (short)ServerPacketIds.SM_CHANGELIGHT; }
+        }
+        public byte btLight { get { return (byte)wParam; } set { wParam = value; } }
+        protected override void ReadPacket(BinaryReader reader)
+        {
+
+        }
+        protected override void WritePacket(BinaryWriter writer)
+        {
+        }
+    }
+    public sealed class FeatureChanged : Packet
+    {
+        public override short Index
+        {
+            get { return (short)ServerPacketIds.SM_FEATURECHANGED; }
+        }
+        public byte Gender { get { return (byte)(wParam); } }
+        public byte Wear { get { return (byte)(wParam >> 8); } }
+        public byte Hair { get { return (byte)(wTag ); } }
+        public byte Weapon { get { return (byte)(wTag >> 8); } }
+        public int ObjectId { get { return nRecog; } }
+        protected override void ReadPacket(BinaryReader reader)
+        {
+
+        }
+        protected override void WritePacket(BinaryWriter writer)
+        {
+        }
+    }
+    public sealed class TakeOnEnquip : Packet
+    {
+        public override short Index
+        {
+            get { return (short)ServerPacketIds.SM_TAKEON_EQUIP; }
+        }
+        //nRecog
+        public byte Gender { get { return (byte)(nRecog); } }
+        public byte Wear   { get { return (byte)(nRecog>>8); } }
+        public byte Hair   { get { return (byte)(nRecog>>16); } }
+        public byte Weapon { get { return (byte)(nRecog >> 24); } }
+        public short To { get { return wParam; } }
+        public Guid UniqueID;
+        /// <summary>
+        /// Result:0-Success,1-NotEnoughAbility,2-NotThatEnquip
+        /// </summary>
+        public short Result { get { return wTag; } }
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            UniqueID = new Guid(reader.ReadBytes(GUIDLEN));
+        }
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(UniqueID.ToByteArray());
         }
     }
 }

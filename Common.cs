@@ -1363,13 +1363,18 @@ public enum ServerPacketIds : short
 
 
     // For game process 
+    SM_FEATURECHANGED = 41,
     SM_ADDITEM = 200,
     SM_BAGITEMS = 201,
     SM_DROPITEM = 600,
     SM_ITEMSHOW = 610,
     SM_ITEMHIDE = 611,
-    SM_WEIGHTCHANGED=622,
+    SM_TAKEON_EQUIP=615,
+    SM_WEIGHTCHANGED =622,
     SM_GOLDCHANGED=653,
+    SM_CHANGELIGHT=654,
+    SM_SUBABILITY =752,
+    SM_CHARSTATUSCHANGED=657,
     SM_ACTIONRESULT = 3000,
 
 
@@ -5215,7 +5220,7 @@ public abstract class Packet
             case ServerMsgIds.SM_ABILITY:
                 return new SEX.Ablity();
             case ServerMsgIds.SM_SUBABILITY:
-                return new SEX.Subability();
+                return new SEX.SubAbility();
             case ServerMsgIds.SM_DAYCHANGING:
                 return new SEX.DayChanging();
             case ServerMsgIds.SM_SENDMYMAGIC:
@@ -5275,6 +5280,12 @@ public abstract class Packet
                 return new SEX.WeightChanged();
             case (short)ServerPacketIds.SM_GOLDCHANGED:
                 return new SEX.GoldChanged();
+            case (short)ServerPacketIds.SM_CHANGELIGHT:
+                return new SEX.ChangeLight();
+            case (short)ServerPacketIds.SM_FEATURECHANGED:
+                return new SEX.FeatureChanged();
+            case (short)ServerPacketIds.SM_TAKEON_EQUIP:
+                return new SEX.TakeOnEnquip();
             //case (short)ServerPacketIds.CM_SELCHR:
             //    return new S.StartGame();
             case (short)ServerPacketIds.StartGameBanned:

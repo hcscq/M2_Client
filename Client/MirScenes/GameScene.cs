@@ -1701,6 +1701,7 @@ namespace Client.MirScenes
                     ActionResult((SEX.ActionResult)p);
                     break;
                 case ServerMsgIds.SM_SUBABILITY:
+                    SubAbility((SEX.SubAbility)p);
                     break;
                 case ServerMsgIds.SM_SENDMYMAGIC:
                     break;
@@ -1737,6 +1738,18 @@ namespace Client.MirScenes
                 case (short)ServerPacketIds.SM_GOLDCHANGED:
                     GoldChanged((SEX.GoldChanged)p);
                     break;
+                case (short)ServerPacketIds.SM_CHANGELIGHT:
+                    ChangeLight((SEX.ChangeLight)p);
+                    break;
+                case (short)ServerPacketIds.SM_FEATURECHANGED:
+                    FeatureChanged((SEX.FeatureChanged)p);
+                    break;
+                case (short)ServerPacketIds.SM_CHARSTATUSCHANGED:
+                    CharStatusChanged((SEX.CharStatusChanged)p);
+                    break;
+                case (short)ServerPacketIds.SM_TAKEON_EQUIP:
+                    TakeOnEnquip((SEX.TakeOnEnquip)p);
+                    break;
                 /*EX process end*/
                 default:
                     base.ProcessPacket(p);
@@ -1760,7 +1773,7 @@ namespace Client.MirScenes
         {
             User.LoadMagic(p);
         }
-        public void SubAbility(SEX.Subability p)
+        public void SubAbility(SEX.SubAbility p)
         {
             User.LoadSubAbility(p);
         }
@@ -1825,6 +1838,61 @@ namespace Client.MirScenes
             Gold = (uint)p.GoldAmount;
             SoundManager.PlaySound(SoundList.Gold);
             //OutputMessage(string.Format("You gained {0:###,###,###} Gold.", p.Gold));
+        }
+        private void ChangeLight(SEX.ChangeLight p)
+        {
+            User.Light = p.btLight;
+        }
+        private void CharStatusChanged(SEX.CharStatusChanged p)
+        {
+            //for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
+            //{
+            //    MapObject ob = MapControl.Objects[i];
+            //    if (ob.ObjectID != p.ObjectID) continue;
+                
+            //    ob.ActionFeed.Add(new QueuedAction { Action = MirAction.Show, Direction = ob.Direction, Location = ob.CurrentLocation });
+            //    return;
+            //}
+
+            User.AttackSpeed = p.HitSpeed;
+        }
+        private void TakeOnEnquip(SEX.TakeOnEnquip p)
+        {
+            MirItemCell fromCell;
+
+            MirItemCell toCell = CharacterDialog.Grid[p.To];
+
+
+            fromCell = InventoryDialog.GetCell(p.UniqueID) ?? BeltDialog.GetCell(p.UniqueID);
+
+
+            if (toCell == null || fromCell == null) return;
+
+            toCell.Locked = false;
+            fromCell.Locked = false;
+
+            if (p.Result>0) return;
+
+            UserItem i = fromCell.Item;
+            fromCell.Item = toCell.Item;
+            toCell.Item = i;
+            CharacterDuraPanel.UpdateCharacterDura(i);
+            User.RefreshStats();
+        }
+        private void FeatureChanged(SEX.FeatureChanged p)
+        {
+            for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
+            {
+                MapObject ob = MapControl.Objects[i];
+                if (ob.ObjectID != p.ObjectId) continue;
+                PlayerObject player = ((PlayerObject)ob);
+                player.Gender = (MirGender)p.Gender;
+                player.Armour = p.Wear;
+                player.Weapon = p.Weapon;
+                player.Hair = p.Hair;
+                ob.ActionFeed.Add(new QueuedAction { Action = MirAction.Show, Direction = ob.Direction, Location = ob.CurrentLocation });
+                return;
+            }
         }
         private void Logon(SEX.MapLogon P)
         {

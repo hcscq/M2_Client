@@ -82,11 +82,16 @@ namespace Client.MirObjects
                     Magics[i].CastTime = CMain.Time - Magics[i].CastTime;
             }
         }
-        public void LoadSubAbility(SEX.Subability subability)
+        public void LoadSubAbility(SEX.SubAbility subAbility)
         {
-            SpellRecovery = subability.m_btSpellRecover;
-            HealthRecovery = subability.m_btHealthRecover;
-            PoisonRecovery = subability.m_btPoisonRecover;       
+            SpellRecovery = subAbility.SpellRecover;
+            HealthRecovery = subAbility.HealthRecover;
+            PoisonRecovery = subAbility.PoisonRecover;
+            Accuracy = subAbility.HitPoint;
+            Agility = subAbility.SpeedPoint;
+            MagicResist = subAbility.AntiMagic;
+            PoisonResist = subAbility.AntiPoison;
+
         }
         public void LoadAbility(SEX.Ablity ability)
         {
